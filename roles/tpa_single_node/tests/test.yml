@@ -1,0 +1,6 @@
+---
+- name: Install TPA locally
+  hosts: localhost
+  remote_user: root
+  roles:
+    - tpa_single_node

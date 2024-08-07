@@ -1,0 +1,20 @@
+---
+namespace: redhat
+name: trusted_profile_analyzer
+version: 1.0.0
+
+readme: README.md
+authors:
+  - Red Hat
+description: TODO
+license_file: Apache-2.0
+tags: [rhtpa, tpa, trusted profile analyzer, security, application, tools]
+# NOTE: when updating, also update dependencies in requirements.yml
+dependencies:
+  containers.podman: ">=1.15.0"
+repository: https://github.com/trustification/trustification-ansible
+documentation: http://TODO.com
+homepage: https://TODO.com
+issues: https://github.com/trustification/trustification-ansible/issues
+
+build_ignore: [.ansible-lint, .github, .gitignore, .vscode, requirements-testing.txt, vm-testing, .idea]
