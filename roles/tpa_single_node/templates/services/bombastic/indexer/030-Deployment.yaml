@@ -1,0 +1,110 @@
+kind: Deployment
+metadata:
+  name: bombastic-indexer
+  labels:
+    app.kubernetes.io/name: bombastic-indexer
+    app.kubernetes.io/component: bombastic
+    app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    app.kubernetes.io/version: 1.1.1
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: trusted-profile-analyzer
+  annotations: null
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bombastic-indexer
+      app.kubernetes.io/component: bombastic
+      app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: bombastic-indexer
+        app.kubernetes.io/component: bombastic
+        app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    spec:
+      volumes:
+        - name: data
+          emptyDir: {}
+      containers:
+        - name: service
+          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:044b6070e52378a93cbcd65cbd5d10b866f102ee8d6040b92147df7b52202e83
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 2
+            httpGet:
+              path: /health/live
+              port: 9010
+          readinessProbe:
+            initialDelaySeconds: 2
+            httpGet:
+              path: /health/ready
+              port: 9010
+          command:
+            - /trust
+          args:
+            - bombastic
+            - indexer
+            - --stored-topic
+            - bombastic-stored-default
+            - --indexed-topic
+            - bombastic-indexed-default
+            - --failed-topic
+            - bombastic-failed-default
+            - --index-mode
+            - file
+            - --index-dir
+            - /data/index
+          env:
+            - name: RUST_LOG
+              value: info
+            - name: INFRASTRUCTURE_ENABLED
+              value: 'true'
+            - name: INFRASTRUCTURE_BIND
+              value: '[::]:9010'
+            - name: STORAGE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: root-user
+                  name: infrastructure-minio
+            - name: STORAGE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: root-password
+                  name: infrastructure-minio
+            - name: STORAGE_ENDPOINT
+              value: http://infrastructure-minio:9000
+            - name: STORAGE_REGION
+              value: eu-west-1
+            - name: STORAGE_BUCKET
+              value: bombastic-default
+            - name: EVENT_BUS
+              value: kafka
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: my-cluster-kafka-bootstrap:9092
+            - name: KAFKA_PROPERTIES_ENV_PREFIX
+              value: TCK_
+            - name: TCK_SECURITY__PROTOCOL
+              value: SASL_PLAINTEXT
+            - name: TCK_SASL__USERNAME
+              value: user1
+            - name: TCK_SASL__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: user1
+            - name: TCK_SASL__MECHANISM
+              value: SCRAM-SHA-512
+            - name: INDEX_WRITER_MEMORY_BYTES
+              value: 128MiB
+            - name: INDEX_SYNC_INTERVAL
+              value: 1m
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          ports:
+            - containerPort: 9010
+              protocol: TCP
+              name: infra

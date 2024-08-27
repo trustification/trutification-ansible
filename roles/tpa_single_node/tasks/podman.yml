@@ -1,0 +1,51 @@
+---
+- name: Podman login to registry.redhat.io
+  when:
+    - ansible_facts['distribution'] == 'RedHat'
+    - ansible_facts['distribution_major_version'] == '9'
+  ansible.builtin.command: podman login registry.redhat.io -u {{ tpa_single_node_registry_username }} --password {{ tpa_single_node_registry_password }}
+  register: podman_login_result
+  changed_when: '"Already logged in" not in podman_login_result'
+
+- name: Create RHTPA network
+  containers.podman.podman_network:
+    name: "{{ tpa_single_node_podman_network }}"
+
+- name: Pull trustification image from registry.redhat.io
+  when:
+    - ansible_facts['distribution'] == 'RedHat'
+    - ansible_facts['distribution_major_version'] == '9'
+  containers.podman.podman_image:
+    name: "{{ tpa_single_node_trustification_image }}"
+
+
+- name: Pull Guac image from registry.redhat.io
+  when:
+    - ansible_facts['distribution'] == 'RedHat'
+    - ansible_facts['distribution_major_version'] == '9'
+  containers.podman.podman_image:
+    name: "{{ tpa_single_node_guac_image }}"
+
+- name: Pull SSO image from registry.redhat.io
+  when:
+    - ansible_facts['distribution'] == 'RedHat'
+    - ansible_facts['distribution_major_version'] == '9'
+  containers.podman.podman_image:
+    name: "{{ tpa_single_node_sso_image }}"
+
+- name: Pull Postgresql 15 image from registry.redhat.io
+  when:
+    - ansible_facts['distribution'] == 'RedHat'
+    - ansible_facts['distribution_major_version'] == '9'
+  containers.podman.podman_image:
+    name: "{{ tpa_single_node_postgresql }}"
+
+- name: Pull Streams for Apache Kafka from registry.redhat.io
+  when:
+    - ansible_facts['distribution'] == 'RedHat'
+    - ansible_facts['distribution_major_version'] == '9'
+  containers.podman.podman_image:
+    name: "{{ tpa_single_node_streams_kafka }}"
+
+- name: Configure/Deploy guac
+  ansible.builtin.include_tasks: podman/guac.yml

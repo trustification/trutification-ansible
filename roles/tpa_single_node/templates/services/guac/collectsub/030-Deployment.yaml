@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guac-collectsub
+  labels:
+    app.kubernetes.io/name: guac-collectsub
+    app.kubernetes.io/component: guac
+    app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    app.kubernetes.io/version: 1.1.1
+    app.kubernetes.io/part-of: trusted-profile-analyzer
+  annotations: null
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: guac-collectsub
+      app.kubernetes.io/component: guac
+      app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: guac-collectsub
+        app.kubernetes.io/component: guac
+        app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    spec:
+      volumes:
+        - name: tls
+          secret:
+            secretName: guac-collectsub-tls
+      containers:
+        - name: service
+          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:a0cd9379eeaa15e95230fe330649b74928c776fbd35438b76fa17f3f4bbea954
+          imagePullPolicy: IfNotPresent
+          command:
+            - /opt/guac/guaccsub
+          args: []
+          env:
+            - name: GUAC_CSUB_TLS_CERT_FILE
+              value: /etc/tls/tls.crt
+            - name: GUAC_CSUB_TLS_KEY_FILE
+              value: /etc/tls/tls.key
+          volumeMounts:
+            - mountPath: /etc/tls
+              name: tls
+              readOnly: true
+          livenessProbe:
+            tcpSocket:
+              port: 2782
+          ports:
+            - containerPort: 2782
+              protocol: TCP
+              name: endpoint
