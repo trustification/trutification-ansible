@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guac-graphql
+  labels:
+    app.kubernetes.io/name: guac-graphql
+    app.kubernetes.io/component: guac
+    app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    app.kubernetes.io/version: 1.1.1
+    app.kubernetes.io/part-of: trusted-profile-analyzer
+  annotations: null
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: guac-graphql
+      app.kubernetes.io/component: guac
+      app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: guac-graphql
+        app.kubernetes.io/component: guac
+        app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    spec:
+      initContainers:
+        - name: migrate
+          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:a0cd9379eeaa15e95230fe330649b74928c776fbd35438b76fa17f3f4bbea954
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+          args:
+            - -ec
+            - 'TC_PGOPTIONS="?"
+
+                  TC_PGOPTIONS="${TC_PGOPTIONS}sslmode=${TC_PGSSLMODE}&"
+
+                  exec /opt/guac/guacmigrate "--db-address" "postgres://${TC_PGUSER}:${TC_PGPASSWORD}@${TC_PGHOST}:${TC_PGPORT}/${TC_PGDATABASE}${TC_PGOPTIONS}"
+                  "--db-driver" "postgres" "--db-debug" "true"
+
+                  '
+          env:
+            - name: TC_PGHOST
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_HOST
+                  name: keycloak-db-secret
+            - name: TC_PGPORT
+              value: '5432'
+            - name: TC_PGDATABASE
+              value: guac
+            - name: TC_PGUSER
+              value: postgres
+            - name: TC_PGPASSWORD
+              value: postgres
+            - name: TC_PGSSLMODE
+              value: disable
+          volumeMounts: null
+      containers:
+        - name: service
+          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:1472d5acb56cb72d49cd0d25186e6a02af53cd14c84c1a22357d115958921e52
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+          args:
+            - -ec
+            - 'TC_PGOPTIONS="?"
+
+                  TC_PGOPTIONS="${TC_PGOPTIONS}sslmode=${TC_PGSSLMODE}&"
+
+                  exec /opt/guac/guacgql "--gql-backend" "ent" "--db-address" "postgres://${TC_PGUSER}:${TC_PGPASSWORD}@${TC_PGHOST}:${TC_PGPORT}/${TC_PGDATABASE}${TC_PGOPTIONS}"
+                  "--db-driver" "postgres" "--db-migrate=false"
+
+                  '
+          workingDir: /guac
+          env:
+            - name: TC_PGHOST
+              value: keycloak-postgresql
+            - name: TC_PGPORT
+              value: '5432'
+            - name: TC_PGDATABASE
+              value: guac
+            - name: TC_PGUSER
+              value: guac
+            - name: TC_PGPASSWORD
+              value: guac1234
+            - name: TC_PGSSLMODE
+              value: disable
+            - name: GUAC_GQL_TLS_CERT_FILE
+              value: /etc/tls/tls.crt
+            - name: GUAC_GQL_TLS_KEY_FILE
+              value: /etc/tls/tls.key
+            - name: GUAC_PROMETHEUS_ADDR
+              value: '9010'
+          volumeMounts:
+            - mountPath: /etc/tls
+              name: tls
+              readOnly: true
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTPS
+          ports:
+            - containerPort: 9010
+              protocol: TCP
+              name: infra
+            - containerPort: 8080
+              protocol: TCP
+              name: endpoint
+      volumes:
+        - name: tls
+          secret:
+            secretName: guac-graphql-tls

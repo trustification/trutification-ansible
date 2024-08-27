@@ -1,0 +1,25 @@
+---
+# NOTE: determining when the service will restart with `when: ...` is not ideal, however
+# we would need a dynamic handler otherwise and these are a bit fragile.
+
+- name: Set location of Podman Play Manifest
+  ansible.builtin.set_fact:
+    kube_play_file: >-
+      {{ tpa_single_node_kube_manifest_dir + '/' + podman_spec.kube_file_content.metadata.namespace + '_'
+      + podman_spec.kube_file_content.metadata.name + '.yml' }}
+
+- name: Copy Manifest to Server
+  ansible.builtin.copy:
+    content: "{{ podman_spec.kube_file_content | to_nice_yaml(indent=2) }}"
+    dest: "{{ kube_play_file }}"
+    mode: "0600"
+  register: copy_manifest
+
+
+- name: Restart Podman Service
+  ansible.builtin.systemd:
+    state: restarted
+    enabled: true
+    daemon_reload: true
+    name: "{{ podman_spec.systemd_file }}"
+  when: copy_manifest.changed or copy_systemd_file.changed or (podman_spec.secret is defined and podman_spec.secret_changed)

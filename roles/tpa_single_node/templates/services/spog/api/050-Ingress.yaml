@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spog-api
+  labels:
+    app.kubernetes.io/name: spog-api
+    app.kubernetes.io/component: spog
+    app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    app.kubernetes.io/version: 1.1.1
+    app.kubernetes.io/part-of: trusted-profile-analyzer
+  annotations:
+    haproxy.router.openshift.io/timeout: 180s
+    route.openshift.io/termination: reencrypt
+spec:
+  ingressClassName: openshift-default
+  rules:
+    - host: api$APP_DOMAIN_URL
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: spog-api
+                port:
+                  name: endpoint

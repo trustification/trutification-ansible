@@ -1,0 +1,119 @@
+kind: Deployment
+metadata:
+  name: bombastic-api
+  labels:
+    app.kubernetes.io/name: bombastic-api
+    app.kubernetes.io/component: bombastic
+    app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    app.kubernetes.io/version: 1.1.1
+    app.kubernetes.io/part-of: trusted-profile-analyzer
+  annotations: null
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bombastic-api
+      app.kubernetes.io/component: bombastic
+      app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: bombastic-api
+        app.kubernetes.io/component: bombastic
+        app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+      annotations:
+        configHash/auth: f1603b2e10b24822d2b2ae28973e973fb20d68559f0caff8327d5a9a7326b106
+    spec:
+      containers:
+        - name: service
+          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:044b6070e52378a93cbcd65cbd5d10b866f102ee8d6040b92147df7b52202e83
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 2
+            httpGet:
+              path: /health/live
+              port: 9010
+          readinessProbe:
+            initialDelaySeconds: 2
+            httpGet:
+              path: /health/ready
+              port: 9010
+          command:
+            - /trust
+          args:
+            - bombastic
+            - api
+            - -p
+            - '8080'
+            - --validator
+            - sbom
+            - --index-mode
+            - file
+            - --auth-configuration
+            - /etc/config/auth.yaml
+          env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: RUST_LOG
+              value: info
+            - name: INFRASTRUCTURE_ENABLED
+              value: 'true'
+            - name: INFRASTRUCTURE_BIND
+              value: '[::]:9010'
+            - name: HTTP_SERVER_BIND_ADDR
+              value: '::'
+            - name: HTTP_SERVER_TLS_ENABLED
+              value: 'true'
+            - name: HTTP_SERVER_TLS_KEY_FILE
+              value: /etc/tls/tls.key
+            - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
+              value: /etc/tls/tls.crt
+            - name: OIDC_PROVIDER_CLIENT_ID
+              value: walker
+            - name: OIDC_PROVIDER_CLIENT_SECRET
+              value: 6560cc91-4e20-4edd-881c-b15b169f8a80
+            - name: OIDC_PROVIDER_ISSUER_URL
+              value: https://sso$APP_DOMAIN_URL/realms/chicken
+            - name: STORAGE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: root-user
+                  name: infrastructure-minio
+            - name: STORAGE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: root-password
+                  name: infrastructure-minio
+            - name: STORAGE_ENDPOINT
+              value: http://infrastructure-minio:9000
+            - name: STORAGE_REGION
+              value: eu-west-1
+            - name: STORAGE_BUCKET
+              value: bombastic-default
+            - name: SWAGGER_UI_OIDC_ISSUER_URL
+              value: https://sso$APP_DOMAIN_URL/realms/chicken
+            - name: INDEX_SYNC_INTERVAL
+              value: 1m
+          ports:
+            - containerPort: 9010
+              protocol: TCP
+              name: infra
+            - containerPort: 8080
+              name: endpoint
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/tls
+              name: tls
+              readOnly: true
+            - name: config-auth
+              mountPath: /etc/config/auth.yaml
+              subPath: auth.yaml
+      volumes:
+        - name: tls
+          secret:
+            secretName: bombastic-api-tls
+        - name: config-auth
+          configMap:
+            name: bombastic-api-auth

@@ -1,0 +1,12 @@
+---
+- name: Install Operating System Components
+  ansible.builtin.include_tasks: os.yml
+  args:
+    apply:
+      become: true
+
+- name: Execute Podman Actions
+  ansible.builtin.include_tasks: podman.yml
+  args:
+    apply:
+      become: true

@@ -1,0 +1,19 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: bombastic-api-auth
+  labels:
+    app.kubernetes.io/name: bombastic-api-auth
+    app.kubernetes.io/component: bombastic
+    app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    app.kubernetes.io/version: 1.1.1
+    app.kubernetes.io/part-of: trusted-profile-analyzer
+data:
+  auth.yaml: "\nauthentication:\n  clients:\n\n    - clientId: frontend\n    \
+        \  issuerUrl: https://sso$APP_DOMAIN_URL/realms/chicken\n      scopeMappings:\
+        \ &keycloakScopeMappings\n        \"create:document\": [ \"create.sbom\",\
+        \ \"create.vex\" ]\n        \"read:document\": [ \"read.sbom\", \"read.vex\"\
+        \ ]\n        \"update:document\": [ \"update.sbom\", \"update.vex\" ]\n  \
+        \      \"delete:document\": [ \"delete.sbom\", \"delete.vex\" ]\n\n    - clientId:\
+        \ walker\n      issuerUrl: https://sso$APP_DOMAIN_URL/realms/chicken\n   \
+        \   scopeMappings: *keycloakScopeMappings\n"

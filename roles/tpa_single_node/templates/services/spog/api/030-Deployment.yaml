@@ -1,0 +1,121 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: spog-api
+  labels:
+    app.kubernetes.io/name: spog-api
+    app.kubernetes.io/component: spog
+    app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    app.kubernetes.io/version: 1.1.1
+    app.kubernetes.io/part-of: trusted-profile-analyzer
+  annotations: null
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: spog-api
+      app.kubernetes.io/component: spog
+      app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: spog-api
+        app.kubernetes.io/component: spog
+        app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+      annotations:
+        configHash/auth: f1603b2e10b24822d2b2ae28973e973fb20d68559f0caff8327d5a9a7326b106
+        configHash/ui: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+    spec:
+      containers:
+        - name: service
+          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 2
+            httpGet:
+              path: /health/live
+              port: 9010
+          readinessProbe:
+            initialDelaySeconds: 2
+            httpGet:
+              path: /health/ready
+              port: 9010
+          command:
+            - /trust
+          args:
+            - spog
+            - api
+            - -p
+            - '8080'
+            - --bombastic-url
+            - https://bombastic-api.trustificcation.svc.cluster.local
+            - --vexination-url
+            - https://vexination-api.trustificcation.svc.cluster.local
+            - --collectorist-url
+            - https://collectorist-api.trustificcation.svc.cluster.local
+            - --v11y-url
+            - https://v11y-api.trustificcation.svc.cluster.local
+            - --exhort-url
+            - https://exhort-api.trustificcation.svc.cluster.local
+            - --crda-url
+            - https://rhda.rhcloud.com/api/v4/analysis
+            - --guac
+            - https://guac-graphql.trustificcation.svc.cluster.local/query
+            - --auth-configuration
+            - /etc/config/auth.yaml
+          env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: RUST_LOG
+              value: info
+            - name: INFRASTRUCTURE_ENABLED
+              value: 'true'
+            - name: INFRASTRUCTURE_BIND
+              value: '[::]:9010'
+            - name: HTTP_SERVER_BIND_ADDR
+              value: '::'
+            - name: HTTP_SERVER_TLS_ENABLED
+              value: 'true'
+            - name: HTTP_SERVER_TLS_KEY_FILE
+              value: /etc/tls/tls.key
+            - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
+              value: /etc/tls/tls.crt
+            - name: OIDC_PROVIDER_CLIENT_ID
+              value: walker
+            - name: OIDC_PROVIDER_CLIENT_SECRET
+              value: 6560cc91-4e20-4edd-881c-b15b169f8a80
+            - name: OIDC_PROVIDER_ISSUER_URL
+              value: https://sso$APP_DOMAIN_URL/realms/chicken
+            - name: SWAGGER_UI_OIDC_ISSUER_URL
+              value: https://sso$APP_DOMAIN_URL/realms/chicken
+            - name: SPOG_UI_CONFIG
+              value: /etc/config/spog-ui.yaml
+          ports:
+            - containerPort: 9010
+              protocol: TCP
+              name: infra
+            - containerPort: 8080
+              name: endpoint
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/tls
+              name: tls
+              readOnly: true
+            - name: config-auth
+              mountPath: /etc/config/auth.yaml
+              subPath: auth.yaml
+            - name: config-ui
+              mountPath: /etc/config/spog-ui.yaml
+              subPath: spog-ui.yaml
+      volumes:
+        - name: tls
+          secret:
+            secretName: spog-api-tls
+        - name: config-auth
+          configMap:
+            name: spog-api-auth
+        - name: config-ui
+          configMap:
+            name: spog-ui-config
