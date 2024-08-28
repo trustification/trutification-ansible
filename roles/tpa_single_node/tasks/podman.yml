@@ -26,6 +26,7 @@
   containers.podman.podman_image:
     name: "{{ tpa_single_node_guac_image }}"
 
+  # REMOVE THE FOLLOWING CONTAINERS TO USE EXTERNAL SERVICES
 - name: Pull SSO image from registry.redhat.io
   when:
     - ansible_facts['distribution'] == 'RedHat'

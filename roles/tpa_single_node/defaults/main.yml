@@ -1,2 +1,5 @@
 ---
-# defaults file for tpa_single_node
+# defaults file for tas_single_node
+tpa_single_node_system_packages:
+  - podman
+  - podman-plugins
