@@ -7,10 +7,10 @@ jobs:
   sanity-test:
     runs-on: ubuntu-latest
     steps:
-        - name: Perform testing
-          uses: ansible-community/ansible-test-gh-action@release/v1
-          with:
-            testing-type: sanity
-            origin-python-version: 3.11
-            ansible-core-version: stable-2.14
+      - name: Perform testing
+        uses: ansible-community/ansible-test-gh-action@release/v1
+        with:
+          testing-type: sanity
+          python-version: 3.11
+          ansible-core-version: stable-2.14
                 

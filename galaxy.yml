@@ -5,16 +5,16 @@ version: 1.0.0
 
 readme: README.md
 authors:
-  - Red Hat
-description: TODO
+  - Max Dessì <mdessi@redhat.com>
+description: Install and configure RHTPA, a downstream redistribution of the Trustification project.
 license_file: Apache-2.0
 tags: [rhtpa, tpa, trusted profile analyzer, security, application, tools]
 # NOTE: when updating, also update dependencies in requirements.yml
 dependencies:
-  containers.podman: ">=1.15.0"
+  containers.podman: ">=1.15.4"
 repository: https://github.com/trustification/trustification-ansible
 documentation: http://TODO.com
-homepage: https://TODO.com
+homepage: https://github.com/trustification/trustification-ansible
 issues: https://github.com/trustification/trustification-ansible/issues
 
-build_ignore: [.ansible-lint, .github, .gitignore, .vscode, requirements-testing.txt, vm-testing, .idea]
+build_ignore: [.ansible-lint, .github, .gitignore, .vscode, ansible-navigator.log, molecule, requirements-testing.txt, vm-testing, .idea]

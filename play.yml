@@ -13,7 +13,7 @@
     # * tpa_single_node_registry_password
     #   * get at https://access.redhat.com/terms-based-registry
     tpa_single_node_registry_password: <YOUR_PASSWORD>
-    tpa_single_node_podman_network: tcnet
+    tpa_single_node_podman_network: rhtpanet
     tpa_single_node_trustification_image:
     tpa_single_node_guac_image:
     # REMOVE TO USE EXTERNAl SERVICES
