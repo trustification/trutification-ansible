@@ -1,0 +1,8 @@
+# tpa_single_node_oidc_issuers:
+#  - issuer: "https://keycloak-keycloak-system.apps.platform-sts.pcbk.p1.openshiftapps.com/auth/realms/trusted-profile-analyzer"
+#    url: "https://keycloak-keycloak-system.apps.platform-sts.pcbk.p1.openshiftapps.com/auth/realms/trusted-profile-analyzer"
+#    client_id: trusted-profile-analyzer
+#    type: email
+tpa_single_node_base_hostname: trustification
+tpa_single_node_registry_username: "{{ lookup('env', 'TPA_SINGLE_NODE_REGISTRY_USERNAME') }}"
+tpa_single_node_registry_password: "{{ lookup('env', 'TPA_SINGLE_NODE_REGISTRY_PASSWORD') }}"

@@ -5,8 +5,8 @@ Vagrant.configure("2") do |config|
 
     #config.registration.username = '<your Red Hat username>'
     #config.registration.password = '<your Red Hat password>'
-    config.registration.username = ENV['SUBSCRIPTION_USERNAME']
-    config.registration.password = ENV['SUBSCRIPTION_PASSWORD']
+    config.registration.username = ENV['TPA_SINGLE_NODE_REGISTRY_USERNAME']
+    config.registration.password = ENV['TPA_SINGLE_NODE_REGISTRY_USERNAME']
 
     config.vm.define "trustification" do |main_server|
           main_server.vm.box = "generic-x64/rhel9"
@@ -24,8 +24,8 @@ Vagrant.configure("2") do |config|
           main_server.vm.provision "ansible" do |ansible|
              ansible.verbose = "v"
              ansible.compatibility_mode = "2.0"
-             ansible.playbook = "./../../../play.yml"
-             ansible.galaxy_role_file = "./../../../requirements.yml"
+             ansible.playbook = "./../../play.yml"
+             ansible.galaxy_role_file = "./../../requirements.yml"
              #ansible.galaxy_command = "ansible-galaxy collection install -r %{role_file}"
            end
       end
