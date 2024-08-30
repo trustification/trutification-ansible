@@ -9,17 +9,22 @@
     tpa_single_node_kube_configmap_dir: "{{ tpa_single_node_config_dir }}/configs"
     # * tpa_single_node_registry_username
     #   * get at https://access.redhat.com/terms-based-registry
-    tpa_single_node_registry_username: <YOUR_USERNAME>
+    tpa_single_node_registry_username: <your Red Hat username>
     # * tpa_single_node_registry_password
     #   * get at https://access.redhat.com/terms-based-registry
-    tpa_single_node_registry_password: <YOUR_PASSWORD>
-    tpa_single_node_podman_network: rhtpanet
-    tpa_single_node_trustification_image:
-    tpa_single_node_guac_image:
+    tpa_single_node_registry_password: <your Red Hat password>
+    tpa_single_node_podman_network: tcnet
+    tpa_single_node_trustification_image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:e5a9440a40a8e84279202c75425415840d988959
+    tpa_single_node_guac_image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9:f0688194637cc759052e02c350c38dbabc19484e
     # REMOVE TO USE EXTERNAl SERVICES
-    tpa_single_node_sso_image:
-    tpa_single_node_postgresql:
-    tpa_single_node_streams_kafka:
+    tpa_single_node_sso_image: quay.io/keycloak/keycloak:20.0.0
+    tpa_single_node_postgresql: docker.io/library/postgres:16
+    tpa_single_node_streams_kafka: docker.io/bitnami/kafka@sha256:8fedaa492f1f570cade60f5ff09978cd841307b1e9f93fe6216136ca165fcc2d
+  vars_files:
+    # vars.yml should contain:
+    # * tpa_single_node_oidc_issuers
+    # * tpa_single_node_issuer_url
+    - vars.yml
   tasks:
     - name: Include TPA single node
       ansible.builtin.include_role:
