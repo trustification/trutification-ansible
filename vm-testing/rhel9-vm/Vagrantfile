@@ -6,7 +6,7 @@ Vagrant.configure("2") do |config|
     #config.registration.username = '<your Red Hat username>'
     #config.registration.password = '<your Red Hat password>'
     config.registration.username = ENV['TPA_SINGLE_NODE_REGISTRY_USERNAME']
-    config.registration.password = ENV['TPA_SINGLE_NODE_REGISTRY_USERNAME']
+    config.registration.password = ENV['TPA_SINGLE_NODE_REGISTRY_PASSWORD']
 
     config.vm.define "trustification" do |main_server|
           main_server.vm.box = "generic-x64/rhel9"
