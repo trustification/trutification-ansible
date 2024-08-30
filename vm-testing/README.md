@@ -64,6 +64,11 @@ Reload
 vagrant reload --provision
 ```
 
+All commands available
+```
+vagrant list-commands
+```
+
 ## Ansible 
 From the root of the project
 
