@@ -2,15 +2,25 @@
 
 This directory contains tooling to (manually) test the collection using Vagrant.
 
+
 General prerequisites:
+Vagrant 2.4.1 or later https://developer.hashicorp.com/vagrant/downloads
+
+Run as admin 
 ```
 dnf install @virtualization @vagrant libvirt-devel
 systemctl enable --now virtqemud.service
 systemctl enable --now virtnetworkd.service
 usermod -aG libvirt $USER
 loginctl terminate-user $USER
+```
+Run as a normal user
+```
 vagrant plugin install vagrant-libvirt
 vagrant plugin install vagrant-registration
+```
+Run as admin
+```
 systemctl enable --now libvirtd
 systemctl restart libvirtd
 ```
