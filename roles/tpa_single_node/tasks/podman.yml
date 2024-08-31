@@ -27,26 +27,33 @@
     name: "{{ tpa_single_node_guac_image }}"
 
   # REMOVE THE FOLLOWING CONTAINERS TO USE EXTERNAL SERVICES
-- name: Pull SSO image from registry.redhat.io
+- name: Pull Keycloack image from Quay
   when:
     - ansible_facts['distribution'] == 'RedHat'
     - ansible_facts['distribution_major_version'] == '9'
   containers.podman.podman_image:
     name: "{{ tpa_single_node_sso_image }}"
 
-- name: Pull Postgresql 15 image from registry.redhat.io
+- name: Pull Postgresql 15 image from docker.io
   when:
     - ansible_facts['distribution'] == 'RedHat'
     - ansible_facts['distribution_major_version'] == '9'
   containers.podman.podman_image:
     name: "{{ tpa_single_node_postgresql }}"
 
-- name: Pull Streams for Apache Kafka from registry.redhat.io
+- name: Pull Kafka from docker.io
   when:
     - ansible_facts['distribution'] == 'RedHat'
     - ansible_facts['distribution_major_version'] == '9'
   containers.podman.podman_image:
     name: "{{ tpa_single_node_streams_kafka }}"
+
+- name: Pull Streams for S3 Minio from quay
+  when:
+    - ansible_facts['distribution'] == 'RedHat'
+    - ansible_facts['distribution_major_version'] == '9'
+  containers.podman.podman_image:
+    name: "{{ tpa_single_node_S3 }}"
 
 - name: Configure/Deploy guac
   ansible.builtin.include_tasks: podman/guac.yml
