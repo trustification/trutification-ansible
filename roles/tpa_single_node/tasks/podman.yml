@@ -7,6 +7,15 @@
   register: podman_login_result
   changed_when: '"Already logged in" not in podman_login_result'
 
+- name: Create Manifests/Configs Directory
+  ansible.builtin.file:
+    state: directory
+    dest: "{{ item }}"
+    mode: "0700"
+  loop:
+    - "{{ tpa_single_node_kube_manifest_dir }}"
+    - "{{ tpa_single_node_kube_configmap_dir }}"
+
 - name: Create RHTPA network
   containers.podman.podman_network:
     name: "{{ tpa_single_node_podman_network }}"
@@ -54,6 +63,9 @@
     - ansible_facts['distribution_major_version'] == '9'
   containers.podman.podman_image:
     name: "{{ tpa_single_node_s3 }}"
+
+- name: Configure/Postgresql DB
+  ansible.builtin.include_tasks: podman/postgresql.yml
 
 - name: Configure/Deploy guac
   ansible.builtin.include_tasks: podman/guac.yml
