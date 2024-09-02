@@ -17,4 +17,4 @@ documentation: http://TODO.com
 homepage: https://github.com/trustification/trustification-ansible
 issues: https://github.com/trustification/trustification-ansible/issues
 
-build_ignore: [.ansible-lint, .github, .gitignore, .vscode, ansible-navigator.log, molecule, requirements-testing.txt, vm-testing, .idea]
+build_ignore: [.ansible-lint, .github, .gitignore, .vscode, ansible-navigator.log, molecule, requirements-testing.txt, vm-testing, input-template, .idea]
