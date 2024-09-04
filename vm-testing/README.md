@@ -69,8 +69,23 @@ All commands available
 vagrant list-commands
 ```
 
+# Expose Postgresql from an OCP cluster 
+```
+oc get svc
+```
+Identify Postgresql service
+```
+oc expose svc/keycloak-postgresql
+oc get routes
+```
+
+copy the route of the exposed keycloak-postgresql service
+
+# Vagrat net
+```
+vagrant ssh
+route -A inet
+```
+
 ## Ansible 
 From the root of the project
-
-
-
