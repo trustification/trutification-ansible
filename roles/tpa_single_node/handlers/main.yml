@@ -1,2 +1,5 @@
 ---
 # handlers file for tpa_single_node
+# postgres-remove
+- name: restart postgres
+  service: name=postgresql state=restarted
