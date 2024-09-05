@@ -35,13 +35,7 @@
   containers.podman.podman_image:
     name: "{{ tpa_single_node_guac_image }}"
 
-- name: Pull Postgres image from docker
-  when:
-    - ansible_facts['distribution'] == 'RedHat'
-    - ansible_facts['distribution_major_version'] == '9'
-  containers.podman.podman_image:
-    name: "{{ tpa_single_node_postgresql }}"
-
+# postgres-remove
 - name: Configure/Deploy Postgres
   ansible.builtin.include_tasks: podman/postgresql.yml
 

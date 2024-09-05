@@ -1,3 +1,4 @@
+# postgres-remove
 ---
 - name: Confirmed required parameters provided
   ansible.builtin.assert:
@@ -21,14 +22,11 @@
   register: postgres_data
 
 - name: "Initialize PostgreSQL"
-  ansible.builtin.command: "postgresql-setup --initdb"
-  notify: Initialize Postgresql
+  shell: "postgresql-setup --initdb"
   when: not postgres_data.stat.exists
-  changed_when: false
 
 - name: "Start and enable services"
-  ansible.builtin.service:
-    name: "name={{ item }} state=started enabled=yes"
+  service: "name={{ item }} state=started enabled=yes"
   with_items:
     - postgresql
 
@@ -40,7 +38,7 @@
   postgresql_db:
     state: present
     name: "{{ tpa_pgdatabase }}"
-  become: true
+  become: yes
   become_user: postgres
 
 - name: "Create db user"
@@ -48,7 +46,7 @@
     state: present
     name: "{{ tpa_pguser }}"
     password: "{{ tpa_pgpassword }}"
-  become: true
+  become: yes
   become_user: postgres
 
 - name: "Grant db user access to app db"
@@ -56,16 +54,23 @@
     type: database
     database: "{{ tpa_pgdatabase }}"
     roles: "{{ tpa_pguser }}"
-    grant_option: false
+    grant_option: no
     privs: all
-  become: true
+  become: yes
   become_user: postgres
 
+- name: "Allow md5 connection for the db user"
+  postgresql_pg_hba:
+    dest: "~/data/pg_hba.conf"
+    contype: host
+    databases: all
+    method: md5
+    users: "{{ tpa_pguser }}"
+    create: true
+  become: yes
+  become_user: postgres
+  notify: restart postgres
+
 - name: Testing DB to make sure it is available
-  postgresql_query:
-    query: "SELECT 1"
-    # query: "psql postgresql://{{ tpa_pguser }}:{{ tpa_pgpassword }}@{{ tpa_pghost }}/{{ tpa_pgdatabase }} -c 'SELECT 1'"
-    db: "{{ tpa_pgdatabase }}"
-    login_host: "{{ tpa_pghost }}"
-    login_password: "{{ tpa_pgpassword }}"
-    login_user: "{{ tpa_pguser }}"
+  command: psql postgresql://{{ tpa_pguser }}:{{ tpa_pgpassword }}@{{ tpa_pghost }}/{{ tpa_pgdatabase }} -c 'SELECT 1'
+
