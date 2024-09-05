@@ -3,3 +3,4 @@ exclude_paths:
   - .github
   - vm-testing
   - input-template
+  - roles/tpa_single_node/tasks/podman/postgresql.yml
