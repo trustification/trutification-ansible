@@ -2,7 +2,6 @@
 
 This directory contains tooling to (manually) test the collection using Vagrant.
 
-
 General prerequisites:
 Vagrant 2.4.1 or later https://developer.hashicorp.com/vagrant/downloads
 
@@ -28,9 +27,10 @@ systemctl restart libvirtd
 ## Vagrant
 First setup
 ```
-cd images/rhel9-vm
+cd rhel9-vm
 vagrant up
 ```
+
 If you haven't provided the subscription details on the Vagrantfile, or as a env variables
 during the startup will be asked you RH username and password to enable the repos on RHEL.
 Without can't be installed podman and the other libs.
@@ -40,52 +40,40 @@ trustification: Would you like to register the system now (default: yes)? [y|n]y
 trustification: username: <your subscription username>
 trustification: password: <your subscription password>
 ```
-To enter in the running instance
+
+To Reload the configuration and execute again the playbook agains the vm
 ```
-vagrant ssh-config
+vagrant reload --provision
+```
+
+To enter in the running instance, automatically configured on the vagrant file
+```
 vagrant ssh
+```
+To see the networking configuration on the vm after the ssh login
+```
 hostnamectl
 ansible all -m ping
 ```
 
 Stop
-This unregister and stop your instance
 ```
 vagrant halt
 ```
 
 Destroy
+This unregister your instance
 ```
 vagrant destroy
 ```
 
-Reload
-```
-vagrant reload --provision
-```
+
 
 All commands available
 ```
 vagrant list-commands
 ```
 
-# Expose Postgresql from an OCP cluster 
-```
-oc get svc
-```
-Identify Postgresql service
-```
-oc expose svc/keycloak-postgresql
-oc get routes
-```
-
-copy the route of the exposed keycloak-postgresql service
-
-# Vagrat net
-```
-vagrant ssh
-route -A inet
-```
 
 ## Ansible 
 From the root of the project

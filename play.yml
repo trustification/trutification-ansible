@@ -1,34 +1,14 @@
 - name: Trustification
   hosts: trustification
   vars:
-    tpa_single_node_base_hostname: trustification
-    tpa_single_node_skip_os_install: true
-    tpa_single_node_config_dir: /etc/rhtpa
-    tpa_single_node_systemd_directory: /etc/systemd/system
-    tpa_single_node_certs_dir: "{{ tpa_single_node_config_dir }}/certs"
-    tpa_single_node_kube_configmap_dir: "{{ tpa_single_node_config_dir }}/configs"
-    tpa_single_node_kube_manifest_dir: "{{ tpa_single_node_config_dir }}/manifests"
-    # * tpa_single_node_registry_username
-    #   * get at https://access.redhat.com/terms-based-registry
-    tpa_single_node_registry_username: <your Red Hat username>
-    # * tpa_single_node_registry_password
-    #   * get at https://access.redhat.com/terms-based-registry
-    tpa_single_node_registry_password: <your Red Hat password>
-    tpa_single_node_podman_network: tcnet
     tpa_single_node_trustification_image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:e5a9440a40a8e84279202c75425415840d988959
     tpa_single_node_guac_image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9:f0688194637cc759052e02c350c38dbabc19484e
-    # DB_SERVICE GUAC
-    tpa_pghost: localhost
-    tpa_pgport: 5432
-    tpa_pgdatabase: guac
-    tpa_pguser: guac
-    tpa_pgpassword: guac1234
-    tpa_pgsslmode: disable
+    #   * get at https://access.redhat.com/terms-based-registry
+    tpa_single_node_registry_username: <your Red Hat username>
+    #   * get at https://access.redhat.com/terms-based-registry
+    tpa_single_node_registry_password: <your Red Hat password>
   vars_files:
-    # vars.yml should contain:
-    # * tpa_single_node_oidc_issuers
-    # * tpa_single_node_issuer_url
-    - vars.yml
+    - vars/main.yml
   tasks:
     - name: Include TPA single node
       ansible.builtin.include_role:
