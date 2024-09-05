@@ -37,7 +37,7 @@
 
  # 1 Configuring external services, DB, SSO, SQS, S3
 
-# postgres-remove
+# @postgres-remove
 - name: Configure/Deploy Postgres
   ansible.builtin.include_tasks: podman/postgresql.yml
 
@@ -45,6 +45,6 @@
 # S3
 # SSO
 
-# 2 Init DB for Guac, 1 configmap and 1 batch/job
+# 2 Init DB for Guac
 - name: Configure/Deploy guac
   ansible.builtin.include_tasks: podman/init_guac.yml

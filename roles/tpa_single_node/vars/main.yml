@@ -1,2 +1,24 @@
 ---
 # vars file for tpa_scaffolding
+tpa_single_node_base_hostname: trustification
+tpa_single_node_certs_dir: "{{ tpa_single_node_config_dir }}/certs"
+tpa_single_node_config_dir: /etc/rhtpa
+tpa_single_node_kube_configmap_dir: "{{ tpa_single_node_config_dir }}/configs"
+tpa_single_node_kube_manifest_dir: "{{ tpa_single_node_config_dir }}/manifests"
+tpa_single_node_podman_network: tcnet
+tpa_single_node_skip_os_install: true
+tpa_single_node_systemd_directory: /etc/systemd/system
+
+# DB_SERVICE
+tpa_single_node_pghost: localhost
+tpa_single_node_pgport: 5432
+tpa_single_node_pgdatabase: guac
+tpa_single_node_pguser: guac
+tpa_single_node_pgpassword: guac1234
+tpa_single_node_pgsslmode: disable
+
+# S3_SERVICE
+
+# SQS_SERVICE
+
+# SSO_SERVICE
