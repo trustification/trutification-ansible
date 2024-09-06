@@ -46,5 +46,9 @@
 # SSO
 
 # 2 Init DB for Guac
-- name: Configure/Deploy guac
+- name: Configure/Deploy guac init
   ansible.builtin.include_tasks: podman/init_guac.yml
+
+# 3 V11y Walker deployment and cronjob
+- name: Configure/Deploy v11y walker
+  ansible.builtin.include_tasks: podman/v11y_walker.yml
