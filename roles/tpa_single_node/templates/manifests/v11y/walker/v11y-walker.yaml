@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: v11y-walker
+  namespace: trustification
+  labels:
+    app: v11y-walker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: v11y-walker
+  template:
+    metadata:
+      labels:
+        app: v11y-walker
+    spec:
+      initContainers:
+        - name: git-fetch
+          image: "{{ tpa_single_node_trustification_image }}"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /git
+              name: cvelist
+          command: [ "/bin/sh" ]
+          workingDir: /git
+          args:
+            - "-ec"
+            - |
+                if test -d cvelistV5; then
+                  cd cvelistV5
+                  git stash
+                  git stash clear
+                  git pull
+                else
+                  git clone https://github.com/CVEProject/cvelistV5
+                fi
+      containers:
+        - name: v11y-walker
+          image: "{{ tpa_single_node_trustification_image }}"
+          volumeMounts:
+            - mountPath: /mnt
+              name: cvelist
+          args:
+            - "/trust"
+            - "v11y"
+            - "walker"
+            - "--source"
+            - "/mnt/cvelistV5"
+            - "--delta-file"
+            - "/mnt/last-delta"
+          env:
+            - name: RUST_LOG
+              value: "info"
+            - name: INFRASTRUCTURE_ENABLED
+              value: "true"
+            - name: INFRASTRUCTURE_BIND
+              value: "[::]:9010"
+            - name: STORAGE_ACCESS_KEY
+              value: "{{ tpa_single_node_s3_username }}"
+            - name: STORAGE_SECRET_KEY
+              value: "{{ tpa_single_node_s3_password }}"
+            - name: STORAGE_ENDPOINT
+              value: "{{ tpa_single_node_s3_url }}"
+            - name: STORAGE_REGION
+              value: "eu-west-1" # just a dummy value
+            - name: STORAGE_BUCKET
+              value: "v11y-default"
+          ports:
+            - containerPort: 9010
+              protocol: TCP
+              name: infra
+      volumes:
+        - name: v11y-walker
+          persistentVolumeClaim:
+            claimName: v11y-walker
+        - name: cvelist
+          persistentVolumeClaim:
+            claimName: cvelist
+
+

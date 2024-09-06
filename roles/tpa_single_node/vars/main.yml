@@ -5,6 +5,7 @@ tpa_single_node_certs_dir: "{{ tpa_single_node_config_dir }}/certs"
 tpa_single_node_config_dir: /etc/rhtpa
 tpa_single_node_kube_configmap_dir: "{{ tpa_single_node_config_dir }}/configs"
 tpa_single_node_kube_manifest_dir: "{{ tpa_single_node_config_dir }}/manifests"
+tpa_single_node_namespace: trustification
 tpa_single_node_podman_network: tcnet
 tpa_single_node_skip_os_install: true
 tpa_single_node_systemd_directory: /etc/systemd/system
@@ -18,6 +19,9 @@ tpa_single_node_pgpassword: guac1234
 tpa_single_node_pgsslmode: disable
 
 # S3_SERVICE
+tpa_single_node_s3_url:
+tpa_single_node_s3_username:
+tpa_single_node_s3_password:
 
 # SQS_SERVICE
 
