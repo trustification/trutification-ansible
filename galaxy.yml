@@ -6,6 +6,7 @@ version: 1.0.0
 readme: README.md
 authors:
   - Max Dessì <mdessi@redhat.com>
+  - Gilles Dubreuil <gdubreui@redhat.com>
 description: Install and configure RHTPA, a downstream redistribution of the Trustification project.
 license_file: Apache-2.0
 tags: [rhtpa, tpa, trusted profile analyzer, security, application, tools]

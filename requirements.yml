@@ -2,3 +2,5 @@
 collections:
   - name: containers.podman
     version: ">=1.15.4"
+  - name: community.crypto
+    version: ">=2.22.0"

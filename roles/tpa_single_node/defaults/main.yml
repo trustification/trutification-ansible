@@ -7,3 +7,4 @@ tpa_single_node_system_packages:
   - postgresql
   - postgresql-server
   - python3-pip
+  - python3-cryptography

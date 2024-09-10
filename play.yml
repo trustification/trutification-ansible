@@ -7,9 +7,11 @@
     tpa_single_node_registry_username: <your Red Hat username>
     #   * get at https://access.redhat.com/terms-based-registry
     tpa_single_node_registry_password: <your Red Hat password>
+
   vars_files:
     - vars/main.yml
   tasks:
     - name: Include TPA single node
       ansible.builtin.include_role:
         name: tpa_single_node
+

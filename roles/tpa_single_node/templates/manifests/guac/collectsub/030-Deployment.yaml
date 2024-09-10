@@ -35,7 +35,8 @@ spec:
           imagePullPolicy: IfNotPresent
           command:
             - /opt/guac/guaccsub
-          args: []
+          args: 
+           - "--csub-listen-port 2782"
           env:
             - name: GUAC_CSUB_TLS_CERT_FILE
               value: /etc/tls/tls.crt
