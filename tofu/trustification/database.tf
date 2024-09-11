@@ -12,15 +12,12 @@ data "aws_subnets" "cluster-private" {
     name   = "vpc-id"
     values = [data.aws_vpc.cluster.id]
   }
-  tags = {
-    "kubernetes.io/role/internal-elb" = ""
-  }
 }
 
 resource "aws_db_subnet_group" "database" {
   name       = "database-${var.environment}"
-#  subnet_ids = data.aws_subnets.cluster-private.ids
-  subnet_ids = ["subnet-0d7681137281158ec", "subnet-076a5a2ec15a3327b"]
+  subnet_ids = data.aws_subnets.cluster-private.ids
+#  subnet_ids = ["subnet-0d7681137281158ec", "subnet-076a5a2ec15a3327b"]
 }
 
 resource "aws_security_group" "database" {
