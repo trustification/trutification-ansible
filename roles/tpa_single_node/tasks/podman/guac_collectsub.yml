@@ -1,0 +1,33 @@
+---
+- name: Create private key (RSA, 4096 bits) for csub
+  community.crypto.openssl_privatekey:
+    path: "{{ tpa_single_node_certs_dir }}/guac-csub-certificate.key"
+
+- name: Create simple self-signed certificate for csub
+  community.crypto.x509_certificate:
+    path: "{{ tpa_single_node_certs_dir }}/guac-csub-certificate.pem"
+    privatekey_path: "{{ tpa_single_node_certs_dir }}/guac-csub-certificate.key"
+    provider: selfsigned
+
+- name: Copy Guac csub secret manifest
+  ansible.builtin.copy:
+    src: "{{ lookup('ansible.builtin.env', 'GUAC_CSUB_SECRET_FILE') }}"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Guac-csub-Secret.yaml"
+    mode: "0600"
+
+- name: Play Guac csub secret manifest
+  containers.podman.podman_play:
+    kube_file: "{{ tpa_single_node_kube_manifest_dir }}/Guac-csub-Secret.yaml"
+    state: started
+
+- name: Copy Guac csub deployment manifest
+  ansible.builtin.copy:
+    src: "{{ role_path }}/templates/manifests/guac/csub/030-Deployment.yaml"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Guac-csub-Deployment.yaml"
+    mode: "0600"
+
+- name: Play Guac csub deployment manifest
+  containers.podman.podman_play:
+    kube_file: "{{ tpa_single_node_kube_manifest_dir }}/Guac-csub-Deployment.yaml"
+    state: started
+    network: "{{ tpa_single_node_podman_network }}"

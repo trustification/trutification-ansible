@@ -15,6 +15,7 @@
   loop:
     - "{{ tpa_single_node_kube_manifest_dir }}"
     - "{{ tpa_single_node_kube_configmap_dir }}"
+    - "{{ tpa_single_node_certs_dir }}"
 
 - name: Create RHTPA network
   containers.podman.podman_network:
@@ -52,3 +53,6 @@
 # 3 V11y Walker deployment and cronjob
 - name: Configure/Deploy v11y walker
   ansible.builtin.include_tasks: podman/v11y_walker.yml
+
+- name: Provision Guac collectsub
+  ansible.builtin.include_tasks: podman/guac_collectsub.yml

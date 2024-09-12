@@ -4,9 +4,9 @@
     tpa_single_node_trustification_image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:e5a9440a40a8e84279202c75425415840d988959
     tpa_single_node_guac_image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9:f0688194637cc759052e02c350c38dbabc19484e
     #   * get at https://access.redhat.com/terms-based-registry
-    tpa_single_node_registry_username: <your Red Hat username>
+    tpa_single_node_registry_username: "{{ lookup('ansible.builtin.env', 'TPA_SINGLE_NODE_REGISTRY_USERNAME') }}"
     #   * get at https://access.redhat.com/terms-based-registry
-    tpa_single_node_registry_password: <your Red Hat password>
+    tpa_single_node_registry_password: "{{ lookup('ansible.builtin.env', 'TPA_SINGLE_NODE_REGISTRY_PASSWORD') }}"
   vars_files:
     - vars/main.yml
   tasks:
