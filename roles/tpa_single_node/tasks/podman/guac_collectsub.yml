@@ -11,7 +11,7 @@
 
 - name: Copy Guac csub secret manifest
   ansible.builtin.copy:
-    src: "{{ lookup('ansible.builtin.env', 'GUAC_CSUB_SECRET_FILE') }}"
+    src: "{{ tpa_single_node_csub_secret_manifest }}"
     dest: "{{ tpa_single_node_kube_manifest_dir }}/Guac-csub-Secret.yaml"
     mode: "0600"
 
@@ -22,7 +22,7 @@
 
 - name: Copy Guac csub deployment manifest
   ansible.builtin.copy:
-    src: "{{ role_path }}/templates/manifests/guac/csub/030-Deployment.yaml"
+    src: "{{ role_path }}/templates/manifests/guac/collectsub/030-Deployment.yaml"
     dest: "{{ tpa_single_node_kube_manifest_dir }}/Guac-csub-Deployment.yaml"
     mode: "0600"
 

@@ -26,12 +26,9 @@ spec:
         app.kubernetes.io/instance: redhat-trusted-profile-analyzer
     spec:
       volumes:
-        - name: tls-cert
+        - name: tls
           secret:
-            secretName: guac-collectsub-tls-cert
-        - name: tls-key
-          secret:
-            secretName: guac-collectsub-tls-key
+            secretName: guac-collectsub-tls
       containers:
         - name: service
           image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:a0cd9379eeaa15e95230fe330649b74928c776fbd35438b76fa17f3f4bbea954
@@ -46,10 +43,7 @@ spec:
             - name: GUAC_CSUB_TLS_KEY_FILE
               value: /etc/tls/tls.key
           volumeMounts:
-            - mountPath: /etc/tls/tls.cert
-              name: tls-cert
-              readOnly: true
-            - mountPath: /etc/tls/tls.key
+            - mountPath: /etc/tls/tls
               name: tls-cert
               readOnly: true
           livenessProbe:
