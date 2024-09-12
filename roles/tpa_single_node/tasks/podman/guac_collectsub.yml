@@ -1,8 +1,10 @@
 ---
+# Todo: remove if user provided secret manifest remains the only approach 
 - name: Create private key (RSA, 4096 bits) for csub
   community.crypto.openssl_privatekey:
     path: "{{ tpa_single_node_certs_dir }}/guac-csub-certificate.key"
 
+# Todo: remove if user provided secret manifest remains the only approach 
 - name: Create simple self-signed certificate for csub
   community.crypto.x509_certificate:
     path: "{{ tpa_single_node_certs_dir }}/guac-csub-certificate.pem"
