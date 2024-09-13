@@ -26,3 +26,9 @@ tpa_single_node_s3_password:
 # SQS_SERVICE
 
 # SSO_SERVICE
+
+# TSL Certificates
+tpa_single_node_guac_csub_tls_cert_pem_path: "{{ tpa_single_node_certificates_path }}/guac-collectsub-tls-certificate.pem"
+tpa_single_node_guac_csub_tls_cert_key_path: "{{ tpa_single_node_certificates_path }}/guac-collectsub-tls-certificate.key"
+tpa_single_node_guac_graphql_tls_cert_pem_path: "{{ tpa_single_node_certificates_path }}/guac-graphql-tls-certificate.pem"
+tpa_single_node_guac_graphql_tls_cert_key_path: "{{ tpa_single_node_certificates_path }}/guac-graphql-tls-certificate.key"
