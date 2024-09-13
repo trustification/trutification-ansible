@@ -110,7 +110,15 @@ Default values for certificate file names are defined in `roles/tpa_single_node/
         name: tpa_single_node
 ```
 
-6. Execute the following command (NOTE: you will have to provide credentials to authenticate to registry.redhat.io: https://access.redhat.com/RegistryAuthentication):
+6. Create Environment Variables with S3 and OIDC credentails
+```
+export TPA_S3_ACCESS_KEY=<S3 Storage Access Key>
+export TPA_S3_SECRET_KEY=<S3 Storage Secret Key>
+export TPA_OIDC_WALKER_SECRET=<OIDC Walker Secret>
+```
+
+
+7. Execute the following command (NOTE: you will have to provide credentials to authenticate to registry.redhat.io: https://access.redhat.com/RegistryAuthentication):
 
 ```shell
 ANSIBLE_ROLES_PATH="roles/" ansible-playbook -i inventory.ini play.yml -vvvv -e registry_username='REGISTRY.REDHAT.IO_USERNAME' -e registry_password='REGISTRY.REDHAT.IO_PASSWORD'

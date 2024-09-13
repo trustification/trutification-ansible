@@ -58,7 +58,7 @@
 - name: Update minio Endpoint if needed
   ansible.builtin.blockinfile:
     path: "v11y-api-temp-deployment.yaml"
-    inserafter: EOF
+    insertafter: EOF
     block: |
             - name: STORAGE_ENDPOINT
               value: {{ tpa_single_node_s3_minio_endpoint }}

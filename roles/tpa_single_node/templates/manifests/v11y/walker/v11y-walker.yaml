@@ -77,5 +77,3 @@ spec:
         - name: cvelist
           persistentVolumeClaim:
             claimName: cvelist
-
-
