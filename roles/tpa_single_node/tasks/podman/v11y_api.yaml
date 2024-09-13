@@ -1,0 +1,74 @@
+---
+- name: Confirmed required parameters provided
+  ansible.builtin.assert:
+    that:
+      - tpa_single_node_base_hostname is defined
+      - tpa_single_node_base_hostname | trim | length > 0
+    msg: "'tpa_single_node_base_hostname' must be specified"
+
+- name: Get RHTPA network details
+  containers.podman.podman_network:
+    name: "{{ tpa_single_node_podman_network }}"
+  register: tpa_podman_network_results
+
+- name: Retrieve OIDC type from oidc_issuer_url
+  oidc: "{{ cognito if 'cognito' in oidc_issuer_url else keycloak }}"
+
+- name: Create Secret for S3 Storage
+  ansible.builtin.include_tasks: podman/install_manifest.yml
+  vars:
+    podman_spec:
+      state: started
+      systemd_file: v11y-api-secret
+      network: "{{ tpa_single_node_podman_network }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'templates/manifests/v11y/api/v11y-api-secret.yaml') | from_yaml }}"
+
+- name: Deploy v11y-api ConfigMap
+  ansible.builtin.include_tasks: podman/install_manifest.yml
+  vars:
+    podman_spec:
+      state: started
+      systemd_file: v11y-api-cm
+      network: "{{ tpa_single_node_podman_network }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'templates/manifests/v11y/api/v11y-api-cm-' + oidc + '.yaml') | from_yaml }}"
+
+- name: Retrieve the checksum of the ConfigMap
+  ansible.builtin.stat:
+    path: "{{ 'templates/manifests/v11y/api/v11y-api-cm-' + oidc + '.yaml' }}"
+    checksum_algorithm: sha256
+  register: cm_checksum
+
+- name: Find the deployment temp file exists
+  ansible.builtin.stat:
+    path: "v11y-api-temp-deployment.yaml"
+  register: temp_deployment
+
+- name: Remove the existing temp deployment file
+  ansible.builtin.file:
+    path: "v11y-api-temp-deployment.yaml"
+    state: absent
+  when: temp_deployment.stat.exists
+
+- name: Create temp deployment file
+  ansible.builtin.template:
+    src: "templates/manifests/v11y/api/v11y-api-deployment.yaml"
+    dest: "v11y-api-temp-deployment.yaml"
+    mode: "0755"
+
+- name: Update minio Endpoint if needed
+  ansible.builtin.blockinfile:
+    path: "v11y-api-temp-deployment.yaml"
+    inserafter: EOF
+    block: |
+            - name: STORAGE_ENDPOINT
+              value: {{ tpa_single_node_s3_minio_endpoint }}
+  when: "'cognito' not in oidc"
+
+- name: Deploy v11y-api Deployment
+  ansible.builtin.include_tasks: podman/install_manifest.yml
+  vars:
+    podman_spec:
+      state: started
+      systemd_file: v11y-api
+      network: "{{ tpa_single_node_podman_network }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'v11y-api-temp-deployment.yaml') | from_yaml }}"

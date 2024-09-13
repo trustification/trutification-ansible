@@ -1,0 +1,28 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: v11y-api-auth
+  namespace: "{{ tpa_single_node_namespace }}"
+  labels:
+      app: v11y-api
+      component: v11y
+data:
+  auth.yaml: |
+
+    authentication:
+      clients:
+        - clientId: "{{ tpa_single_node_oidc_frontend }}"
+          issuerUrl: "{{ tpa_single_node_oidc_issuer_url }}"
+          scopeMappings: &keycloakScopeMappings
+            "create:document": [ "create.sbom", "create.vex" ]
+            "read:document": [ "read.sbom", "read.vex" ]
+            "update:document": [ "update.sbom", "update.vex" ]
+            "delete:document": [ "delete.sbom", "delete.vex" ]
+          # tlsCaCertificates:
+          #   - "{{ tls_cert }}"
+
+        - clientId: "{{ tpa_single_node_oidc_walker }}"
+          issuerUrl: "{{ tpa_single_node_oidc_issuer_url }}"
+          scopeMappings: *keycloakScopeMappings
+          # tlsCaCertificates:
+          #   - "{{ tls_cert }}"
