@@ -3,7 +3,7 @@
   when:
     - ansible_facts['distribution'] == 'RedHat'
     - ansible_facts['distribution_major_version'] == '9'
-  ansible.builtin.command: podman login registry.redhat.io -u {{ tpa_single_node_registry_username }} --password {{ tpa_single_node_registry_password }}
+  ansible.builtin.command: podman login registry.redhat.io -u {{ tpa_single_node_registry_username }} -p {{ tpa_single_node_registry_password }}
   register: podman_login_result
   changed_when: '"Already logged in" not in podman_login_result'
 
@@ -15,6 +15,7 @@
   loop:
     - "{{ tpa_single_node_kube_manifest_dir }}"
     - "{{ tpa_single_node_kube_configmap_dir }}"
+    - "{{ tpa_single_node_certs_dir }}"
 
 - name: Create RHTPA network
   containers.podman.podman_network:
@@ -27,7 +28,6 @@
   containers.podman.podman_image:
     name: "{{ tpa_single_node_trustification_image }}"
 
-
 - name: Pull Guac image from registry.redhat.io
   when:
     - ansible_facts['distribution'] == 'RedHat'
@@ -35,7 +35,7 @@
   containers.podman.podman_image:
     name: "{{ tpa_single_node_guac_image }}"
 
- # 1 Configuring external services, DB, SSO, SQS, S3
+  # 1 Configuring external services, DB, SSO, SQS, S3
 
 # @postgres-remove
 - name: Configure/Deploy Postgres
@@ -52,3 +52,6 @@
 # 3 V11y Walker deployment and cronjob
 - name: Configure/Deploy v11y walker
   ansible.builtin.include_tasks: podman/v11y_walker.yml
+
+- name: Provision Guac collectsub
+  ansible.builtin.include_tasks: podman/guac_collectsub.yml

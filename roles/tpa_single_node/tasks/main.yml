@@ -10,3 +10,7 @@
   args:
     apply:
       become: true
+  vars:
+    tpa_single_node_registry_username: "{{ lookup('env', 'TPA_SINGLE_NODE_REGISTRY_USERNAME') }}"
+    tpa_single_node_registry_password: "{{ lookup('env', 'TPA_SINGLE_NODE_REGISTRY_PASSWORD') }}"
+    tpa_single_node_csub_secret_manifest: "{{ lookup('env', 'TPA_SINGLE_NODE_GUAC_CSUB_SECRET_FILE') }}"
