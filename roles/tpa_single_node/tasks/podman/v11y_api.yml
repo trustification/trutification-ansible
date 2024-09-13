@@ -11,17 +11,48 @@
     name: "{{ tpa_single_node_podman_network }}"
   register: tpa_podman_network_results
 
-- name: Retrieve OIDC type from oidc_issuer_url
-  oidc: "{{ cognito if 'cognito' in oidc_issuer_url else keycloak }}"
+- name: Set OIDC variable
+  ansible.builtin.set_fact:
+    oidc: keycloak
 
-- name: Create Secret for S3 Storage
+- name: Overwrite OIDC variable
+  ansible.builtin.set_fact:
+    oidc: cognito
+  when: "'cognito' in (tpa_single_node_oidc_issuer_url | string | safe)"
+
+- name: Check S3 Access key and Secret is defined
+  ansible.builtin.assert:
+    that:
+      - tpa_single_node_s3_access_key is defined
+      - tpa_single_node_s3_access_key != ""
+      - tpa_single_node_s3_secret_key is defined
+      - tpa_single_node_s3_secret_key != ""
+    fail_msg: S3 Access Key and Secret is not defined
+
+- name: Create S3 Storage Secret
   ansible.builtin.include_tasks: podman/install_manifest.yml
   vars:
     podman_spec:
       state: started
-      systemd_file: v11y-api-secret
+      systemd_file: v11y-api-secret-s3
       network: "{{ tpa_single_node_podman_network }}"
-      kube_file_content: "{{ lookup('ansible.builtin.template', 'templates/manifests/v11y/api/v11y-api-secret.yaml') | from_yaml }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'templates/manifests/v11y/api/v11y-api-secret-s3.yaml') | from_yaml }}"
+
+- name: Check OIDC Walker is defined
+  ansible.builtin.assert:
+    that:
+      - tpa_single_node_oidc_walker_secret is defined
+      - tpa_single_node_oidc_walker_secret != ""
+    fail_msg: OIDC Walker Secret is not defined
+
+- name: Create OIDC walker Secret
+  ansible.builtin.include_tasks: podman/install_manifest.yml
+  vars:
+    podman_spec:
+      state: started
+      systemd_file: v11y-api-secret-oidc
+      network: "{{ tpa_single_node_podman_network }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'templates/manifests/v11y/api/v11y-api-secret-oidc.yaml') | from_yaml }}"
 
 - name: Deploy v11y-api ConfigMap
   ansible.builtin.include_tasks: podman/install_manifest.yml
