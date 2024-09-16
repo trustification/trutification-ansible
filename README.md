@@ -74,22 +74,29 @@ host_key_checking = False
 3. Add the subscription, registry and certificates information :
 
 - For Red Hat subscription define :
-  export TPA_SINGLE_NODE_REGISTRATION_USERNAME=<Your Red Hat subscription username>
-  export TPA_SINGLE_NODE_REGISTRATION_PASSWORD=<Your Red Hat subscription password>
+  `export TPA_SINGLE_NODE_REGISTRATION_USERNAME=<Your Red Hat subscription username>`
+  `export TPA_SINGLE_NODE_REGISTRATION_PASSWORD=<Your Red Hat subscription password>`
 - For Red Hat image registry define :
-  export TPA_SINGLE_NODE_REGISTRY_USERNAME=<Your Red Hat image registry username>
-  export TPA_SINGLE_NODE_REGISTRY_PASSWORD=<Your Red Hat image registry password>
+  `export TPA_SINGLE_NODE_REGISTRY_USERNAME=<Your Red Hat image registry username>`
+  `export TPA_SINGLE_NODE_REGISTRY_PASSWORD=<Your Red Hat image registry password>`
 
 # Todo - Remove ?
 
-Alternatively vagrant will prompt for the registration username and password.
+Alternatively vagrant will prompt you to provide the registration username and password.
 
-Provide TLS certificates :
-export GUAC_CSUB_SECRET_FILE=./certificates/guac-collectsub-secret.yaml
+4. Path for TLS certificates files:
 
-# Todo - Give example how to generate secret manifest for TLS using kubectl or oc command
+Replace default value in play.yml and replace them accordingly
+`tpa_single_node_certificates_path: /tmp/certs`
 
-4. Create a simple Ansible playbook `play.yml`:
+Default values for certificate file names are defined in `roles/tpa_single_node/vars/main.yml`, they can be changed if needed :
+
+- guac-collectsub-tls-certificate.pem"
+- guac-collectsub-tls-certificate.key"
+- guac-graphql-tls-certificate.pem"
+- guac-graphql-tls-certificate.key"
+
+5. Create a simple Ansible playbook `play.yml`:
 
 ```
 - hosts: trustification
@@ -103,7 +110,7 @@ export GUAC_CSUB_SECRET_FILE=./certificates/guac-collectsub-secret.yaml
         name: tpa_single_node
 ```
 
-5. Execute the following command (NOTE: you will have to provide credentials to authenticate to registry.redhat.io: https://access.redhat.com/RegistryAuthentication):
+6. Execute the following command (NOTE: you will have to provide credentials to authenticate to registry.redhat.io: https://access.redhat.com/RegistryAuthentication):
 
 ```shell
 ANSIBLE_ROLES_PATH="roles/" ansible-playbook -i inventory.ini play.yml -vvvv -e registry_username='REGISTRY.REDHAT.IO_USERNAME' -e registry_password='REGISTRY.REDHAT.IO_PASSWORD'

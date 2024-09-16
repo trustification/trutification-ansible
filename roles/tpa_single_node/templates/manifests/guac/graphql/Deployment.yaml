@@ -41,10 +41,12 @@ spec:
                   '
           env:
             - name: TC_PGHOST
-              valueFrom:
-                secretKeyRef:
-                  key: POSTGRES_HOST
-                  name: keycloak-db-secret
+              value: keycloak-postgresql
+# TODO : WIP              
+#             valueFrom:
+#               secretKeyRef:
+#                 key: POSTGRES_HOST
+#                 name: keycloak-db-secret
             - name: TC_PGPORT
               value: '5432'
             - name: TC_PGDATABASE

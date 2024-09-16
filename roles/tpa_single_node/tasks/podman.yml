@@ -15,7 +15,6 @@
   loop:
     - "{{ tpa_single_node_kube_manifest_dir }}"
     - "{{ tpa_single_node_kube_configmap_dir }}"
-    - "{{ tpa_single_node_certs_dir }}"
 
 - name: Create RHTPA network
   containers.podman.podman_network:
@@ -55,3 +54,12 @@
 
 - name: Provision Guac collectsub
   ansible.builtin.include_tasks: podman/guac_collectsub.yml
+  vars:
+    tpa_single_node_guac_csub_tls_cert_pem: "{{ lookup('file', tpa_single_node_guac_csub_tls_cert_pem_path) }}"
+    tpa_single_node_guac_csub_tls_cert_key: "{{ lookup('file', tpa_single_node_guac_csub_tls_cert_key_path) }}"
+
+- name: Provision Guac graphql
+  ansible.builtin.include_tasks: podman/guac_graphql.yml
+  vars:
+    tpa_single_node_guac_graphql_tls_cert_pem: "{{ lookup('file', tpa_single_node_guac_graphql_tls_cert_pem_path) }}"
+    tpa_single_node_guac_graphql_tls_cert_key: "{{ lookup('file', tpa_single_node_guac_graphql_tls_cert_key_path) }}"
