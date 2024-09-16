@@ -15,7 +15,6 @@
   loop:
     - "{{ tpa_single_node_kube_manifest_dir }}"
     - "{{ tpa_single_node_kube_configmap_dir }}"
-    - "{{ tpa_single_node_certs_dir }}"
 
 - name: Create RHTPA network
   containers.podman.podman_network:
