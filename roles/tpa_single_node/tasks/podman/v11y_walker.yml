@@ -27,7 +27,6 @@
     job: "{{ lookup('ansible.builtin.template', 'configs/v11y_cronjob.sh') }}"
     state: present
 
-
 - name: Copy v11-walker to tmp for the podman build
   ansible.builtin.copy:
     src: "/etc/cron.d/v11-walker"
@@ -44,7 +43,7 @@
       state: started
       systemd_file: v11y-walker
       network: "{{ tpa_single_node_podman_network }}"
-      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/v11y/walker/v11y-walker.yaml') | from_yaml }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/v11y/walker/Deployment.yaml') | from_yaml }}"
 
 # Here we build a container only for the cronjob using trustification as a base image and adding cronie package
 
