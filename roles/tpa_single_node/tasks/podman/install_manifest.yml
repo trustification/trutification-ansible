@@ -37,4 +37,5 @@
     enabled: true
     daemon_reload: true
     name: "{{ podman_spec.systemd_file }}"
+    no_block: true
   when: copy_manifest.changed or copy_systemd_file.changed

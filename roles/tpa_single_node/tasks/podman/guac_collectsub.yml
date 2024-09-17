@@ -16,8 +16,19 @@
     dest: "{{ tpa_single_node_kube_manifest_dir }}/Guac-Collectsub-Deployment.yaml"
     mode: "0600"
 
-- name: Play Guac csub deployment manifest
-  containers.podman.podman_play:
-    kube_file: "{{ tpa_single_node_kube_manifest_dir }}/Guac-Collectsub-Deployment.yaml"
-    state: started
-    network: "{{ tpa_single_node_podman_network }}"
+- name: Copy Guac csub Quadlet file
+  ansible.builtin.copy:
+    src: "{{ role_path }}/templates/manifests/guac/collectsub/Deployment.kube"
+    dest: /etc/containers/systemd/guac-collectsub.kube
+    mode: "0600"
+
+- name: Reload systemd manager configuration
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+
+- name: Ensure guac-collectsub service is enabled and started
+  ansible.builtin.systemd_service:
+    name: guac-collectsub
+    state: restarted
+    no_block: true
+    enabled: true
