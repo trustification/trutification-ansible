@@ -14,13 +14,14 @@
       type: "osv"
 
 - name: Deploy collector-osv
-  ansible.builtin.include_tasks: install_manifest.yml
+  ansible.builtin.include_tasks: install_service.yml
   vars:
-    podman_spec:
-      state: started
-      systemd_file: collector-osv
+    specs:
+      service: collector-osv
+      state: restarted
       network: "{{ tpa_single_node_podman_network }}"
-      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/collector/osv/Deployment.yaml.j2') | from_yaml }}"
+      kube_file: "{{ role_path }}/templates/systemd/default.kube.j2"
+      manifest_file: "{{ role_path }}/templates/manifests/collector/osv/Deployment.yaml.j2"
       configmaps:
         - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collector-osv.yaml"
         - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api-guac.yaml"

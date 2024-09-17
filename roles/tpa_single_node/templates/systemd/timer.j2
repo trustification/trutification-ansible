@@ -1,0 +1,16 @@
+[Unit]
+Description=Run {{ specs.service}}.timer
+  
+[Timer]
+Unit={{ specs.service}}.service
+{% if specs.timer.type == "monotonic" -%}
+OnBootSec=1min
+OnUnitActiveSec={{ specs.timer.pattern }}
+{% endif -%} 
+{% if specs.timer.type == "realtime" -%}
+OnCalendar={{ specs.timer.pattern }}
+Persistent=true
+{% endif %} 
+
+[Install]
+WantedBy=timers.target

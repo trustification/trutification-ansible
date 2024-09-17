@@ -1,0 +1,13 @@
+[Unit]
+Description=Run Guac Graphql Pod 
+
+[Kube]
+Yaml=/etc/rhtpa/manifests/Guac-Graphql-Deployment.yaml
+
+[Service]
+Restart=always
+RestartSec=10
+StartLimitInterval=0
+
+[Install]
+WantedBy=default.target
