@@ -29,14 +29,16 @@
       - tpa_single_node_s3_secret_key != ""
     fail_msg: S3 Access Key and Secret is not defined
 
-- name: Create S3 Storage Secret
-  ansible.builtin.include_tasks: podman/install_manifest.yml
-  vars:
-    podman_spec:
-      state: started
-      systemd_file: v11y-api-secret-s3
-      network: "{{ tpa_single_node_podman_network }}"
-      kube_file_content: "{{ lookup('ansible.builtin.template', 'templates/manifests/v11y/api/v11y-api-secret-s3.yaml') | from_yaml }}"
+- name: Generate S3 secret manifest
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/v11y/api/v11y-api-secret-s3.j2"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-s3-secret.yaml"
+    mode: "0600"
+
+- name: Play S3 secret secret manifest
+  containers.podman.podman_play:
+    kube_file: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-s3-secret.yaml"
+    state: started
 
 - name: Check OIDC Walker is defined
   ansible.builtin.assert:
@@ -45,61 +47,135 @@
       - tpa_single_node_oidc_walker_secret != ""
     fail_msg: OIDC Walker Secret is not defined
 
-- name: Create OIDC walker Secret
-  ansible.builtin.include_tasks: podman/install_manifest.yml
-  vars:
-    podman_spec:
-      state: started
-      systemd_file: v11y-api-secret-oidc
-      network: "{{ tpa_single_node_podman_network }}"
-      kube_file_content: "{{ lookup('ansible.builtin.template', 'templates/manifests/v11y/api/v11y-api-secret-oidc.yaml') | from_yaml }}"
+- name: Generate OIDC secret manifest
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/v11y/api/v11y-api-secret-oidc.j2"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-secret-oidc.yaml"
+    mode: "0600"
 
-- name: Deploy v11y-api ConfigMap
-  ansible.builtin.include_tasks: podman/install_manifest.yml
+- name: Play OIDC secret secret manifest
+  containers.podman.podman_play:
+    kube_file: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-secret-oidc.yaml"
+    state: started
+
+# - name: Generate OIDC auth ConfigMap manifest
+#   ansible.builtin.template:
+#     src: "{{ role_path }}/templates/manifests/v11y/api/v11y-api-cm-{{ oidc }}.j2"
+#     dest: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-cm-oidc.yaml"
+#     mode: "0600"
+
+- name: Retrieve OIDC config content
+  ansible.builtin.set_fact:
+    oidc_config_content: "{{ lookup('ansible.builtin.template',role_path + '/templates/manifests/v11y/api/v11y-api-cm-' + oidc + '.j2') }}"
+
+# - name: Find the deployment temp file exists
+#   ansible.builtin.stat:
+#     path: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-temp-deployment.yaml"
+#   register: temp_deployment
+
+# - name: Remove the existing temp deployment file
+#   ansible.builtin.file:
+#     path: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-temp-deployment.yaml"
+#     state: absent
+#   when: temp_deployment.stat.exists
+
+# Updating dynamic S3 endpoint not seems to work
+# - name: Create temp deployment file
+#   ansible.builtin.template:
+#     src: "{{ role_path }}/templates/manifests/v11y/api/v11y-api-deployment.j2"
+#     dest: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-temp-deployment.yaml"
+#     mode: "0600"
+
+# - name: Content for Storage Endpoint
+#   ansible.builtin.set_fact:
+#     lines_to_add:
+#       - "            - name: STORAGE_ENDPOINT"
+#       - "              value: {{ tpa_single_node_s3_minio_endpoint }}"
+#   when: "'cognito' not in oidc"
+
+# - name: Update minio Endpoint if needed
+#   ansible.builtin.lineinfile:
+#     path: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-temp-deployment.yaml"
+#     line: "{{ item }}"
+#     insertafter: EOF
+#   loop: "{{ lines_to_add }}"
+
+- name: Check S3 endpoint
+  ansible.builtin.set_fact:
+    is_minio: "{{ tpa_single_node_s3_minio_endpoint is defined and tpa_single_node_s3_minio_endpoint != '' }}"
+
+# - name: Create temp deployment file
+#   ansible.builtin.template:
+#     src: "manifests/v11y/api/v11y-api-deployment-s3.j2"
+#     dest: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-temp-deployment.yaml"
+#     mode: "0600"
+
+- name: Create v11y-api configmap
+  ansible.builtin.copy:
+    content: "{{ configmap_content | to_nice_yaml(indent=2) }}"
+    dest: "{{ tpa_single_node_v11y_api_config }}"
+    mode: "0600"
   vars:
-    podman_spec:
-      state: started
-      systemd_file: v11y-api-cm
-      network: "{{ tpa_single_node_podman_network }}"
-      kube_file_content: "{{ lookup('ansible.builtin.template', 'templates/manifests/v11y/api/v11y-api-cm-' + oidc + '.yaml') | from_yaml }}"
+    configmap_content:
+      kind: ConfigMap
+      apiVersion: v1
+      metadata:
+        name: v11y-api-config
+        namespace: "{{ tpa_single_node_namespace }}"
+      data:
+        auth.yaml: |
+          {
+            "authentication": {
+              "clients": [
+                {
+                  "clientId": "{{ tpa_single_node_oidc_frontend }}",
+                  "issuerUrl": "{{ tpa_single_node_oidc_issuer_url }}",
+                  "scopeMappings": {
+                    "create:document": ["create.sbom", "create.vex"],
+                    "read:document": ["read.sbom", "read.vex"],
+                    "update:document": ["update.sbom", "update.vex"],
+                    "delete:document": ["delete.sbom", "delete.vex"]
+                  }
+                },
+                {
+                  "clientId": "{{ tpa_single_node_oidc_walker }}",
+                  "issuerUrl": "{{ tpa_single_node_oidc_issuer_url }}",
+                  "scopeMappings": {
+                    "create:document": ["create.sbom", "create.vex"],
+                    "read:document": ["read.sbom", "read.vex"],
+                    "update:document": ["update.sbom", "update.vex"],
+                    "delete:document": ["delete.sbom", "delete.vex"]
+                  }
+                }
+              ]
+            }
+          }
+  when: "'cognito' not in oidc"
 
 - name: Retrieve the checksum of the ConfigMap
   ansible.builtin.stat:
-    path: "{{ 'templates/manifests/v11y/api/v11y-api-cm-' + oidc + '.yaml' }}"
+    path: "{{ tpa_single_node_v11y_api_config }}"
     checksum_algorithm: sha256
   register: cm_checksum
 
-- name: Find the deployment temp file exists
-  ansible.builtin.stat:
-    path: "v11y-api-temp-deployment.yaml"
-  register: temp_deployment
-
-- name: Remove the existing temp deployment file
-  ansible.builtin.file:
-    path: "v11y-api-temp-deployment.yaml"
-    state: absent
-  when: temp_deployment.stat.exists
-
-- name: Create temp deployment file
-  ansible.builtin.template:
-    src: "templates/manifests/v11y/api/v11y-api-deployment.yaml"
-    dest: "v11y-api-temp-deployment.yaml"
-    mode: "0755"
-
-- name: Update minio Endpoint if needed
-  ansible.builtin.blockinfile:
-    path: "v11y-api-temp-deployment.yaml"
-    insertafter: EOF
-    block: |
-            - name: STORAGE_ENDPOINT
-              value: {{ tpa_single_node_s3_minio_endpoint }}
-  when: "'cognito' not in oidc"
-
-- name: Deploy v11y-api Deployment
+- name: Deploy v11y-api Deployment 
   ansible.builtin.include_tasks: podman/install_manifest.yml
   vars:
     podman_spec:
       state: started
       systemd_file: v11y-api
       network: "{{ tpa_single_node_podman_network }}"
-      kube_file_content: "{{ lookup('ansible.builtin.template', 'v11y-api-temp-deployment.yaml') | from_yaml }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/v11y/api/v11y-api-deployment-s3.j2') | from_yaml }}"
+      configmap: "{{ tpa_single_node_v11y_api_config }}"
+  when: is_minio
+
+- name: Deploy v11y-api Deployment 
+  ansible.builtin.include_tasks: podman/install_manifest.yml
+  vars:
+    podman_spec:
+      state: started
+      systemd_file: v11y-api
+      network: "{{ tpa_single_node_podman_network }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/v11y/api/v11y-api-deployment.j2') | from_yaml }}"
+      configmap: "{{ tpa_single_node_v11y_api_config }}"
+  when: ! is_minio

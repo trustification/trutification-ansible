@@ -24,14 +24,14 @@ spec:
         app.kubernetes.io/part-of: trustification
         metrics: "true"
       annotations:
-        config/checksum: "{{ cm_checksum }}"
+        config/checksum: "{{ cm_checksum.stat.checksum }}"
     spec:
       volumes:
         - name: data
           persistentVolumeClaim:
             claimName: v11y-storage
-        - name: config
-          configMap: v11y-api-auth
+        - name: v11y-api-config
+          configMap: v11y-api-config
 
       containers:
         - image: "{{ tpa_single_node_trustification_image }}"
@@ -57,9 +57,8 @@ spec:
               protocol: TCP
 
           volumeMounts:
-            - name: config-auth
-              mountPath: /etc/config/auth.yaml
-              subPath: auth.yaml
+            - name: v11y-api-config
+              mountPath: /etc/v11y-api-config
 
           livenessProbe:
             initialDelaySeconds: 2
@@ -113,3 +112,5 @@ spec:
                 secretKeyRef:
                   key: tpa_single_node_s3_secret_key
                   name: s3-credentials
+            - name: STORAGE_ENDPOINT
+              value: "{{ tpa_single_node_s3_minio_endpoint }}"
