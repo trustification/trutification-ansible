@@ -37,23 +37,31 @@
 - name: "Create app database"
   postgresql_db:
     state: present
-    name: "{{ tpa_single_node_pgdatabase }}"
+    name: "{{ tpa_single_node_pg_db }}"
   become: yes
   become_user: postgres
 
+- name: "Set db admin user"
+  postgresql_user:
+    state: present
+    name: "{{ tpa_single_node_pg_admin_user }}"
+    password: "{{ tpa_single_node_pg_admin_passwd }}"
+  become: yes
+  become_user: postgres
+  
 - name: "Create db user"
   postgresql_user:
     state: present
-    name: "{{ tpa_single_node_pguser }}"
-    password: "{{ tpa_single_node_pgpassword }}"
+    name: "{{ tpa_single_node_pg_user }}"
+    password: "{{ tpa_single_node_pg_user_passwd }}"
   become: yes
   become_user: postgres
 
 - name: "Grant db user access to app db"
   postgresql_privs:
     type: database
-    database: "{{ tpa_single_node_pgdatabase }}"
-    roles: "{{ tpa_single_node_pguser }}"
+    database: "{{ tpa_single_node_pg_db }}"
+    roles: "{{ tpa_single_node_pg_user }}"
     grant_option: no
     privs: all
   become: yes
@@ -65,12 +73,12 @@
     contype: host
     databases: all
     method: md5
-    users: "{{ tpa_single_node_pguser }}"
+    users: all
     create: true
   become: yes
   become_user: postgres
   notify: restart postgres
 
 - name: Testing DB to make sure it is available
-  command: psql postgresql://{{ tpa_single_node_pguser }}:{{ tpa_single_node_pgpassword }}@{{ tpa_single_node_pghost }}/{{ tpa_single_node_pgdatabase }} -c 'SELECT 1'
+  command: psql postgresql://{{ tpa_single_node_pg_user }}:{{ tpa_single_node_pg_user_passwd }}@{{ tpa_single_node_pg_host }}/{{ tpa_single_node_pg_db }} -c 'SELECT 1'
 

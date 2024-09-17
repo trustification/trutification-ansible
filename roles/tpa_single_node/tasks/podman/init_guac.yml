@@ -23,8 +23,8 @@
     mode: "0600"
 
 - name: Run init-db.sql
-  ansible.builtin.command: "psql postgresql://{{ tpa_single_node_pguser }}:{{ tpa_single_node_pgpassword }}@{{ tpa_single_node_pghost }}/\n
-  {{ tpa_single_node_pgdatabase }} -v ON_ERROR_STOP=1 \n
-  -v db_name={{ tpa_single_node_pgdatabase }} -v db_user={{ tpa_single_node_pguser }} \n
-  -v db_password={{ tpa_single_node_pgpassword }} -f /tmp/init-db.sql"
+  ansible.builtin.command: "psql postgresql://{{ tpa_single_node_pg_user }}:{{ tpa_single_node_pg_user_passwd }}@{{ tpa_single_node_pg_host }}/\n
+  {{ tpa_single_node_pg_db }} -v ON_ERROR_STOP=1 \n
+  -v db_name={{ tpa_single_node_pg_db }} -v db_user={{ tpa_single_node_pg_user }} \n
+  -v db_password={{ tpa_single_node_pg_user_passwd }} -f /tmp/init-db.sql"
   changed_when: false

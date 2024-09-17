@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: guac-collectsub
+  namespace: trustification
   labels:
     app.kubernetes.io/name: guac-collectsub
     app.kubernetes.io/component: guac
