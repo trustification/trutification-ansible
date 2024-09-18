@@ -5,8 +5,10 @@ metadata:
   namespace: "{{ tpa_single_node_namespace }}"
   labels:
     app.kubernetes.io/name: v11y-api
-    app.kubernetes.io/component: api
-    app.kubernetes.io/part-of: trustification
+    app.kubernetes.io/component: v11y
+    app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    app.kubernetes.io/version: 1.1.1
+    app.kubernetes.io/part-of: trusted-profile-analyzer
 spec:
   replicas: 1
   strategy:
@@ -14,25 +16,17 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: v11y-api
-      app.kubernetes.io/component: api
-      app.kubernetes.io/part-of: trustification
+      app.kubernetes.io/component: v11y
+      app.kubernetes.io/instance: redhat-trusted-profile-analyzer
   template:
     metadata:
       labels:
         app.kubernetes.io/name: v11y-api
-        app.kubernetes.io/component: api
-        app.kubernetes.io/part-of: trustification
-        metrics: "true"
+        app.kubernetes.io/component: v11y
+        app.kubernetes.io/instance: redhat-trusted-profile-analyzer
       annotations:
         config/checksum: "{{ cm_checksum.stat.checksum }}"
     spec:
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: v11y-storage
-        - name: v11y-api-config
-          configMap: v11y-api-config
-
       containers:
         - image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: IfNotPresent
@@ -57,9 +51,12 @@ spec:
               protocol: TCP
 
           volumeMounts:
-            - name: v11y-api-config
+            - name: v11y-api-cm-volume
               mountPath: /etc/v11y-api-config
-
+            - name: s3-credentials
+              mountPath: /etc/s3-v11y
+            - name: oidc-credentials
+              mountPath: /etc/oidc-v11y
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:
@@ -73,10 +70,6 @@ spec:
               port: 9010
 
           env:
-            - name: NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
             - name: RUST_LOG
               value: "info"    
             - name: INFRASTRUCTURE_ENABLED
@@ -112,3 +105,16 @@ spec:
                 secretKeyRef:
                   key: tpa_single_node_s3_secret_key
                   name: s3-credentials
+      volumes:
+        - name: v11y-api-cm-volume
+          configMap:
+            name: v11y-api-config
+          
+        - name: s3-credentials
+          secret:
+            secret_name: storage-credentials
+          
+        - name: oidc-credentials
+          secret: 
+            secret_name: oidc-walker
+          

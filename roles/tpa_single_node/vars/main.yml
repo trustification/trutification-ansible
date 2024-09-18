@@ -42,3 +42,5 @@ tpa_single_node_guac_graphql_tls_cert_key_path: "{{ tpa_single_node_certificates
 
 # Secret, certs and Configmap locations
 tpa_single_node_v11y_api_config: "{{ tpa_single_node_kube_configmap_dir }}/v11y-api-configmap.yaml"
+tpa_single_node_v11y_api_s3_secret: "{{ tpa_single_node_kube_configmap_dir }}/v11y-api-s3-secret.yaml"
+tpa_single_node_v11y_api_oidc_secret: "{{ tpa_single_node_kube_configmap_dir }}/v11y-api-oidc-secret.yaml"

@@ -72,4 +72,3 @@
 
 - name: Configure/Deploy v11y api
   ansible.builtin.include_tasks: podman/v11y_api.yml
-

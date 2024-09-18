@@ -1,14 +1,14 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: v11y-api-auth
+  name: v11y-api-config
   namespace: "{{ tpa_single_node_namespace }}"
   labels:
       app: v11y-api
       component: v11y
+
 data:
   auth.yaml: |
-
     authentication:
       clients:
         - clientId: "{{ tpa_single_node_oidc_frontend }}"
