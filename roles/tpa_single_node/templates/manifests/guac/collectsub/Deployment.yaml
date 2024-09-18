@@ -26,7 +26,7 @@ spec:
         app.kubernetes.io/instance: redhat-trusted-profile-analyzer
     spec:
       volumes:
-        - name: tls
+        - name: tls-cert
           secret:
             secretName: guac-collectsub-tls
       containers:
@@ -35,15 +35,17 @@ spec:
           imagePullPolicy: IfNotPresent
           command:
             - /opt/guac/guaccsub
-          args: 
-           - "--csub-listen-port 2782"
+          # TODO - We get an error with following args so we could use a variable for configuration purposes
+          # The default port is 2782 so that's no blocker for now
+          # args: 
+          #  - --csub-listen-port 2782
           env:
             - name: GUAC_CSUB_TLS_CERT_FILE
               value: /etc/tls/tls.crt
             - name: GUAC_CSUB_TLS_KEY_FILE
               value: /etc/tls/tls.key
           volumeMounts:
-            - mountPath: /etc/tls/tls
+            - mountPath: /etc/tls
               name: tls-cert
               readOnly: true
           livenessProbe:

@@ -69,7 +69,7 @@
     create: true
   become: yes
   become_user: postgres
-  notify: restart postgres
+  notify: Restart postgres
 
 - name: Testing DB to make sure it is available
   command: psql postgresql://{{ tpa_single_node_pguser }}:{{ tpa_single_node_pgpassword }}@{{ tpa_single_node_pghost }}/{{ tpa_single_node_pgdatabase }} -c 'SELECT 1'
