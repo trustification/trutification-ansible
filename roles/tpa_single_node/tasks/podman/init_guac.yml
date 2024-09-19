@@ -27,7 +27,12 @@
   changed_when: false
   become: true
   become_user: postgres
-  
-- name: Testing DB to make sure it is available
-  command: psql postgresql://{{ tpa_single_node_pg_user }}:{{ tpa_single_node_pg_user_passwd }}@{{ tpa_single_node_pg_host }}/{{ tpa_single_node_pg_db }} -c 'SELECT 1'
+
+- name: Restart postgres
+  ansible.builtin.service:
+    name: postgresql
+    state: restarted
+
+- name: Testing DB guac to make sure it is available
+  command: psql postgresql://{{ tpa_single_node_pg_user }}:{{ tpa_single_node_pg_user_passwd }}@{{ tpa_single_node_pg_host }}:5432/{{ tpa_single_node_pg_db }} -c 'SELECT 1'
 
