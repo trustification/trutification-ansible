@@ -59,24 +59,13 @@
   become: yes
   become_user: postgres
 
-# - name: "Allow md5 connection for the db user"
-#   postgresql_pg_hba:
-#     dest: "/var/lib/pgsql/data/pg_hba.conf"
-#     contype: host
-#     databases: all
-#     method: md5
-#     users: "{{ tpa_single_node_pg_user }}"
-#     create: true
-#   become: yes
-#   become_user: postgres
-#   notify: Restart postgres
-
 - name: "Ensure the IP is set to all"
   lineinfile:
     path: /var/lib/pgsql/data/postgresql.conf
     regexp: '^#?listen_addresses ='
     line: "listen_addresses = '*'"
     state: present
+  notify: Restart postgres
 
 - name: "Allow md5 connection for the db user"
   postgresql_pg_hba:

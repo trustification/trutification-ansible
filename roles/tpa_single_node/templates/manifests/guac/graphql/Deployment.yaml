@@ -40,7 +40,6 @@ spec:
         - name: service
           image: {{ tpa_single_node_guac_image }}
           imagePullPolicy: IfNotPresent
- 
           command:
             - /opt/guac/guacgql 
           args:
