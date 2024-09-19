@@ -40,8 +40,7 @@ spec:
         - name: service
           image: {{ tpa_single_node_guac_image }}
           imagePullPolicy: IfNotPresent
-          tty: true     
-          stdin: true   
+ 
           command:
             - /opt/guac/guacgql 
           args:
