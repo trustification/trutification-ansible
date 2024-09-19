@@ -24,26 +24,15 @@
       - tpa_single_node_oidc_walker_secret != ""
     fail_msg: OIDC Walker Secret is not defined
 
-- name: Generate OIDC secret manifest
+- name: Generate v11y API secret manifest
   ansible.builtin.template:
-    src: "{{ role_path }}/templates/manifests/v11y/api/v11y-api-oidc-secret.j2"
-    dest: "{{ tpa_single_node_v11y_api_oidc_secret }}"
+    src: "{{ role_path }}/templates/manifests/v11y/api/v11y-api-secret.j2"
+    dest: "{{ tpa_single_node_v11y_api_secret }}"
     mode: "0600"
 
-- name: Play OIDC secret secret manifest
+- name: Play v11y API secret manifest
   containers.podman.podman_play:
-    kube_file: "{{ tpa_single_node_v11y_api_oidc_secret }}"
-    state: started
-
-- name: Generate S3 storage secret manifest
-  ansible.builtin.template:
-    src: "{{ role_path }}/templates/manifests/v11y/api/v11y-api-s3-secret.j2"
-    dest: "{{ tpa_single_node_v11y_api_s3_secret }}"
-    mode: "0600"
-
-- name: Play S3 storage secret manifest
-  containers.podman.podman_play:
-    kube_file: "{{ tpa_single_node_v11y_api_s3_secret }}"
+    kube_file: "{{ tpa_single_node_v11y_api_secret }}"
     state: started
 
 - name: Generate OIDC auth ConfigMap manifest
@@ -59,16 +48,6 @@
     checksum_algorithm: sha256
   register: cm_checksum
 
-- name: Check S3 endpoint
-  ansible.builtin.set_fact:
-    is_minio: "{{ tpa_single_node_s3_minio_endpoint is defined and tpa_single_node_s3_minio_endpoint != '' }}"
-
-- name: Copy v11y-api deployment manifest
-  ansible.builtin.template:
-    src: "{{ role_path }}/templates/manifests/v11y/api/v11y-api-deployment-s3.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-deployment.yaml"
-    mode: "0600"
-
 - name: Deploy v11y-api Deployment
   ansible.builtin.include_tasks: podman/install_manifest.yml
   vars:
@@ -79,16 +58,3 @@
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/v11y/api/v11y-api-deployment-s3.j2') | from_yaml }}"
       configmap: "{{ tpa_single_node_v11y_api_config }}"
       configmap_changed: "{{ configmap_result.changed }}"
-  when: is_minio
-
-- name: Deploy v11y-api Deployment
-  ansible.builtin.include_tasks: podman/install_manifest.yml
-  vars:
-    podman_spec:
-      state: started
-      systemd_file: v11y-api
-      network: "{{ tpa_single_node_podman_network }}"
-      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/v11y/api/v11y-api-deployment.j2') | from_yaml }}"
-      configmap: "{{ tpa_single_node_v11y_api_config }}"
-      configmap_changed: "{{ configmap_result.changed }}"
-  when: ! is_minio

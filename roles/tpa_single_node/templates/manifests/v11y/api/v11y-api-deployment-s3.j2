@@ -27,6 +27,13 @@ spec:
       annotations:
         config/checksum: "{{ cm_checksum.stat.checksum }}"
     spec:
+      volumes:
+      - name: config-auth
+        configMap:
+          name: v11y_api_config
+      - name: v11yapisecret
+        secret:
+          secretName: v11y_api_secret
       containers:
         - image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: IfNotPresent
@@ -51,12 +58,11 @@ spec:
               protocol: TCP
 
           volumeMounts:
-            - name: v11y-api-cm-volume
-              mountPath: /etc/v11y-api-config
-            - name: s3-credentials
-              mountPath: /etc/s3-v11y
-            - name: oidc-credentials
-              mountPath: /etc/oidc-v11y
+          - name: config-auth
+            mountPath: /etc/config/auth.yaml
+            subPath: auth.yaml
+          - mountPath: /etc/v11yapisecret
+            name: v11yapisecret
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:
@@ -88,9 +94,12 @@ spec:
             - name: OIDC_PROVIDER_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  key: client-secret
-                  name: oidc-walker
-
+                  key: client_secret
+                  name: v11y_api_secret
+{% if tpa_single_node_s3_minio_endpoint is defined %}
+            - name: STORAGE_ENDPOINT
+              value: "{{ tpa_single_node_s3_minio_endpoint }}"
+{% endif %}
             - name: STORAGE_REGION
               value: "{{ tpa_single_node_s3_storage_region }}"
             - name: STORAGE_BUCKET
@@ -99,23 +108,9 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: s3_access_key
-                  name: storage-credentials
+                  name: v11y_api_secret
             - name: STORAGE_SECRET_KEY
               valueFrom:
                 secretKeyRef:
                   key: s3_secret_key
-                  name: storage-credentials
-            - name: STORAGE_ENDPOINT
-              value: "{{ tpa_single_node_s3_minio_endpoint }}"
-      volumes:
-        - name: v11y-api-cm-volume
-          configMap:
-            name: v11y-api-config
-          
-        - name: s3-credentials
-          secret:
-            secret_name: storage-credentials
-          
-        - name: oidc-credentials
-          secret: 
-            secret_name: oidc-walker
+                  name: v11y_api_secret
