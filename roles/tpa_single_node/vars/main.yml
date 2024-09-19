@@ -10,11 +10,8 @@ tpa_single_node_skip_os_install: true
 tpa_single_node_systemd_directory: /etc/systemd/system
 
 # DB_SERVICE
-tpa_single_node_pg_host: localhost
+tpa_single_node_pg_host: 127.0.0.1
 tpa_single_node_pg_port: 5432
-tpa_single_node_pg_admin_db: postgres
-tpa_single_node_pg_admin_user: admin
-tpa_single_node_pg_admin_passwd: admin1234
 tpa_single_node_pg_db: guac
 tpa_single_node_pg_user: guac
 tpa_single_node_pg_user_passwd: guac1234

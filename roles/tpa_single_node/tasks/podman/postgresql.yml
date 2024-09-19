@@ -40,14 +40,6 @@
     name: "{{ tpa_single_node_pg_db }}"
   become: yes
   become_user: postgres
-
-- name: "Set db admin user"
-  postgresql_user:
-    state: present
-    name: "{{ tpa_single_node_pg_admin_user }}"
-    password: "{{ tpa_single_node_pg_admin_passwd }}"
-  become: yes
-  become_user: postgres
   
 - name: "Create db user"
   postgresql_user:
@@ -69,16 +61,12 @@
 
 - name: "Allow md5 connection for the db user"
   postgresql_pg_hba:
-    dest: "~/data/pg_hba.conf"
+    dest: "/var/lib/pgsql/data/pg_hba.conf"
     contype: host
     databases: all
     method: md5
-    users: all
+    users: "{{ tpa_single_node_pg_user }}"
     create: true
   become: yes
   become_user: postgres
-  notify: restart postgres
-
-- name: Testing DB to make sure it is available
-  command: psql postgresql://{{ tpa_single_node_pg_user }}:{{ tpa_single_node_pg_user_passwd }}@{{ tpa_single_node_pg_host }}/{{ tpa_single_node_pg_db }} -c 'SELECT 1'
-
+  notify: Restart postgres
