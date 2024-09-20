@@ -93,20 +93,6 @@ Copy your certificate files in `./certs` directory using following names:
 - guac-graphql-tls-certificate.pem"
 - guac-graphql-tls-certificate.key"
 
-5. Create a simple Ansible playbook `play.yml`:
-
-```
-- hosts: trustification
-  vars:
-    base_hostname: TODO # e.g. example.com
-    tpa_single_node_oidc_issuers: TODO # your OIDC provider (e.g. SSO/keycloak) URL
-    tpa_single_node_issuer_url: TODO # your OIDC provider (e.g. SSO/keycloak) URL
-  tasks:
-    - name: Include TPA single node role
-      ansible.builtin.include_role:
-        name: tpa_single_node
-```
-
 6. Create Environment Variables with S3 and OIDC credentails
 
 ```
