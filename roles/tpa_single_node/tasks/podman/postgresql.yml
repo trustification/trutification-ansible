@@ -78,3 +78,7 @@
   become: yes
   become_user: postgres
   
+- name: Restart postgres
+  ansible.builtin.service:
+    name: postgresql
+    state: restarted
