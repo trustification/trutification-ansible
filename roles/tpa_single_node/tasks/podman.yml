@@ -1,4 +1,10 @@
 ---
+- name: Check Registry Username exists
+  ansible.builtin.assert:
+    that:
+      - tpa_single_node_registry_username is defined
+    fail_msg: "tpa_single_node_registry_username is not exists, export the registry username and password"
+
 - name: Podman login to registry.redhat.io
   when:
     - ansible_facts['distribution'] == 'RedHat'
@@ -63,3 +69,6 @@
   vars:
     tpa_single_node_guac_graphql_tls_cert_pem: "{{ lookup('file', tpa_single_node_guac_graphql_tls_cert_pem_path) }}"
     tpa_single_node_guac_graphql_tls_cert_key: "{{ lookup('file', tpa_single_node_guac_graphql_tls_cert_key_path) }}"
+
+- name: Configure/Deploy v11y api
+  ansible.builtin.include_tasks: podman/v11y_api.yml

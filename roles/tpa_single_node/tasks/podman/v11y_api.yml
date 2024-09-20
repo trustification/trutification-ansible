@@ -1,0 +1,60 @@
+---
+- name: Set OIDC variable
+  ansible.builtin.set_fact:
+    oidc: keycloak
+
+- name: Overwrite OIDC variable
+  ansible.builtin.set_fact:
+    oidc: cognito
+  when: "'cognito' in (tpa_single_node_oidc_issuer_url | string | safe)"
+
+- name: Check S3 Access key and Secret is defined
+  ansible.builtin.assert:
+    that:
+      - tpa_single_node_s3_access_key is defined
+      - tpa_single_node_s3_access_key != ""
+      - tpa_single_node_s3_secret_key is defined
+      - tpa_single_node_s3_secret_key != ""
+    fail_msg: S3 Access Key and Secret is not defined
+
+- name: Check OIDC Walker is defined
+  ansible.builtin.assert:
+    that:
+      - tpa_single_node_oidc_walker_secret is defined
+      - tpa_single_node_oidc_walker_secret != ""
+    fail_msg: OIDC Walker Secret is not defined
+
+- name: Generate v11y API secret manifest
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/v11y/api/v11y-api-secret.j2"
+    dest: "{{ tpa_single_node_v11y_api_secret }}"
+    mode: "0600"
+
+- name: Play v11y API secret manifest
+  containers.podman.podman_play:
+    kube_file: "{{ tpa_single_node_v11y_api_secret }}"
+    state: started
+
+- name: Generate OIDC auth ConfigMap manifest
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/v11y/api/v11y-api-cm-{{ oidc }}.j2"
+    dest: "{{ tpa_single_node_v11y_api_config }}"
+    mode: "0600"
+  register: configmap_result
+
+- name: Retrieve the checksum of the ConfigMap
+  ansible.builtin.stat:
+    path: "{{ tpa_single_node_v11y_api_config }}"
+    checksum_algorithm: sha256
+  register: cm_checksum
+
+- name: Deploy v11y-api Deployment
+  ansible.builtin.include_tasks: podman/install_manifest.yml
+  vars:
+    podman_spec:
+      state: started
+      systemd_file: v11y-api
+      network: "{{ tpa_single_node_podman_network }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/v11y/api/v11y-api-deployment-s3.j2') | from_yaml }}"
+      configmap: "{{ tpa_single_node_v11y_api_config }}"
+      configmap_changed: "{{ configmap_result.changed }}"

@@ -22,10 +22,9 @@ spec:
           volumeMounts:
             - mountPath: /git
               name: cvelist
-          command: [ "/bin/sh" ]
+          command: [ "/bin/sh", "-ec" ]
           workingDir: /git
           args:
-            - "-ec"
             - |
                 if test -d cvelistV5; then
                   cd cvelistV5
@@ -57,11 +56,11 @@ spec:
             - name: INFRASTRUCTURE_BIND
               value: "[::]:9010"
             - name: STORAGE_ACCESS_KEY
-              value: "{{ tpa_single_node_s3_username }}"
+              value: "{{ tpa_single_node_s3_access_key }}"
             - name: STORAGE_SECRET_KEY
-              value: "{{ tpa_single_node_s3_password }}"
+              value: "{{ tpa_single_node_s3_secret_key }}"
             - name: STORAGE_ENDPOINT
-              value: "{{ tpa_single_node_s3_url }}"
+              value: "{{ tpa_single_node_s3_minio_endpoint }}"
             - name: STORAGE_REGION
               value: "eu-west-1" # just a dummy value
             - name: STORAGE_BUCKET
