@@ -1,8 +1,8 @@
 ---
 # vars file for tpa_scaffolding
 tpa_single_node_base_hostname: trustification
+tpa_single_node_certificates_dir: certs/
 tpa_single_node_config_dir: /etc/rhtpa
-tpa_single_node_kube_configmap_dir: "{{ tpa_single_node_config_dir }}/configs"
 tpa_single_node_kube_manifest_dir: "{{ tpa_single_node_config_dir }}/manifests"
 tpa_single_node_namespace: trustification
 tpa_single_node_podman_network: tcnet
@@ -28,7 +28,6 @@ tpa_single_node_s3_minio_endpoint: # <Enter minio storage endpoint, For AWS this
 
 # SQS_SERVICE
 
-
 # SSO_SERVICE
 tpa_single_node_oidc_issuer_url: # <Keycloak or AWS cognito Issuer URL with endpoint auth/realms/chicken>
 tpa_single_node_oidc_frontend: # <Keycloak or AWS cognito frontend Client ID>
@@ -42,5 +41,5 @@ tpa_single_node_guac_graphql_tls_cert_pem_path: "{{ tpa_single_node_certificates
 tpa_single_node_guac_graphql_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/guac-graphql-tls-certificate.key"
 
 # Secret, certs and Configmap locations
-tpa_single_node_v11y_api_config: "{{ tpa_single_node_kube_configmap_dir }}/v11y-api-configmap.yaml"
-tpa_single_node_v11y_api_secret: "{{ tpa_single_node_kube_configmap_dir }}/v11y-api-secret.yaml"
+tpa_single_node_v11y_api_config: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-configmap.yaml"
+tpa_single_node_v11y_api_secret: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-secret.yaml"

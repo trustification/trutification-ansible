@@ -86,37 +86,20 @@ Alternatively vagrant will prompt you to provide the registration username and p
 
 4. Path for TLS certificates files:
 
-Replace default value in play.yml and replace them accordingly
-`tpa_single_node_certificates_path: /tmp/certs`
-
-Default values for certificate file names are defined in `roles/tpa_single_node/vars/main.yml`, they can be changed if needed :
+Copy your certificate files in `./certs` directory using following names:
 
 - guac-collectsub-tls-certificate.pem"
 - guac-collectsub-tls-certificate.key"
 - guac-graphql-tls-certificate.pem"
 - guac-graphql-tls-certificate.key"
 
-5. Create a simple Ansible playbook `play.yml`:
-
-```
-- hosts: trustification
-  vars:
-    base_hostname: TODO # e.g. example.com
-    tpa_single_node_oidc_issuers: TODO # your OIDC provider (e.g. SSO/keycloak) URL
-    tpa_single_node_issuer_url: TODO # your OIDC provider (e.g. SSO/keycloak) URL
-  tasks:
-    - name: Include TPA single node role
-      ansible.builtin.include_role:
-        name: tpa_single_node
-```
-
 6. Create Environment Variables with S3 and OIDC credentails
+
 ```
 export TPA_S3_ACCESS_KEY=<S3 Storage Access Key>
 export TPA_S3_SECRET_KEY=<S3 Storage Secret Key>
 export TPA_OIDC_WALKER_SECRET=<OIDC Walker Secret>
 ```
-
 
 7. Execute the following command (NOTE: you will have to provide credentials to authenticate to registry.redhat.io: https://access.redhat.com/RegistryAuthentication):
 
