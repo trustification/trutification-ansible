@@ -34,11 +34,12 @@
   become: true
   become_user: postgres
 
-- name: Create psql test command template
+- name: Create psql test command
   ansible.builtin.template:
     src: "templates/scripts/psql_test.sh.j2"
     dest: "/tmp/psql_test.sh"
     mode: "0755"
 
 - name: Testing DB guac to make sure it is available
-  ansible.builtin.shell: "/tmp/psql_test.sh"
+  ansible.builtin.command: "/tmp/psql_test.sh"
+  changed_when: false
