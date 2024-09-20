@@ -26,7 +26,7 @@
 
 - name: Generate v11y API secret manifest
   ansible.builtin.template:
-    src: "{{ role_path }}/templates/manifests/v11y/api/v11y-api-secret.j2"
+    src: "{{ role_path }}/templates/manifests/v11y/api/Secret.yaml.j2"
     dest: "{{ tpa_single_node_v11y_api_secret }}"
     mode: "0600"
 
@@ -37,7 +37,7 @@
 
 - name: Generate OIDC auth ConfigMap manifest
   ansible.builtin.template:
-    src: "{{ role_path }}/templates/manifests/v11y/api/v11y-api-cm-{{ oidc }}.j2"
+    src: "{{ role_path }}/templates/manifests/v11y/api/Configmap-{{ oidc }}.yaml.j2"
     dest: "{{ tpa_single_node_v11y_api_config }}"
     mode: "0600"
   register: configmap_result
@@ -55,6 +55,6 @@
       state: started
       systemd_file: v11y-api
       network: "{{ tpa_single_node_podman_network }}"
-      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/v11y/api/v11y-api-deployment-s3.j2') | from_yaml }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/v11y/api/Deployment-s3.yaml.j2') | from_yaml }}"
       configmap: "{{ tpa_single_node_v11y_api_config }}"
       configmap_changed: "{{ configmap_result.changed }}"
