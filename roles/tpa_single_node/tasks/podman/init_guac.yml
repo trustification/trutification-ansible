@@ -23,7 +23,7 @@
     mode: "0666"
 
 - name: Run init-db.sql
-  ansible.builtin.command: 
+  ansible.builtin.command:
     cmd: >
       psql -v ON_ERROR_STOP=1
       -v db_name={{ tpa_single_node_pg_db }}
