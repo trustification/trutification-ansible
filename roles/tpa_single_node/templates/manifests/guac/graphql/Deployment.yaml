@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: guac-graphql
+  namespace: trustification
   labels:
     app.kubernetes.io/name: guac-graphql
     app.kubernetes.io/component: guac
@@ -25,73 +26,31 @@ spec:
     spec:
       initContainers:
         - name: migrate
-          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:a0cd9379eeaa15e95230fe330649b74928c776fbd35438b76fa17f3f4bbea954
+          image: {{ tpa_single_node_guac_image }}
           imagePullPolicy: IfNotPresent
           command:
-            - /bin/sh
+            - /opt/guac/guacmigrate
           args:
-            - -ec
-            - 'TC_PGOPTIONS="?"
-
-                  TC_PGOPTIONS="${TC_PGOPTIONS}sslmode=${TC_PGSSLMODE}&"
-
-                  exec /opt/guac/guacmigrate "--db-address" "postgres://${TC_PGUSER}:${TC_PGPASSWORD}@${TC_PGHOST}:${TC_PGPORT}/${TC_PGDATABASE}${TC_PGOPTIONS}"
-                  "--db-driver" "postgres" "--db-debug" "true"
-
-                  '
-          env:
-            - name: TC_PGHOST
-              value: keycloak-postgresql
-# TODO : WIP              
-#             valueFrom:
-#               secretKeyRef:
-#                 key: POSTGRES_HOST
-#                 name: keycloak-db-secret
-            - name: TC_PGPORT
-              value: '5432'
-            - name: TC_PGDATABASE
-              value: guac
-            - name: TC_PGUSER
-              value: postgres
-            - name: TC_PGPASSWORD
-              value: postgres
-            - name: TC_PGSSLMODE
-              value: disable
+            - --db-address=postgres://{{ tpa_single_node_pg_user }}:{{ tpa_single_node_pg_user_passwd }}@{{ tpa_single_node_pg_host }}:{{ tpa_single_node_pg_port }}/{{ tpa_single_node_pg_db }}?sslmode={{ tpa_single_node_pg_ssl_mode }}
+            - --db-driver=postgres
+            - --db-debug=true
+          workingDir: /opt/guac
           volumeMounts: null
       containers:
         - name: service
-          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:1472d5acb56cb72d49cd0d25186e6a02af53cd14c84c1a22357d115958921e52
+          image: {{ tpa_single_node_guac_image }}
           imagePullPolicy: IfNotPresent
           command:
-            - /bin/sh
+            - /opt/guac/guacgql 
           args:
-            - -ec
-            - 'TC_PGOPTIONS="?"
-
-                  TC_PGOPTIONS="${TC_PGOPTIONS}sslmode=${TC_PGSSLMODE}&"
-
-                  exec /opt/guac/guacgql "--gql-backend" "ent" "--db-address" "postgres://${TC_PGUSER}:${TC_PGPASSWORD}@${TC_PGHOST}:${TC_PGPORT}/${TC_PGDATABASE}${TC_PGOPTIONS}"
-                  "--db-driver" "postgres" "--db-migrate=false"
-
-                  '
-          workingDir: /guac
+            - --gql-listen-port=8080
+            - --gql-backend=ent
+            - --db-address=postgres://{{ tpa_single_node_pg_user }}:{{ tpa_single_node_pg_user_passwd }}@{{ tpa_single_node_pg_host }}:{{ tpa_single_node_pg_port }}/{{ tpa_single_node_pg_db }}?sslmode={{ tpa_single_node_pg_ssl_mode }}
+            - --db-driver=postgres
+            - --db-debug=true
+            - --gql-debug=true
+          workingDir: /opt/guac
           env:
-            - name: TC_PGHOST
-              value: keycloak-postgresql
-            - name: TC_PGPORT
-              value: '5432'
-            - name: TC_PGDATABASE
-              value: guac
-            - name: TC_PGUSER
-              value: guac
-            - name: TC_PGPASSWORD
-              value: guac1234
-            - name: TC_PGSSLMODE
-              value: disable
-            - name: GUAC_GQL_TLS_CERT_FILE
-              value: /etc/tls/tls.crt
-            - name: GUAC_GQL_TLS_KEY_FILE
-              value: /etc/tls/tls.key
             - name: GUAC_PROMETHEUS_ADDR
               value: '9010'
           volumeMounts:
