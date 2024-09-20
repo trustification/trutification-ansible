@@ -3,7 +3,6 @@
   vars:
     tpa_single_node_trustification_image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:2943d20c8ac831f4ae4f209c8ca6807619404062
     tpa_single_node_guac_image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9:f0688194637cc759052e02c350c38dbabc19484e
-    tpa_single_node_certificates_dir: /tmp/certs
   vars_files:
     - vars/main.yml
   tasks:
