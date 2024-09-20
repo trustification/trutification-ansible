@@ -1,7 +1,1 @@
 ---
-# handlers file for tpa_single_node
-# @postgres-remove
-- name: Restart postgres
-  ansible.builtin.service:
-    name: postgresql
-    state: reloaded

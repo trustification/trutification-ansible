@@ -37,40 +37,48 @@
 - name: "Create app database"
   postgresql_db:
     state: present
-    name: "{{ tpa_single_node_pgdatabase }}"
+    name: "{{ tpa_single_node_pg_db }}"
   become: yes
   become_user: postgres
-
+  
 - name: "Create db user"
   postgresql_user:
     state: present
-    name: "{{ tpa_single_node_pguser }}"
-    password: "{{ tpa_single_node_pgpassword }}"
+    name: "{{ tpa_single_node_pg_user }}"
+    password: "{{ tpa_single_node_pg_user_passwd }}"
   become: yes
   become_user: postgres
 
 - name: "Grant db user access to app db"
   postgresql_privs:
     type: database
-    database: "{{ tpa_single_node_pgdatabase }}"
-    roles: "{{ tpa_single_node_pguser }}"
+    database: "{{ tpa_single_node_pg_db }}"
+    roles: "{{ tpa_single_node_pg_user }}"
     grant_option: no
     privs: all
   become: yes
   become_user: postgres
 
+- name: "Ensure the IP is set to all"
+  lineinfile:
+    path: /var/lib/pgsql/data/postgresql.conf
+    regexp: '^#?listen_addresses ='
+    line: "listen_addresses = '*'"
+    state: present
+
 - name: "Allow md5 connection for the db user"
   postgresql_pg_hba:
-    dest: "~/data/pg_hba.conf"
+    dest: "/var/lib/pgsql/data/pg_hba.conf"
     contype: host
     databases: all
+    source: 0.0.0.0/0
     method: md5
-    users: "{{ tpa_single_node_pguser }}"
+    users: all
     create: true
   become: yes
   become_user: postgres
-  notify: Restart postgres
-
-- name: Testing DB to make sure it is available
-  command: psql postgresql://{{ tpa_single_node_pguser }}:{{ tpa_single_node_pgpassword }}@{{ tpa_single_node_pghost }}/{{ tpa_single_node_pgdatabase }} -c 'SELECT 1'
-
+  
+- name: Restart postgres
+  ansible.builtin.service:
+    name: postgresql
+    state: restarted

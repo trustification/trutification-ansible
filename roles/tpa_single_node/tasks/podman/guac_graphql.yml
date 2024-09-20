@@ -10,25 +10,11 @@
     kube_file: "{{ tpa_single_node_kube_manifest_dir }}/Guac-Graphql-Secret.yaml"
     state: started
 
-- name: Copy Guac graphql deployment manifest
-  ansible.builtin.copy:
-    src: "{{ role_path }}/templates/manifests/guac/graphql/Deployment.yaml"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/Guac-Graphql-Deployment.yaml"
-    mode: "0600"
-
-- name: Copy Guac graphql Quadlet file
-  ansible.builtin.copy:
-    src: "{{ role_path }}/templates/manifests/guac/graphql/Deployment.kube"
-    dest: /etc/containers/systemd/guac-graphql.kube
-    mode: "0600"
-
-- name: Reload systemd manager configuration
-  ansible.builtin.systemd_service:
-    daemon_reload: true
-
-- name: Ensure guac-graphql service is enabled and started
-  ansible.builtin.systemd_service:
-    name: guac-graphql
-    state: restarted
-    no_block: true
-    enabled: true
+- name: Deploy guac-graphql Pod
+  ansible.builtin.include_tasks: podman/install_manifest.yml
+  vars:
+    podman_spec:
+      state: started
+      systemd_file: guac-graphql
+      network: "{{ tpa_single_node_podman_network }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/guac/graphql/Deployment.yaml') | from_yaml }}"

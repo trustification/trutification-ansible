@@ -20,11 +20,26 @@
     content: "{{ lookup('ansible.builtin.template', 'configs/init-db.sql') }}"
     dest: "/tmp/init-db.sql"
     remote_src: true
-    mode: "0600"
+    mode: "0666"
 
 - name: Run init-db.sql
-  ansible.builtin.command: "psql postgresql://{{ tpa_single_node_pguser }}:{{ tpa_single_node_pgpassword }}@{{ tpa_single_node_pghost }}/\n
-  {{ tpa_single_node_pgdatabase }} -v ON_ERROR_STOP=1 \n
-  -v db_name={{ tpa_single_node_pgdatabase }} -v db_user={{ tpa_single_node_pguser }} \n
-  -v db_password={{ tpa_single_node_pgpassword }} -f /tmp/init-db.sql"
+  ansible.builtin.command:
+    cmd: >
+      psql -v ON_ERROR_STOP=1
+      -v db_name={{ tpa_single_node_pg_db }}
+      -v db_user={{ tpa_single_node_pg_user }}
+      -v db_password={{ tpa_single_node_pg_user_passwd }}
+      -f /tmp/init-db.sql
+  changed_when: false
+  become: true
+  become_user: postgres
+
+- name: Create psql test command
+  ansible.builtin.template:
+    src: "templates/scripts/psql_test.sh.j2"
+    dest: "/tmp/psql_test.sh"
+    mode: "0755"
+
+- name: Testing DB guac to make sure it is available
+  ansible.builtin.command: "/tmp/psql_test.sh"
   changed_when: false
