@@ -1,8 +1,4 @@
 ---
-- name: Get the Host IP
-  ansible.builtin.set_fact:
-    tpa_single_node_pg_host: "{{ ansible_default_ipv4.address }}"
-
 - name: Install Operating System Components
   ansible.builtin.include_tasks: os.yml
   args:
@@ -63,6 +59,13 @@
 # Step 11
 - name: Configure/Deploy Guac collector for bombastic
   ansible.builtin.include_tasks: guac/bombastic_collector.yml
+  args:
+    apply:
+      become: true
+
+# Step 14
+- name: Configure/Deploy collector osv
+  ansible.builtin.include_tasks: collector/osv/main.yml
   args:
     apply:
       become: true

@@ -88,10 +88,15 @@ Alternatively vagrant will prompt you to provide the registration username and p
 
 Copy your certificate files in `./certs` directory using following names:
 
-- guac-collectsub-tls-certificate.pem"
-- guac-collectsub-tls-certificate.key"
-- guac-graphql-tls-certificate.pem"
-- guac-graphql-tls-certificate.key"
+- guac-collectsub-tls-certificate.pem
+- guac-collectsub-tls-certificate.key
+- guac-graphql-tls-certificate.pem
+- guac-graphql-tls-certificate.key
+- collector-osv-tls-certificate.pem
+- collector-osv-tls-certificate.key
+
+Optionally, you can also copy `service-ca.crt` certificate to the same
+directory if you have OSV client that needs secure access to the collector.
 
 6. Create Environment Variables with S3 and OIDC credentails
 
