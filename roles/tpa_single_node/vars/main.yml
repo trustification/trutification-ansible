@@ -28,12 +28,10 @@ tpa_single_node_storage_v11y_bucket: v11y-default # <v11y storage bucket name>
 # SQS_SERVICE
 
 # SSO_SERVICE
-# tpa_single_node_oidc_issuer_url: # <Keycloak or AWS cognito Issuer URL with endpoint auth/realms/chicken>
-tpa_single_node_oidc_issuer_url: https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_KSdeV9oLh/
-tpa_single_node_oidc_frontend: "na" # <Keycloak or AWS cognito frontend Client ID>
-tpa_single_node_oidc_provider_client_id: "na" # <Keycloak or AWS cognito Walker Client ID>
-# tpa_single_node_oidc_provider_client_id_secret: "{{ lookup('env', 'TPA_OIDC_WALKER_SECRET') }}" #  Export AWS Cognito or Keycloak walker Secret
-tpa_single_node_oidc_provider_client_id_secret: "na"
+tpa_single_node_oidc_issuer_url: # <Keycloak or AWS cognito Issuer URL with endpoint auth/realms/chicken>
+tpa_single_node_oidc_frontend: # <Keycloak or AWS cognito frontend Client ID>
+tpa_single_node_oidc_provider_client_id: # <Keycloak or AWS cognito Walker Client ID>
+tpa_single_node_oidc_provider_client_id_secret: "{{ lookup('env', 'TPA_OIDC_WALKER_SECRET') }}" #  Export AWS Cognito or Keycloak walker Secret
 
 # TSL Certificates
 tpa_single_node_guac_csub_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/guac-collectsub-tls-certificate.pem"
