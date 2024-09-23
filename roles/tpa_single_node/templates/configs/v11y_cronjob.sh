@@ -1,1 +1,1 @@
-bombastic walker --sink https://sbom.trustification --source https://access.redhat.com/security/data/sbom/beta/ '-3' --signing-key https://access.redhat.com/security/data/97f5eac4.txt#77E79ABE93673533ED09EBE2DCE3823597F5EAC4 --fix-licenses 'true' --since-file /walker-state/since
+systemctl start v11y-walker.service

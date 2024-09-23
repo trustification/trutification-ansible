@@ -8,6 +8,7 @@ RequiresMountsFor=%t/containers
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
 TimeoutStopSec=70
+TimeoutStartSec=600
 ExecStart=/usr/bin/podman kube play --replace --service-container=true "{{ kube_play_file }}"  --network "{{ podman_spec.network | default('podman') }}"
 ExecStop=/usr/bin/podman kube down "{{ kube_play_file }}"
 Type=notify
