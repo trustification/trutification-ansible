@@ -1,0 +1,11 @@
+---
+- name: Deploy bombastic-api
+  ansible.builtin.include_tasks: install_manifest.yml
+  vars:
+    podman_spec:
+      state: started
+      systemd_file: bombastic-api
+      network: "{{ tpa_single_node_podman_network }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/bombastic/api/Deployment.yaml.j2') | from_yaml }}"
+      configmap: "{{ tpa_single_node_oidc_configmap }}"
+      configmap_changed: "{{ configmap_result.changed }}"

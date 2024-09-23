@@ -1,0 +1,16 @@
+---
+# Init Guac DBMS
+- name: Configure and initialize Guac DBMS
+  ansible.builtin.include_tasks: guac/init.yml
+
+- name: Provision Guac collectsub
+  ansible.builtin.include_tasks: guac/guac_collectsub.yml
+  vars:
+    tpa_single_node_guac_csub_tls_cert_pem: "{{ lookup('file', tpa_single_node_guac_csub_tls_cert_pem_path) }}"
+    tpa_single_node_guac_csub_tls_cert_key: "{{ lookup('file', tpa_single_node_guac_csub_tls_cert_key_path) }}"
+
+- name: Provision Guac graphql
+  ansible.builtin.include_tasks: guac/guac_graphql.yml
+  vars:
+    tpa_single_node_guac_graphql_tls_cert_pem: "{{ lookup('file', tpa_single_node_guac_graphql_tls_cert_pem_path) }}"
+    tpa_single_node_guac_graphql_tls_cert_key: "{{ lookup('file', tpa_single_node_guac_graphql_tls_cert_key_path) }}"

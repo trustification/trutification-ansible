@@ -1,13 +1,13 @@
 kind: Deployment
 metadata:
   name: bombastic-api
+  namespace: "{{ tpa_single_node_namespace }}"
   labels:
     app.kubernetes.io/name: bombastic-api
     app.kubernetes.io/component: bombastic
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
     app.kubernetes.io/version: 1.1.1
     app.kubernetes.io/part-of: trusted-profile-analyzer
-  annotations: null
 spec:
   replicas: 1
   selector:
@@ -24,27 +24,23 @@ spec:
       annotations:
         configHash/auth: f1603b2e10b24822d2b2ae28973e973fb20d68559f0caff8327d5a9a7326b106
     spec:
+      volumes:
+        - name: config-auth
+          configMap:
+            name: bombastic-api-auth
+        - name: tls
+          secret:
+            secretName: bombastic-api-tls
       containers:
         - name: service
-          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:044b6070e52378a93cbcd65cbd5d10b866f102ee8d6040b92147df7b52202e83
+          image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: IfNotPresent
-          livenessProbe:
-            initialDelaySeconds: 2
-            httpGet:
-              path: /health/live
-              port: 9010
-          readinessProbe:
-            initialDelaySeconds: 2
-            httpGet:
-              path: /health/ready
-              port: 9010
-          command:
-            - /trust
+          command: ["/trust"]
           args:
             - bombastic
             - api
             - -p
-            - '8080'
+            - "8080"
             - --validator
             - sbom
             - --index-mode
@@ -71,29 +67,34 @@ spec:
             - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
               value: /etc/tls/tls.crt
             - name: OIDC_PROVIDER_CLIENT_ID
-              value: walker
+              value: "{{ tpa_single_node_oidc_provider_client_id }}"
             - name: OIDC_PROVIDER_CLIENT_SECRET
-              value: 6560cc91-4e20-4edd-881c-b15b169f8a80
+              valueFrom:
+                secretKeyRef:
+                  key: client_secret
+                  name: storage_secret
             - name: OIDC_PROVIDER_ISSUER_URL
-              value: https://sso$APP_DOMAIN_URL/realms/chicken
+              value: "{{ tpa_single_node_oidc_issuer_url }}"
             - name: STORAGE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  key: root-user
-                  name: infrastructure-minio
+                  key: storage_access_key
+                  name: storage_secret
             - name: STORAGE_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  key: root-password
-                  name: infrastructure-minio
+                  key: storage_secret_key
+                  name: storage_secret
+{% if tpa_single_node_storage_endpoint is defined %}
             - name: STORAGE_ENDPOINT
-              value: http://infrastructure-minio:9000
+              value: "{{ tpa_single_node_storage_endpoint }}"
+{% endif %}
             - name: STORAGE_REGION
-              value: eu-west-1
+              value: "{{ tpa_single_node_storage_region }}"
             - name: STORAGE_BUCKET
-              value: bombastic-default
+              value: "{{ tpa_single_node_storage_bombastic_bucket }}"
             - name: SWAGGER_UI_OIDC_ISSUER_URL
-              value: https://sso$APP_DOMAIN_URL/realms/chicken
+              value: "{{ tpa_single_node_oidc_issuer_url }}"
             - name: INDEX_SYNC_INTERVAL
               value: 1m
           ports:
@@ -110,10 +111,13 @@ spec:
             - name: config-auth
               mountPath: /etc/config/auth.yaml
               subPath: auth.yaml
-      volumes:
-        - name: tls
-          secret:
-            secretName: bombastic-api-tls
-        - name: config-auth
-          configMap:
-            name: bombastic-api-auth
+          livenessProbe:
+            initialDelaySeconds: 2
+            httpGet:
+              path: /health/live
+              port: 9010
+          readinessProbe:
+            initialDelaySeconds: 2
+            httpGet:
+              path: /health/ready
+              port: 9010

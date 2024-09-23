@@ -96,8 +96,8 @@ Copy your certificate files in `./certs` directory using following names:
 6. Create Environment Variables with S3 and OIDC credentails
 
 ```
-export TPA_S3_ACCESS_KEY=<S3 Storage Access Key>
-export TPA_S3_SECRET_KEY=<S3 Storage Secret Key>
+export TPA_STORAGE_ACCESS_KEY=<S3 Storage Access Key>
+export TPA_STORAGE_SECRET_KEY=<S3 Storage Secret Key>
 export TPA_OIDC_WALKER_SECRET=<OIDC Walker Secret>
 ```
 

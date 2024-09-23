@@ -25,15 +25,15 @@ spec:
         app.kubernetes.io/component: v11y
         app.kubernetes.io/instance: redhat-trusted-profile-analyzer
       annotations:
-        config/checksum: "{{ cm_checksum.stat.checksum }}"
+        config/checksum: "{{ configmap_checksum.stat.checksum }}"
     spec:
       volumes:
       - name: config-auth
         configMap:
-          name: v11y_api_config
+          name: oidc
       - name: v11yapisecret
         secret:
-          secretName: v11y_api_secret
+          secretName: storage_secret
       containers:
         - image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: IfNotPresent
@@ -48,7 +48,6 @@ spec:
             - "file"
             - "--auth-configuration"
             - "/etc/config/auth.yaml"      
-
           ports: 
             - containerPort: 9010
               protocol: TCP
@@ -56,7 +55,6 @@ spec:
             - containerPort: 8080
               name: endpoint
               protocol: TCP
-
           volumeMounts:
           - name: config-auth
             mountPath: /etc/config/auth.yaml
@@ -68,13 +66,11 @@ spec:
             httpGet:
               path: /health/live
               port: 9010
-          
           readinessProbe:
             initialDelaySeconds: 2
             httpGet:
               path: /health/ready
               port: 9010
-
           env:
             - name: RUST_LOG
               value: "info"    
@@ -86,31 +82,30 @@ spec:
               value: "::"
             - name: INDEX_SYNC_INTERVAL
               value: 1m
-
             - name: OIDC_PROVIDER_ISSUER_URL
               value: "{{ tpa_single_node_oidc_issuer_url }}"
             - name: OIDC_PROVIDER_CLIENT_ID
-              value: "{{ tpa_single_node_oidc_walker }}"
+              value: "{{ tpa_single_node_oidc_provider_client_id }}"
             - name: OIDC_PROVIDER_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   key: client_secret
-                  name: v11y_api_secret
-{% if tpa_single_node_s3_minio_endpoint is defined %}
+                  name: storage_secret
+{% if tpa_single_node_storage_endpoint is defined %}
             - name: STORAGE_ENDPOINT
-              value: "{{ tpa_single_node_s3_minio_endpoint }}"
+              value: "{{ tpa_single_node_storage_endpoint }}"
 {% endif %}
             - name: STORAGE_REGION
-              value: "{{ tpa_single_node_s3_storage_region }}"
+              value: "{{ tpa_single_node_storage_region }}"
             - name: STORAGE_BUCKET
-              value: "{{ tpa_single_node_s3_v11y_bucket }}"
+              value: "{{ tpa_single_node_storage_v11y_bucket }}"
             - name: STORAGE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  key: s3_access_key
-                  name: v11y_api_secret
+                  key: storage_access_key
+                  name: storage_secret
             - name: STORAGE_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  key: s3_secret_key
-                  name: v11y_api_secret
+                  key: storage_secret_key
+                  name: storage_secret

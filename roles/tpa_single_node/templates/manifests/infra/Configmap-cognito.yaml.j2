@@ -1,7 +1,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: v11y_api_config
+  name: oidc
   namespace: "{{ tpa_single_node_namespace }}"
   labels:
     app: v11y-api
@@ -28,7 +28,7 @@ data:
               - "delete.vex"
 
 
-        - clientId: "{{ tpa_single_node_oidc_walker }}"
+        - clientId: "{{ tpa_single_node_oidc_provider_client_id }}"
           issuerUrl: "{{ tpa_single_node_oidc_issuer_url }}"
           scopeMappings:
             "trustification/bombastic":

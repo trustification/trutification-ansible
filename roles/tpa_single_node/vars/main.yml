@@ -10,7 +10,6 @@ tpa_single_node_skip_os_install: true
 tpa_single_node_systemd_directory: /etc/systemd/system
 
 # DB_SERVICE
-# TODO - Workaround for PostgreSQL PG_HBA issue
 tpa_single_node_pg_host: 192.168.121.60
 tpa_single_node_pg_port: 5432
 tpa_single_node_pg_db: guac
@@ -18,21 +17,23 @@ tpa_single_node_pg_user: guac
 tpa_single_node_pg_user_passwd: guac1234
 tpa_single_node_pg_ssl_mode: disable
 
-# S3_SERVICE
-tpa_single_node_s3_url:
-tpa_single_node_s3_access_key: "{{ lookup('env', 'TPA_S3_ACCESS_KEY') }}" # Export S3 access key
-tpa_single_node_s3_secret_key: "{{ lookup('env', 'TPA_S3_SECRET_KEY') }}" # Export S3 Secret key
-tpa_single_node_s3_v11y_bucket: # <v11y storage bucket name>
-tpa_single_node_s3_storage_region: # <AWS S3 Stroage region> # For Minio just keep us-west-1
-tpa_single_node_s3_minio_endpoint: # <Enter minio storage endpoint, For AWS this field is not necessary>
+# Storage Service (S3 or Minio)
+tpa_single_node_storage_endpoint: # <Enter minio storage endpoint, For AWS this field is not necessary>
+tpa_single_node_storage_region: # <AWS S3 Storage region> # For Minio just keep us-west-1
+tpa_single_node_storage_access_key_id: "{{ lookup('env', 'TPA_STORAGE_ACCESS_KEY_ID') }}"
+tpa_single_node_storage_secret_access_key: "{{ lookup('env', 'TPA_STORAGE_SECRET_ACCESS_KEY') }}"
+tpa_single_node_storage_bombastic_bucket: bombastic-default # <bombastic storage bucket name>
+tpa_single_node_storage_v11y_bucket: v11y-default # <v11y storage bucket name>
 
 # SQS_SERVICE
 
 # SSO_SERVICE
-tpa_single_node_oidc_issuer_url: # <Keycloak or AWS cognito Issuer URL with endpoint auth/realms/chicken>
-tpa_single_node_oidc_frontend: # <Keycloak or AWS cognito frontend Client ID>
-tpa_single_node_oidc_walker: # <Keycloak or AWS cognito Walker Client ID>
-tpa_single_node_oidc_walker_secret: "{{ lookup('env', 'TPA_OIDC_WALKER_SECRET') }}" #  Export AWS Cognito or Keycloak walker Secret
+# tpa_single_node_oidc_issuer_url: # <Keycloak or AWS cognito Issuer URL with endpoint auth/realms/chicken>
+tpa_single_node_oidc_issuer_url: https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_KSdeV9oLh/
+tpa_single_node_oidc_frontend: "na" # <Keycloak or AWS cognito frontend Client ID>
+tpa_single_node_oidc_provider_client_id: "na" # <Keycloak or AWS cognito Walker Client ID>
+# tpa_single_node_oidc_provider_client_id_secret: "{{ lookup('env', 'TPA_OIDC_WALKER_SECRET') }}" #  Export AWS Cognito or Keycloak walker Secret
+tpa_single_node_oidc_provider_client_id_secret: "na"
 
 # TSL Certificates
 tpa_single_node_guac_csub_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/guac-collectsub-tls-certificate.pem"
@@ -40,6 +41,6 @@ tpa_single_node_guac_csub_tls_cert_key_path: "{{ tpa_single_node_certificates_di
 tpa_single_node_guac_graphql_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/guac-graphql-tls-certificate.pem"
 tpa_single_node_guac_graphql_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/guac-graphql-tls-certificate.key"
 
-# Secret, certs and Configmap locations
-tpa_single_node_v11y_api_config: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-configmap.yaml"
-tpa_single_node_v11y_api_secret: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-secret.yaml"
+# Secret and Configmap locations
+tpa_single_node_oidc_configmap: "{{ tpa_single_node_kube_manifest_dir }}/oidc-configmap.yaml"
+tpa_single_node_storage_secret: "{{ tpa_single_node_kube_manifest_dir }}/storage-secret.yaml"
