@@ -25,7 +25,7 @@ spec:
         app.kubernetes.io/component: v11y
         app.kubernetes.io/instance: redhat-trusted-profile-analyzer
       annotations:
-        config/checksum: "{{ configmap_checksum.stat.checksum }}"
+        config/checksum: "{{ oidc_configmap_checksum.stat.checksum }}"
     spec:
       volumes:
       - name: config-auth
