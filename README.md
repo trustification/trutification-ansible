@@ -98,10 +98,13 @@ Copy your certificate files in `./certs` directory using following names:
 ```
 export TPA_STORAGE_ACCESS_KEY=<Storage Access Key>
 export TPA_STORAGE_SECRET_KEY=<Storage Secret Key>
-export TPA_STORAGE_OIDC_ISSUER_URL=<Issuer URL with endpoint auth/realms/chicken>
+export TPA_STORAGE_OIDC_ISSUER_URL=<AWS Cognito or Keycloak Issuer URL. Incase of Keycloak endpoint auth/realms/chicken is needed>
 export TPA_STORAGE_OIDC_FRONTEND_ID=<OIDC Frontend Id>
 export TPA_OIDC_PROVIDER_CLIENT_ID=<OIDC Walker Id>
 export TPA_OIDC_PROVIDER_CLIENT_SECRET=<OIDC Walker Secret>
+export TPA_EVENT_ACCESS_KEY_ID=<Kafka Username or AWS SQS Access Key>
+export TPA_EVENT_SECRET_ACCESS_KEY=<Kafka User Password or AWS SQS Secret Key>
+export TPA_EVENT_BOOTSTRAP_SERVER=<Kafka Bootstrap Server URL, For AWS SQS it is not needed>
 ```
 
 7. Execute the following command (NOTE: you will have to provide credentials to authenticate to registry.redhat.io: https://access.redhat.com/RegistryAuthentication):

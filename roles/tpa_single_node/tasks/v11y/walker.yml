@@ -32,4 +32,4 @@
       state: stopped
       systemd_file: v11y-walker
       network: "{{ tpa_single_node_podman_network }}"
-      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/v11y/walker/Deployment.yaml') | from_yaml }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/v11y/walker/Deployment.yaml.j2') | from_yaml }}"

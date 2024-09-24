@@ -10,3 +10,6 @@
 
 - name: Configure Storage
   ansible.builtin.include_tasks: infra/storage.yml
+
+- name: Configure Events
+  ansible.builtin.include_tasks: infra/events.yml

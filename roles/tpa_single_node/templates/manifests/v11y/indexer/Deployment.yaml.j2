@@ -1,0 +1,161 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: v11y-indexer
+  namespace: "{{ tpa_single_node_namespace }}"
+  labels:
+    app.kubernetes.io/name: v11y-indexer
+    app.kubernetes.io/component: v11y
+    app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    app.kubernetes.io/version: 1.1.1
+    app.kubernetes.io/part-of: trusted-profile-analyzer
+  annotations: 
+spec:
+  replicas: 1
+
+  strategy:
+    type: Recreate
+
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: v11y-indexer
+      app.kubernetes.io/component: v11y
+      app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: v11y-indexer
+        app.kubernetes.io/component: v11y
+        app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+
+    spec:
+      volumes:
+        - name: data
+          emptyDir: {}
+        - name: v11yapisecret
+          secret:
+            secretName: storage_secret
+        - name: v11yapisqssecret
+          secret:
+            secretName: event_secret
+
+      containers:
+        - name: service
+
+          image: "{{ tpa_single_node_trustification_image }}"
+          imagePullPolicy: IfNotPresent
+
+          livenessProbe:
+            initialDelaySeconds: 2
+            httpGet:
+              path: /health/live
+              port: 9010
+          
+          readinessProbe:
+            initialDelaySeconds: 2
+            httpGet:
+              path: /health/ready
+              port: 9010
+
+          command: ["/trust"]
+          args:
+            - "v11y"
+            - "indexer"
+            - "--stored-topic"
+            - "{{ tpa_single_node_v11y_topic_stored }}"
+            - "--indexed-topic"
+            - "{{ tpa_single_node_v11y_topic_indexed }}"
+            - "--failed-topic"
+            - "{{ tpa_single_node_v11y_topic_failed }}"
+            - "--index-mode"
+            - "file"
+            - "--index-dir"
+            - "/data/index"
+
+          env:
+            - name: RUST_LOG
+              value: "info"
+    
+            - name: INFRASTRUCTURE_ENABLED
+              value: "true"
+            - name: INFRASTRUCTURE_BIND
+              value: "[::]:9010"
+
+            - name: STORAGE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: storage_access_key
+                  name: storage_secret
+            - name: STORAGE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: storage_secret_key
+                  name: storage_secret
+            - name: STORAGE_REGION
+              value: "{{ tpa_single_node_storage_region }}"
+            - name: STORAGE_BUCKET
+              value: "{{ tpa_single_node_storage_v11y_bucket }}"
+
+{% if tpa_single_node_storage_endpoint is defined %}
+            - name: STORAGE_ENDPOINT
+              value: "{{ tpa_single_node_storage_endpoint }}"
+{% endif %}
+            - name: EVENT_BUS
+              value: "{{ tpa_single_node_event_bus_type }}"
+
+
+{% if 'sqs' in tpa_single_node_event_bus_type %}
+            - name: SQS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: event_access_key_id
+                  name: event_secret
+            - name: SQS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: event_secret_access_key
+                  name: event_secret
+            - name: SQS_REGION
+              value: "{{ tpa_single_node_sqs_region }}"
+{% elif 'kafka' in tpa_single_node_event_bus_type %}
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "{{ tpa_single_node_kafka_bootstrap_servers }}"
+            - name: KAFKA_PROPERTIES_ENV_PREFIX
+              value: TCK_
+            - name: TCK_SECURITY__PROTOCOL
+              value: "{{ tpa_single_node_kafka_security_protocol }}"
+            - name: TCK_SASL__USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: event_access_key_id
+                  name: event_secret
+            - name: TCK_SASL__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: event_secret_access_key
+                  name: event_secret
+            - name: TCK_SASL__MECHANISM
+              value: "{{ tpa_single_node_kafka_auth_mechanism }}"
+{% endif %}
+
+            - name: INDEX_WRITER_MEMORY_BYTES
+              value: 128MiB
+            - name: INDEX_SYNC_INTERVAL
+              value: 1m
+
+
+          ports:
+            - containerPort: 9010
+              protocol: TCP
+              name: infra
+
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - mountPath: /etc/v11yapisecret
+              name: v11yapisecret
+            - mountPath: /etc/v11yapisqssecret
+              name: v11yapisqssecret
+
+
