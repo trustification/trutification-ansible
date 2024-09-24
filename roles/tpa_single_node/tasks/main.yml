@@ -1,4 +1,8 @@
 ---
+- name: Get the Host IP
+  ansible.builtin.set_fact:
+    tpa_single_node_pg_host: "{{ ansible_default_ipv4.address }}"
+
 - name: Install Operating System Components
   ansible.builtin.include_tasks: os.yml
   args:
