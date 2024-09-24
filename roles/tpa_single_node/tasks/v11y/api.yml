@@ -1,4 +1,11 @@
 ---
+- name: Create configmap auth for v11y-api
+  ansible.builtin.include_tasks: infra/component_auth.yml
+  vars:
+    component:
+      name: "v11y"
+      service: "api"
+
 - name: Deploy v11y-api
   ansible.builtin.include_tasks: install_manifest.yml
   vars:
@@ -7,5 +14,5 @@
       systemd_file: v11y-api
       network: "{{ tpa_single_node_podman_network }}"
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/v11y/api/Deployment.yaml.j2') | from_yaml }}"
-      configmap: "{{ tpa_single_node_oidc_configmap }}"
+      configmap: "{{ tpa_single_node_kube_manifest_dir }}/v11y-api-configmap.yml"
       configmap_changed: "{{ configmap_result.changed }}"

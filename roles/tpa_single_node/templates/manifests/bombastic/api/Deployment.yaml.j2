@@ -28,7 +28,7 @@ spec:
       volumes:
         - name: config-auth
           configMap:
-            name: oidc
+            name: bombastic-api-auth
         - name: tls
           secret:
             secretName: storage_secret

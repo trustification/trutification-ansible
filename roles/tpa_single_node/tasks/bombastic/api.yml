@@ -1,4 +1,11 @@
 ---
+- name: Create configmap auth for bombastic-api
+  ansible.builtin.include_tasks: infra/component_auth.yml
+  vars:
+    component:
+      name: "bombastic"
+      service: "api"
+
 - name: Deploy bombastic-api
   ansible.builtin.include_tasks: install_manifest.yml
   vars:
@@ -7,5 +14,5 @@
       systemd_file: bombastic-api
       network: "{{ tpa_single_node_podman_network }}"
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/bombastic/api/Deployment.yaml.j2') | from_yaml }}"
-      configmap: "{{ tpa_single_node_oidc_configmap }}"
+      configmap: "{{ tpa_single_node_kube_manifest_dir }}/bombastic-api-configmap.yml"
       configmap_changed: "{{ configmap_result.changed }}"

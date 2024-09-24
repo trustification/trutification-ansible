@@ -1,12 +1,11 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: oidc
+  name: "{{ component.name }}-{{ component.service }}-auth"
   namespace: "{{ tpa_single_node_namespace }}"
   labels:
-    app: v11y-api
-    component: v11y
-
+    app: "{{ component.name }}-{{ component.service }}"
+    component: "{{ component.name }}"
 data:
   auth.yaml: |
     authentication:
@@ -18,7 +17,6 @@ data:
             "read:document": [ "read.sbom", "read.vex" ]
             "update:document": [ "update.sbom", "update.vex" ]
             "delete:document": [ "delete.sbom", "delete.vex" ]
-
         - clientId: "{{ tpa_single_node_oidc_provider_client_id }}"
           issuerUrl: "{{ tpa_single_node_oidc_issuer_url }}"
           scopeMappings: *keycloakScopeMappings

@@ -39,6 +39,5 @@ tpa_single_node_guac_csub_tls_cert_key_path: "{{ tpa_single_node_certificates_di
 tpa_single_node_guac_graphql_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/guac-graphql-tls-certificate.pem"
 tpa_single_node_guac_graphql_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/guac-graphql-tls-certificate.key"
 
-# Secret and Configmap locations
-tpa_single_node_oidc_configmap: "{{ tpa_single_node_kube_manifest_dir }}/oidc-configmap.yaml"
+# Target node(s) - Secret and Configmap locations
 tpa_single_node_storage_secret: "{{ tpa_single_node_kube_manifest_dir }}/storage-secret.yaml"

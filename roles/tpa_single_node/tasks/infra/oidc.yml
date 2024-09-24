@@ -15,15 +15,3 @@
       - tpa_single_node_oidc_provider_client_id_secret != ""
     fail_msg: OIDC Walker Secret is not defined
 
-- name: Generate OIDC auth ConfigMap manifest
-  ansible.builtin.template:
-    src: "{{ role_path }}/templates/manifests/infra/Configmap-{{ oidc }}.yaml.j2"
-    dest: "{{ tpa_single_node_oidc_configmap }}"
-    mode: "0600"
-  register: configmap_result
-
-- name: Retrieve the checksum of the ConfigMap
-  ansible.builtin.stat:
-    path: "{{ tpa_single_node_oidc_configmap }}"
-    checksum_algorithm: sha256
-  register: configmap_checksum
