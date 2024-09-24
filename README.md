@@ -98,7 +98,8 @@ Copy your certificate files in `./certs` directory using following names:
 ```
 export TPA_STORAGE_ACCESS_KEY_ID=<Storage Access Key>
 export TPA_STORAGE_SECRET_ACCESS_KEY=<Storage Secret Key>
-export TPA_OIDC_WALKER_SECRET=<OIDC Walker Secret>
+export TPA_OIDC_PROVIDER_CLIENT_ID=<OIDC Walker Id>
+export TPA_OIDC_PROVIDER_CLIENT_SECRET=<OIDC Walker Secret>
 ```
 
 7. Execute the following command (NOTE: you will have to provide credentials to authenticate to registry.redhat.io: https://access.redhat.com/RegistryAuthentication):

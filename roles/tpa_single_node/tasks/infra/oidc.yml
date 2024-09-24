@@ -11,6 +11,6 @@
 - name: Check OIDC Walker is defined
   ansible.builtin.assert:
     that:
-      - tpa_single_node_oidc_provider_client_id_secret is defined
-      - tpa_single_node_oidc_provider_client_id_secret != ""
+      - tpa_single_node_oidc_provider_client_secret is defined
+      - tpa_single_node_oidc_provider_client_secret != ""
     fail_msg: OIDC Walker Secret is not defined

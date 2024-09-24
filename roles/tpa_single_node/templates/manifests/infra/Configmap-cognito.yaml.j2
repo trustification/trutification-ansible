@@ -10,7 +10,7 @@ data:
   auth.yaml: |
     authentication:
       clients:
-        - clientId: "{{ tpa_single_node_oidc_frontend }}"
+        - clientId: "{{ tpa_single_node_oidc_frontend_id }}"
           issuerUrl: "{{ tpa_single_node_oidc_issuer_url }}"
           additionalPermissions:
             - "read.sbom"
