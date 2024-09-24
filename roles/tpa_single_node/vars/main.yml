@@ -30,10 +30,10 @@ tpa_single_node_storage_v11y_bucket: v11y-default # <v11y storage bucket name>
 
 # SSO_SERVICE - Keycloak or AWS Cognito
 # Issuer URL with endpoint auth/realms/chicken
-tpa_single_node_oidc_issuer_url: "{{ lookup('env', 'TPA_STORAGE_OIDC_ISSUER_URL') }} | default('tpa_single_node_default_empty', true)"
-tpa_single_node_oidc_frontend_id: "{{ lookup('env', 'TPA_STORAGE_OIDC_FRONTEND_ID') }} | default('tpa_single_node_default_empty', true)"
-tpa_single_node_oidc_provider_client_id: "{{ lookup('env', 'TPA_STORAGE_OIDC_PROVIDER_CLIENT_ID') }} | default('tpa_single_node_default_empty', true)"
-tpa_single_node_oidc_provider_client_secret: "{{ lookup('env', 'TPA_OIDC_PROVIDER_CLIENT_SECRET') }} | default('tpa_single_node_default_empty', true)"
+tpa_single_node_oidc_issuer_url: "{{ lookup('env', 'TPA_STORAGE_OIDC_ISSUER_URL') | default('tpa_single_node_default_empty', true) }}"
+tpa_single_node_oidc_frontend_id: "{{ lookup('env', 'TPA_STORAGE_OIDC_FRONTEND_ID') | default('tpa_single_node_default_empty', true) }}"
+tpa_single_node_oidc_provider_client_id: "{{ lookup('env', 'TPA_STORAGE_OIDC_PROVIDER_CLIENT_ID') | default('tpa_single_node_default_empty', true) }}"
+tpa_single_node_oidc_provider_client_secret: "{{ lookup('env', 'TPA_OIDC_PROVIDER_CLIENT_SECRET') | default('tpa_single_node_default_empty', true) }}"
 
 # TSL Certificates
 tpa_single_node_guac_csub_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/guac-collectsub-tls-certificate.pem"
