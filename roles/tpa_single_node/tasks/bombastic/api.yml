@@ -4,7 +4,7 @@
   vars:
     component:
       name: "bombastic"
-      service: "api"
+      type: "api"
 
 - name: Deploy bombastic-api
   ansible.builtin.include_tasks: install_manifest.yml

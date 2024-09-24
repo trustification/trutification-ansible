@@ -4,7 +4,7 @@
   vars:
     component:
       name: "v11y"
-      service: "api"
+      type: "api"
 
 - name: Deploy v11y-api
   ansible.builtin.include_tasks: install_manifest.yml
