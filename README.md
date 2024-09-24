@@ -96,9 +96,12 @@ Copy your certificate files in `./certs` directory using following names:
 6. Create Environment Variables with S3 and OIDC credentails
 
 ```
-export TPA_S3_ACCESS_KEY=<S3 Storage Access Key>
-export TPA_S3_SECRET_KEY=<S3 Storage Secret Key>
-export TPA_OIDC_WALKER_SECRET=<OIDC Walker Secret>
+export TPA_STORAGE_ACCESS_KEY=<Storage Access Key>
+export TPA_STORAGE_SECRET_KEY=<Storage Secret Key>
+export TPA_STORAGE_OIDC_ISSUER_URL=<Issuer URL with endpoint auth/realms/chicken>
+export TPA_STORAGE_OIDC_FRONTEND_ID=<OIDC Frontend Id>
+export TPA_OIDC_PROVIDER_CLIENT_ID=<OIDC Walker Id>
+export TPA_OIDC_PROVIDER_CLIENT_SECRET=<OIDC Walker Secret>
 ```
 
 7. Execute the following command (NOTE: you will have to provide credentials to authenticate to registry.redhat.io: https://access.redhat.com/RegistryAuthentication):

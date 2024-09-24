@@ -1,0 +1,20 @@
+---
+- name: Check storage access and key secrets are defined
+  ansible.builtin.assert:
+    that:
+      - tpa_single_node_storage_access_key is defined
+      - tpa_single_node_storage_access_key != ""
+      - tpa_single_node_storage_secret_key is defined
+      - tpa_single_node_storage_secret_key != ""
+    fail_msg: Storage Access Key and Secret is not defined
+
+- name: Generate storage secret manifest
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/infra/Secret-storage.yaml.j2"
+    dest: "{{ tpa_single_node_storage_secret }}"
+    mode: "0600"
+
+- name: Apply storage secret manifest
+  containers.podman.podman_play:
+    kube_file: "{{ tpa_single_node_storage_secret }}"
+    state: started

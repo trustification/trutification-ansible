@@ -11,7 +11,7 @@
     state: started
 
 - name: Deploy guac-graphql Pod
-  ansible.builtin.include_tasks: podman/install_manifest.yml
+  ansible.builtin.include_tasks: install_manifest.yml
   vars:
     podman_spec:
       state: started

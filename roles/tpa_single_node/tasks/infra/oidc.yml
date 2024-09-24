@@ -1,0 +1,16 @@
+---
+- name: Set OIDC variable
+  ansible.builtin.set_fact:
+    oidc: keycloak
+
+- name: Overwrite OIDC variable
+  ansible.builtin.set_fact:
+    oidc: cognito
+  when: "'cognito' in (tpa_single_node_oidc_issuer_url | string | safe)"
+
+- name: Check OIDC Walker is defined
+  ansible.builtin.assert:
+    that:
+      - tpa_single_node_oidc_provider_client_secret is defined
+      - tpa_single_node_oidc_provider_client_secret != ""
+    fail_msg: OIDC Walker Secret is not defined

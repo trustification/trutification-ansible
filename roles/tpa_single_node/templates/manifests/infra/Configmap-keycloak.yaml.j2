@@ -1,24 +1,22 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: v11y_api_config
+  name: "{{ component.name }}-{{ component.type }}-auth"
   namespace: "{{ tpa_single_node_namespace }}"
   labels:
-    app: v11y-api
-    component: v11y
-
+    app: "{{ component.name }}-{{ component.type }}"
+    component: "{{ component.name }}"
 data:
   auth.yaml: |
     authentication:
       clients:
-        - clientId: "{{ tpa_single_node_oidc_frontend }}"
+        - clientId: "{{ tpa_single_node_oidc_frontend_id }}"
           issuerUrl: "{{ tpa_single_node_oidc_issuer_url }}"
           scopeMappings: &keycloakScopeMappings
             "create:document": [ "create.sbom", "create.vex" ]
             "read:document": [ "read.sbom", "read.vex" ]
             "update:document": [ "update.sbom", "update.vex" ]
             "delete:document": [ "delete.sbom", "delete.vex" ]
-
-        - clientId: "{{ tpa_single_node_oidc_walker }}"
+        - clientId: "{{ tpa_single_node_oidc_provider_client_id }}"
           issuerUrl: "{{ tpa_single_node_oidc_issuer_url }}"
           scopeMappings: *keycloakScopeMappings

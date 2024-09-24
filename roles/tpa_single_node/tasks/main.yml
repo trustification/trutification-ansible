@@ -13,3 +13,38 @@
   vars:
     tpa_single_node_registry_username: "{{ lookup('env', 'TPA_SINGLE_NODE_REGISTRY_USERNAME') }}"
     tpa_single_node_registry_password: "{{ lookup('env', 'TPA_SINGLE_NODE_REGISTRY_PASSWORD') }}"
+
+# 1 Configuring external services, DB, SSO, SQS, S3
+- name: Configure infra dependencies
+  ansible.builtin.include_tasks: infra/main.yml
+  args:
+    apply:
+      become: true
+
+# Step 4, 6 and 7
+- name: Configure and deploy Guac
+  ansible.builtin.include_tasks: guac/main.yml
+  args:
+    apply:
+      become: true
+
+# Step 5
+- name: Configure/Deploy v11y walker
+  ansible.builtin.include_tasks: v11y/walker.yml
+  args:
+    apply:
+      become: true
+
+# Step 8
+- name: Configure/Deploy v11y api
+  ansible.builtin.include_tasks: v11y/api.yml
+  args:
+    apply:
+      become: true
+
+# Step 9
+- name: Configure/Deploy bombastic api
+  ansible.builtin.include_tasks: bombastic/api.yml
+  args:
+    apply:
+      become: true
