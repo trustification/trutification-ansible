@@ -21,8 +21,8 @@ tpa_single_node_pg_ssl_mode: disable
 # Storage Service (S3 or Minio)
 tpa_single_node_storage_endpoint: # <Enter minio storage endpoint, For AWS this field is not necessary>
 tpa_single_node_storage_region: # <AWS S3 Storage region> # For Minio just keep us-west-1
-tpa_single_node_storage_access_key_id: "{{ lookup('env', 'TPA_STORAGE_ACCESS_KEY_ID') }}"
-tpa_single_node_storage_secret_access_key: "{{ lookup('env', 'TPA_STORAGE_SECRET_ACCESS_KEY') }}"
+tpa_single_node_storage_access_key: "{{ lookup('env', 'TPA_STORAGE_ACCESS_KEY') }}"
+tpa_single_node_storage_secret_key: "{{ lookup('env', 'TPA_STORAGE_SECRET_KEY') }}"
 tpa_single_node_storage_bombastic_bucket: bombastic-default # <bombastic storage bucket name>
 tpa_single_node_storage_v11y_bucket: v11y-default # <v11y storage bucket name>
 

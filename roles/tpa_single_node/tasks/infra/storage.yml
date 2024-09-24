@@ -2,10 +2,10 @@
 - name: Check storage access and key secrets are defined
   ansible.builtin.assert:
     that:
-      - tpa_single_node_storage_access_key_id is defined
-      - tpa_single_node_storage_access_key_id != ""
-      - tpa_single_node_storage_secret_access_key is defined
-      - tpa_single_node_storage_secret_access_key != ""
+      - tpa_single_node_storage_access_key is defined
+      - tpa_single_node_storage_access_key != ""
+      - tpa_single_node_storage_secret_key is defined
+      - tpa_single_node_storage_secret_key != ""
     fail_msg: Storage Access Key and Secret is not defined
 
 - name: Generate storage secret manifest

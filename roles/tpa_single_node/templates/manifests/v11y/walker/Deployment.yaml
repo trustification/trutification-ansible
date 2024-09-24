@@ -56,9 +56,9 @@ spec:
             - name: INFRASTRUCTURE_BIND
               value: "[::]:9010"
             - name: STORAGE_ACCESS_KEY
-              value: "{{ tpa_single_node_storage_access_key_id }}"
+              value: "{{ tpa_single_node_storage_access_key }}"
             - name: STORAGE_SECRET_KEY
-              value: "{{ tpa_single_node_storage_secret_access_key }}"
+              value: "{{ tpa_single_node_storage_secret_key }}"
             - name: STORAGE_ENDPOINT
               value: "{{ tpa_single_node_storage_endpoint }}"
             - name: STORAGE_REGION
