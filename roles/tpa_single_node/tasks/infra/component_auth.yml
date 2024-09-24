@@ -1,0 +1,13 @@
+---
+- name: Generate OIDC auth ConfigMap manifest
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/infra/Configmap-{{ oidc }}.yaml.j2"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/{{ component.name }}-{{ component.service }}-configmap.yml"
+    mode: "0600"
+  register: configmap_result
+
+- name: Retrieve the checksum of the ConfigMap
+  ansible.builtin.stat:
+    path: "{{ tpa_single_node_kube_manifest_dir }}/{{ component.name }}-{{ component.service }}-configmap.yml"
+    checksum_algorithm: sha256
+  register: configmap_checksum
