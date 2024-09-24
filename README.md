@@ -98,6 +98,8 @@ Copy your certificate files in `./certs` directory using following names:
 ```
 export TPA_STORAGE_ACCESS_KEY_ID=<Storage Access Key>
 export TPA_STORAGE_SECRET_ACCESS_KEY=<Storage Secret Key>
+export TPA_STORAGE_OIDC_ISSUER_URL=<Issuer URL with endpoint auth/realms/chicken>
+export TPA_STORAGE_OIDC_FRONTEND_ID=<OIDC Frontend Id>
 export TPA_OIDC_PROVIDER_CLIENT_ID=<OIDC Walker Id>
 export TPA_OIDC_PROVIDER_CLIENT_SECRET=<OIDC Walker Secret>
 ```
