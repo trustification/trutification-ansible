@@ -24,6 +24,7 @@ tpa_single_node_storage_region: eu-west-1 # <AWS S3 Storage region> - For Minio 
 tpa_single_node_storage_access_key: "{{ lookup('env', 'TPA_STORAGE_ACCESS_KEY') }}"
 tpa_single_node_storage_secret_key: "{{ lookup('env', 'TPA_STORAGE_SECRET_KEY') }}"
 tpa_single_node_storage_bombastic_bucket: bombastic-rhtpa
+tpa_single_node_storage_vexination_bucket: vexination-rhtpa
 tpa_single_node_storage_v11y_bucket: v11y-rhtpa
 
 # QUEUE Service - Kafka or SQL
@@ -52,7 +53,6 @@ tpa_single_node_vexination_topic_guac: vexination-guac-rhtpa
 tpa_single_node_vexination_topic_indexed: vexination-indexed-rhtpa
 tpa_single_node_vexination_topic_stored: vexination-stored-rhtpa
 tpa_single_node_v11y_topic_failed: v11y-failed-rhtpa
-tpa_single_node_v11y_topic_guac: v11y-guac-rhtpa
 tpa_single_node_v11y_topic_indexed: v11y-indexed-rhtpa
 tpa_single_node_v11y_topic_stored: v11y-stored-rhtpa
 

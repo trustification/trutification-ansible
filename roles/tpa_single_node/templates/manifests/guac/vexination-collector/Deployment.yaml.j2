@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vexination-collector
+  namespace: "{{ tpa_single_node_namespace }}"
   labels:
     app.kubernetes.io/name: vexination-collector
     app.kubernetes.io/component: guac
@@ -35,47 +36,39 @@ spec:
             - collect
             - s3
             - --poll
-          env:
+          env: 
             - name: STORAGE_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  key: root-user
-                  name: infrastructure-minio
+              value: {{ tpa_single_node_storage_access_key }}
             - name: STORAGE_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  key: root-password
-                  name: infrastructure-minio
+              value: {{ tpa_single_node_storage_secret_key }}
             - name: GUAC_S3_URL
-              value: http://infrastructure-minio:9000
+              value: {{ tpa_single_node_storage_endpoint }}
             - name: GUAC_S3_BUCKET
-              value: vexination-default
+              value: {{ tpa_single_node_storage_vexination_bucket }}
             - name: GUAC_S3_MP
-              value: kafka
+              value: {{ tpa_single_node_event_bus_type}}
             - name: GUAC_S3_MP_ENDPOINT
-              value: my-cluster-kafka-bootstrap:9092
+              value: {{ tpa_single_node_event_endpoint }}
             - name: KAFKA_PROPERTIES_ENV_PREFIX
-              value: TCK_
+              value: TCK_ 
             - name: TCK_SECURITY__PROTOCOL
-              value: SASL_PLAINTEXT
+              value: {{ tpa_single_node_kafka_security_protocol }}
             - name: TCK_SASL__USERNAME
-              value: user1
+              value: {{ tpa_single_node_event_access_key_id }}
             - name: TCK_SASL__PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: password
-                  name: user1
+              value: {{ tpa_single_node_event_secret_access_key }}
             - name: TCK_SASL__MECHANISM
-              value: SCRAM-SHA-512
+              value: {{ tpa_single_node_kafka_auth_mechanism }}
             - name: GUAC_S3_QUEUES
-              value: vexination-indexed-default
+              value: {{ tpa_single_node_bombastic_topic_guac }}
             - name: GUAC_GQL_ADDR
-              value: https://guac-graphql.trustificcation.svc.cluster.local/query
+              value: 127.0.0.1:8080/query
             - name: GUAC_CSUB_ADDR
-              value: guac-collectsub.trustificcation.svc.cluster.local:2782
-            - name: GUAC_CSUB_TLS_ROOT_CA
-              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
-            - name: GUAC_GQL_TLS_ROOT_CA
-              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+              value: 127.0.0.1:2782
+# TODO
+#            - name: GUAC_CSUB_TLS_ROOT_CA
+#              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+#            - name: GUAC_GQL_TLS_ROOT_CA
+#              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
           volumeMounts: null
       volumes: null
