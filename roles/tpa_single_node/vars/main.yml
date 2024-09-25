@@ -50,9 +50,9 @@ tpa_single_node_bombastic_topic_stored: # Bombastic Events topic stored
 tpa_single_node_vexination_topic_failed: # Vexination Events topic failed
 tpa_single_node_vexination_topic_indexed: # Vexination Events topic indexed
 tpa_single_node_vexination_topic_stored: # Vexination Events topic stored
-tpa_single_node_v11y_topic_failed: v11y-failed-default # v11y Events topic failed
-tpa_single_node_v11y_topic_indexed: v11y-indexed-default # v11y Events topic indexed
-tpa_single_node_v11y_topic_stored: v11y-stored-default # v11y Events topic stored
+tpa_single_node_v11y_topic_failed:  # v11y Events topic failed
+tpa_single_node_v11y_topic_indexed:  # v11y Events topic indexed
+tpa_single_node_v11y_topic_stored:  # v11y Events topic stored
 
 # SSO_SERVICE - Keycloak or AWS Cognito
 # Issuer URL with endpoint auth/realms/chicken
@@ -60,6 +60,9 @@ tpa_single_node_oidc_issuer_url: "{{ lookup('env', 'TPA_STORAGE_OIDC_ISSUER_URL'
 tpa_single_node_oidc_frontend_id: "{{ lookup('env', 'TPA_STORAGE_OIDC_FRONTEND_ID') | default('tpa_single_node_default_empty', true) }}"
 tpa_single_node_oidc_provider_client_id: "{{ lookup('env', 'TPA_OIDC_PROVIDER_CLIENT_ID') | default('tpa_single_node_default_empty', true) }}"
 tpa_single_node_oidc_provider_client_secret: "{{ lookup('env', 'TPA_OIDC_PROVIDER_CLIENT_SECRET') | default('tpa_single_node_default_empty', true) }}"
+
+## AWS OIDC fields
+tpa_single_node_aws_cognito_domain: "{{ lookup('env', 'TPA_OIDC_COGNITO_DOMAIN') | default('tpa_single_node_default_empty', true) }}"
 
 # TSL Certificates
 tpa_single_node_guac_csub_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/guac-collectsub-tls-certificate.pem"

@@ -59,8 +59,10 @@ spec:
               value: "{{ tpa_single_node_storage_access_key }}"
             - name: STORAGE_SECRET_KEY
               value: "{{ tpa_single_node_storage_secret_key }}"
+{% if tpa_single_node_storage_endpoint is defined %}
             - name: STORAGE_ENDPOINT
               value: "{{ tpa_single_node_storage_endpoint }}"
+{% endif %}
             - name: STORAGE_REGION
               value: "eu-west-1" # just a dummy value
             - name: STORAGE_BUCKET
