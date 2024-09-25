@@ -15,6 +15,7 @@ spec:
       labels:
         app: v11y-walker
     spec:
+      restartPolicy: Never
       initContainers:
         - name: git-fetch
           image: "{{ tpa_single_node_trustification_image }}"
