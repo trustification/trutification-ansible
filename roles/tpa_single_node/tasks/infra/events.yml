@@ -1,0 +1,29 @@
+---
+- name: Set Event Variable
+  ansible.builtin.set_fact:
+    event: kafka
+
+- name: Overwrite Event Variable
+  ansible.builtin.set_fact:
+    event: sqs
+  when: "'sqs' in (tpa_single_node_event_bus_type | string | safe)"
+
+- name: Check Event Access and Secret is defined
+  ansible.builtin.assert:
+    that:
+      - tpa_single_node_event_access_key_id is defined
+      - tpa_single_node_event_secret_access_key is defined
+      - tpa_single_node_event_access_key_id != ""
+      - tpa_single_node_event_secret_access_key != ""
+    fail_msg: Event Access key and Secret is not defined
+
+- name: Generate Event Secret manifest
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/infra/Secret-events.yaml.j2"
+    dest: "{{ tpa_single_node_event_secret }}"
+    mode: "0600"
+
+- name: Apply Event Storage manifest
+  containers.podman.podman_play:
+    kube_file: "{{ tpa_single_node_event_secret }}"
+    state: started
