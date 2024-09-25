@@ -7,9 +7,7 @@
     fail_msg: "tpa_single_node_registry_username is not exists, export the registry username and password"
 
 - name: Podman login to registry.redhat.io
-  when:
-    - ansible_facts['distribution'] == 'RedHat'
-    - ansible_facts['distribution_major_version'] == '9'
+  when: rhel
   ansible.builtin.command: podman login registry.redhat.io -u {{ tpa_single_node_registry_username }} -p {{ tpa_single_node_registry_password }}
   register: podman_login_result
   changed_when: '"Already logged in" not in podman_login_result'
@@ -27,15 +25,11 @@
     name: "{{ tpa_single_node_podman_network }}"
 
 - name: Pull trustification image from registry.redhat.io
-  when:
-    - ansible_facts['distribution'] == 'RedHat'
-    - ansible_facts['distribution_major_version'] == '9'
+  when: rhel
   containers.podman.podman_image:
     name: "{{ tpa_single_node_trustification_image }}"
 
 - name: Pull Guac image from registry.redhat.io
-  when:
-    - ansible_facts['distribution'] == 'RedHat'
-    - ansible_facts['distribution_major_version'] == '9'
+  when: rhel
   containers.podman.podman_image:
     name: "{{ tpa_single_node_guac_image }}"

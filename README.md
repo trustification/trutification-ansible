@@ -25,7 +25,7 @@ Utilize the steps below to understand how to setup and execute the provisioning.
 
 ## Prerequisites
 
-A RHEL 9.2+ server should be used to run the Trustification components.
+A RHEL 9.3+ server should be used to run the Trustification components.
 
 Ansible must be installed and configured on a control node that will be used to perform the automation.
 
@@ -49,7 +49,7 @@ An installation of RH SSO/Keycloak/AWS Cognito must be provided to allow for int
 
 #### https://docs.ansible.com/ansible/2.9/scenario_guides/guide_vagrant.html
 
-In order to deploy Trustification on a RHEL 9.2+ VM:
+In order to deploy Trustification on a RHEL 9.3+ VM:
 
 1. Create an `inventory.ini` file in the project with a single VM in the `trustification` group:
 
