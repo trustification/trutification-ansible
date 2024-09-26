@@ -24,9 +24,9 @@ tpa_single_node_storage_endpoint: # <Enter minio storage endpoint, For AWS this 
 tpa_single_node_storage_region: eu-west-1 # <AWS S3 Storage region> - For Minio just keep us-west-1
 tpa_single_node_storage_access_key: "{{ lookup('env', 'TPA_STORAGE_ACCESS_KEY') }}"
 tpa_single_node_storage_secret_key: "{{ lookup('env', 'TPA_STORAGE_SECRET_KEY') }}"
-tpa_single_node_storage_bombastic_bucket: bombastic-rhtpa
-tpa_single_node_storage_vexination_bucket: vexination-rhtpa
-tpa_single_node_storage_v11y_bucket: v11y-rhtpa
+tpa_single_node_storage_bombastic_bucket: bombastic-default
+tpa_single_node_storage_vexination_bucket: vexination-default
+tpa_single_node_storage_v11y_bucket: v11y-default
 
 # QUEUE Service - Kafka or SQS
 tpa_single_node_event_bus_type: sqs # Either <kafka> or <sqs>
@@ -45,15 +45,15 @@ tpa_single_node_kafka_endpoint: # Exemple <my-cluster-kafka-bootstrap:9092>
 tpa_single_node_sqs_region: eu-west-1 # AWS SQS Region
 
 ### Event topics
-tpa_single_node_bombastic_topic_failed: bombastic-failed-rhtpa
-tpa_single_node_bombastic_topic_indexed: bombastic-indexed-rhtpa
-tpa_single_node_bombastic_topic_stored: bombastic-stored-rhtpa
-tpa_single_node_vexination_topic_failed: vexination-failed-rhtpa
-tpa_single_node_vexination_topic_indexed: vexination-indexed-rhtpa
-tpa_single_node_vexination_topic_stored: vexination-stored-rhtpa
-tpa_single_node_v11y_topic_failed: v11y-failed-rhtpa
-tpa_single_node_v11y_topic_indexed: v11y-indexed-rhtpa
-tpa_single_node_v11y_topic_stored: v11y-stored-rhtpa
+tpa_single_node_bombastic_topic_failed: bombastic-failed-default
+tpa_single_node_bombastic_topic_indexed: bombastic-indexed-default
+tpa_single_node_bombastic_topic_stored: bombastic-stored-default
+tpa_single_node_vexination_topic_failed: vexination-failed-default
+tpa_single_node_vexination_topic_indexed: vexination-indexed-default
+tpa_single_node_vexination_topic_stored: vexination-stored-default
+tpa_single_node_v11y_topic_failed: v11y-failed-default
+tpa_single_node_v11y_topic_indexed: v11y-indexed-default
+tpa_single_node_v11y_topic_stored: v11y-stored-default
 
 # SSO_SERVICE - Keycloak or AWS Cognito
 # Issuer URL with endpoint auth/realms/chicken
