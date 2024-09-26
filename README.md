@@ -126,9 +126,10 @@ export TPA_OIDC_COGNITO_DOMAIN=<AWS Cognito Domain>
 8. Update `roles/tpa_single_node/vars/main.yml` file with the below values,
 
 - Storage Service:
-  1. Update the S3/Minio bucket names
-  2. Update the AWS region for AWS S3 or keep `us-west-1` for minio
-  3. In case of minio, update minio storage end point `tpa_single_node_storage_endpoint`
+  1. Update the Storage type, eithe `s3` or `minio`
+  2. Update the S3/Minio bucket names
+  3. Update the AWS region for AWS S3 or keep `us-west-1` for minio
+  4. In case of minio, update minio storage end point `tpa_single_node_storage_endpoint`
 
 - SQS Service:
   1. Update the Event bus type, either `kafka` or `sqs`

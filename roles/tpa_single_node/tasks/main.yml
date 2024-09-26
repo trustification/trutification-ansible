@@ -42,14 +42,14 @@
     apply:
       become: true
 
-# Step 9
+# Step 10
 - name: Configure/Deploy bombastic api
   ansible.builtin.include_tasks: bombastic/api.yml
   args:
     apply:
       become: true
 
-# Step 10
+# Step 9
 - name: Configure/Deploy v11y Indexer
   ansible.builtin.include_tasks: v11y/indexer.yml
   args:

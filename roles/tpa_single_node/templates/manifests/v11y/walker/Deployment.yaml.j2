@@ -60,7 +60,7 @@ spec:
               value: "{{ tpa_single_node_storage_access_key }}"
             - name: STORAGE_SECRET_KEY
               value: "{{ tpa_single_node_storage_secret_key }}"
-{% if tpa_single_node_storage_endpoint is defined %}
+{% if 'minio' in tpa_single_node_storage_type %}
             - name: STORAGE_ENDPOINT
               value: "{{ tpa_single_node_storage_endpoint }}"
 {% endif %}

@@ -86,7 +86,7 @@ spec:
                 secretKeyRef:
                   key: storage_secret_key
                   name: storage_secret
-{% if tpa_single_node_storage_endpoint is defined %}
+{% if 'minio' in tpa_single_node_storage_type %}
             - name: STORAGE_ENDPOINT
               value: "{{ tpa_single_node_storage_endpoint }}"
 {% endif %}

@@ -19,6 +19,7 @@ tpa_single_node_pg_user_passwd: guac1234
 tpa_single_node_pg_ssl_mode: disable
 
 # Storage Service
+tpa_single_node_storage_type: s3
 tpa_single_node_storage_access_key: "{{ lookup('env', 'TPA_STORAGE_ACCESS_KEY') }}" # AWS Access Key ID
 tpa_single_node_storage_secret_key: "{{ lookup('env', 'TPA_STORAGE_SECRET_KEY') }}" # AWS Secret Access Key
 tpa_single_node_storage_bombastic_bucket: bombastic-rhtpa

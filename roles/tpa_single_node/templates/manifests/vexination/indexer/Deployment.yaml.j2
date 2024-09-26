@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: v11y-indexer
+  name: vexination-indexer
   namespace: "{{ tpa_single_node_namespace }}"
   labels:
-    app.kubernetes.io/name: v11y-indexer
-    app.kubernetes.io/component: v11y
+    app.kubernetes.io/name: vexination-indexer
+    app.kubernetes.io/component: vexination
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
     app.kubernetes.io/version: 1.1.1
     app.kubernetes.io/part-of: trusted-profile-analyzer
@@ -18,25 +18,25 @@ spec:
 
   selector:
     matchLabels:
-      app.kubernetes.io/name: v11y-indexer
-      app.kubernetes.io/component: v11y
+      app.kubernetes.io/name: vexination-indexer
+      app.kubernetes.io/component: vexination
       app.kubernetes.io/instance: redhat-trusted-profile-analyzer
 
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: v11y-indexer
-        app.kubernetes.io/component: v11y
+        app.kubernetes.io/name: vexination-indexer
+        app.kubernetes.io/component: vexination
         app.kubernetes.io/instance: redhat-trusted-profile-analyzer
 
     spec:
       volumes:
         - name: data
           emptyDir: {}
-        - name: v11yapisecret
+        - name: vexinationapisecret
           secret:
             secretName: storage_secret
-        - name: v11yapisqssecret
+        - name: vexinationapisqssecret
           secret:
             secretName: event_secret
 
@@ -60,14 +60,14 @@ spec:
 
           command: ["/trust"]
           args:
-            - "v11y"
+            - "vexination"
             - "indexer"
             - "--stored-topic"
-            - "{{ tpa_single_node_v11y_topic_stored }}"
+            - "{{ tpa_single_node_vexination_topic_stored }}"
             - "--indexed-topic"
-            - "{{ tpa_single_node_v11y_topic_indexed }}"
+            - "{{ tpa_single_node_vexination_topic_indexed }}"
             - "--failed-topic"
-            - "{{ tpa_single_node_v11y_topic_failed }}"
+            - "{{ tpa_single_node_vexination_topic_failed }}"
             - "--index-mode"
             - "file"
             - "--index-dir"
@@ -101,6 +101,7 @@ spec:
             - name: STORAGE_ENDPOINT
               value: "{{ tpa_single_node_storage_endpoint }}"
 {% endif %}
+
             - name: EVENT_BUS
               value: "{{ tpa_single_node_event_bus_type }}"
 
@@ -153,9 +154,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /data
-            - mountPath: /etc/v11yapisecret
-              name: v11yapisecret
-            - mountPath: /etc/v11yapisqssecret
-              name: v11yapisqssecret
+            - mountPath: /etc/vexinationapisecret
+              name: vexinationapisecret
+            - mountPath: /etc/vexinationapisqssecret
+              name: vexinationapisqssecret
 
 

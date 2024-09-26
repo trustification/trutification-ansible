@@ -25,7 +25,7 @@
     job: "{{ lookup('ansible.builtin.template', 'configs/v11y_cronjob.sh') }}"
     state: present
 
-- name: Deploy v11walker Pod
+- name: Deploy v11y walker Pod
   ansible.builtin.include_tasks: install_manifest_cronjob.yml
   vars:
     podman_spec:
