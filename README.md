@@ -74,13 +74,15 @@ host_key_checking = False
 3. Add the subscription, registry and certificates information :
 
 - For Red Hat subscription define :
-  `export TPA_SINGLE_NODE_REGISTRATION_USERNAME=<Your Red Hat subscription username>`
-  `export TPA_SINGLE_NODE_REGISTRATION_PASSWORD=<Your Red Hat subscription password>`
+  ```
+  export TPA_SINGLE_NODE_REGISTRATION_USERNAME=<Your Red Hat subscription username>
+  export TPA_SINGLE_NODE_REGISTRATION_PASSWORD=<Your Red Hat subscription password>
+  ```
 - For Red Hat image registry define :
-  `export TPA_SINGLE_NODE_REGISTRY_USERNAME=<Your Red Hat image registry username>`
-  `export TPA_SINGLE_NODE_REGISTRY_PASSWORD=<Your Red Hat image registry password>`
-
-# Todo - Remove ?
+  ```
+  export TPA_SINGLE_NODE_REGISTRY_USERNAME=<Your Red Hat image registry username>
+  export TPA_SINGLE_NODE_REGISTRY_PASSWORD=<Your Red Hat image registry password>
+  ```
 
 Alternatively vagrant will prompt you to provide the registration username and password.
 
@@ -98,7 +100,7 @@ Copy your certificate files in `./certs` directory using following names:
 Optionally, you can also copy `service-ca.crt` certificate to the same
 directory if you have OSV client that needs secure access to the collector.
 
-6. Create Environment Variables for Storage, Events and OIDC 
+5. Create Environment Variables for Storage, Events and OIDC 
 
 ```
 export TPA_STORAGE_ACCESS_KEY=<Storage Access Key>
@@ -111,17 +113,17 @@ export TPA_EVENT_ACCESS_KEY_ID=<Kafka Username or AWS SQS Access Key>
 export TPA_EVENT_SECRET_ACCESS_KEY=<Kafka User Password or AWS SQS Secret Key>
 ```
 
-In case of Kafka Events, create environmental variable for bootstrap server
+6. In case of Kafka Events, create environmental variable for bootstrap server
 ```
 export TPA_EVENT_BOOTSTRAP_SERVER=<Kafka Bootstrap Server>
 ```
 
-In case of AWS Cognito as OIDC, create environmental variable for Cognito Domain
+7. In case of AWS Cognito as OIDC, create environmental variable for Cognito Domain
 ```
 export TPA_OIDC_COGNITO_DOMAIN=<AWS Cognito Domain>
 ```
 
-Update `roles/tpa_single_node/vars/main.yml` file with the below values,
+8. Update `roles/tpa_single_node/vars/main.yml` file with the below values,
 
 - Storage Service:
   1. Update the S3/Minio bucket names
@@ -136,7 +138,7 @@ Update `roles/tpa_single_node/vars/main.yml` file with the below values,
 
 Refer `roles/tpa_single_node/vars/main_example_aws.yml` and `roles/tpa_single_node/vars/main_example_nonaws.yml`
 
-7. Execute the following command (NOTE: you will have to provide credentials to authenticate to registry.redhat.io: https://access.redhat.com/RegistryAuthentication):
+9. Execute the following command (NOTE: you will have to provide credentials to authenticate to registry.redhat.io: https://access.redhat.com/RegistryAuthentication):
 
 ```shell
 ANSIBLE_ROLES_PATH="roles/" ansible-playbook -i inventory.ini play.yml -vvvv -e registry_username='REGISTRY.REDHAT.IO_USERNAME' -e registry_password='REGISTRY.REDHAT.IO_PASSWORD'
