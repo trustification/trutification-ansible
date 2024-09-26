@@ -15,21 +15,13 @@
   ansible.builtin.set_fact:
     dns_resolver: "{{ tpa_podman_network_results.network.subnets[0].gateway }}"
 
-- name: Creates a v11y walker cron file under /etc/cron.d # 0 1 * * *
-  ansible.builtin.cron:
-    name: v11y cronjob
-    cron_file: v11-walker
-    hour: "1"
-    minute: "0"
-    user: root
-    job: "{{ lookup('ansible.builtin.template', 'configs/v11y_cronjob.sh') }}"
-    state: present
-
 - name: Deploy v11y walker Pod
   ansible.builtin.include_tasks: install_manifest_cronjob.yml
   vars:
     podman_spec:
       state: stopped
       systemd_file: v11y-walker
+      timer_type: monotonic # realtime
+      time_pattern: 1h # *:0/10 for realtime instead of monotonic
       network: "{{ tpa_single_node_podman_network }}"
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/v11y/walker/Deployment.yaml.j2') | from_yaml }}"

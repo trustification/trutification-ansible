@@ -1,0 +1,10 @@
+[Unit]
+Description=Run {{ podman_spec.systemd_file}}.timer
+  
+[Timer]
+Unit={{ podman_spec.systemd_file}}.service
+OnBootSec=1min
+OnUnitActiveSec={{ podman_spec.time_pattern }}
+  
+[Install]
+WantedBy=timers.target
