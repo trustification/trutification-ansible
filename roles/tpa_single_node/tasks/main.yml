@@ -58,14 +58,14 @@
 
 # Step 11
 - name: Configure/Deploy Guac collector for bombastic
-  ansible.builtin.include_tasks: guac/collector_bombastic.yml
+  ansible.builtin.include_tasks: guac/bombastic_collector.yml
   args:
     apply:
       become: true
 
 # Step 17
 - name: Configure/Deploy Guac vexination collector
-  ansible.builtin.include_tasks: guac/collector_vexination.yml
+  ansible.builtin.include_tasks: guac/vexination_collector.yml
   args:
     apply:
       become: true

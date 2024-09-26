@@ -41,41 +41,52 @@ spec:
               value: {{ tpa_single_node_storage_access_key }}
             - name: STORAGE_SECRET_KEY
               value: {{ tpa_single_node_storage_secret_key }}
-
-{% if 'minio' in tpa_single_node_storage_type %}
+{% if 'minio' in tpa_single_node_storage_type %}   
             - name: GUAC_S3_URL
-              value: {{ tpa_single_node_storage_endpoint }}
-   
-{% elif 's3' in tpa_single_node_storage_type %}           
+              value: "{{ tpa_single_node_storage_endpoint }}"
+{% elif 's3' in tpa_single_node_storage_type %}
             - name: STORAGE_REGION
-              value: {{ tpa_single_node_storage_region }}
-            - name: SQS_ACCESS_KEY
-              value: {{ tpa_single_node_storage_access_key }}
-            - name: SQS_SECRET_KEY
-              value: {{ tpa_single_node_storage_secret_key }}
+              value: "{{ tpa_single_node_storage_region }}"
 {% endif %}
-
             - name: GUAC_S3_BUCKET
-              value: {{ tpa_single_node_storage_bombastic_bucket }}
+              value: "{{ tpa_single_node_storage_bombastic_bucket }}"
             - name: GUAC_S3_MP
-              value: {{ tpa_single_node_event_bus_type}}
-
-{% if 'kafka' in tpa_single_node_event_bus_type %}
+              value: "{{ tpa_single_node_event_bus_type }}"
+{% if 'sqs' in tpa_single_node_event_bus_type %}
+            - name: SQS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: event_access_key_id
+                  name: event_secret
+            - name: SQS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: event_secret_access_key
+                  name: event_secret
+            - name: SQS_REGION
+              value: "{{ tpa_single_node_sqs_region }}"
+{% elif 'kafka' in tpa_single_node_event_bus_type %}
             - name: GUAC_S3_MP_ENDPOINT
-              value: {{ tpa_single_node_kafka_endpoint }}
+              value: "{{ tpa_single_node_kafka_bootstrap_servers }}"
             - name: KAFKA_PROPERTIES_ENV_PREFIX
               value: TCK_
             - name: TCK_SECURITY__PROTOCOL
-              value: {{ tpa_single_node_kafka_security_protocol }}
+              value: "{{ tpa_single_node_kafka_security_protocol }}"
             - name: TCK_SASL__USERNAME
-              value: {{ tpa_single_node_event_access_key_id }}
+              valueFrom:
+                secretKeyRef:
+                  key: event_access_key_id
+                  name: event_secret
             - name: TCK_SASL__PASSWORD
-              value: {{ tpa_single_node_event_secret_access_key }}
+              valueFrom:
+                secretKeyRef:
+                  key: event_secret_access_key
+                  name: event_secret
             - name: TCK_SASL__MECHANISM
-              value: {{ tpa_single_node_kafka_auth_mechanism }}
+              value: "{{ tpa_single_node_kafka_auth_mechanism }}"
 {% endif %}
             - name: GUAC_S3_QUEUES
-              value: {{ tpa_single_node_bombastic_topic_indexed }}
+              value: "{{ tpa_single_node_bombastic_topic_indexed }}"
             - name: GUAC_GQL_ADDR
               value: 127.0.0.1:8080/query
             - name: GUAC_CSUB_ADDR
