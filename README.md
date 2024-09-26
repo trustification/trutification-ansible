@@ -103,6 +103,7 @@ directory if you have OSV client that needs secure access to the collector.
 5. Create Environment Variables for Storage, Events and OIDC 
 
 ```
+export TPA_PG_HOST=<POSTGRES_HOST_IP>
 export TPA_STORAGE_ACCESS_KEY=<Storage Access Key>
 export TPA_STORAGE_SECRET_KEY=<Storage Secret Key>
 export TPA_OIDC_ISSUER_URL=<AWS Cognito or Keycloak Issuer URL. Incase of Keycloak endpoint auth/realms/chicken is needed>
