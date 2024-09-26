@@ -45,12 +45,14 @@ spec:
               value: {{ tpa_single_node_storage_endpoint }}
             - name: GUAC_S3_BUCKET
               value: {{ tpa_single_node_storage_vexination_bucket }}
+{% if 'kafka' in tpa_single_node_event_bus_type %}
             - name: GUAC_S3_MP
               value: {{ tpa_single_node_event_bus_type}}
             - name: GUAC_S3_MP_ENDPOINT
               value: {{ tpa_single_node_event_endpoint }}
             - name: KAFKA_PROPERTIES_ENV_PREFIX
-              value: TCK_ 
+              value: TCK_
+{% endif %}
             - name: TCK_SECURITY__PROTOCOL
               value: {{ tpa_single_node_kafka_security_protocol }}
             - name: TCK_SASL__USERNAME
