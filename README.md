@@ -98,7 +98,7 @@ Copy your certificate files in `./certs` directory using following names:
 Optionally, you can also copy `service-ca.crt` certificate to the same
 directory if you have OSV client that needs secure access to the collector.
 
-6. Create Environment Variables with S3 and OIDC credentails
+6. Create Environment Variables for Storage, Events and OIDC 
 
 ```
 export TPA_STORAGE_ACCESS_KEY=<Storage Access Key>
@@ -109,8 +109,32 @@ export TPA_OIDC_PROVIDER_CLIENT_ID=<OIDC Walker Id>
 export TPA_OIDC_PROVIDER_CLIENT_SECRET=<OIDC Walker Secret>
 export TPA_EVENT_ACCESS_KEY_ID=<Kafka Username or AWS SQS Access Key>
 export TPA_EVENT_SECRET_ACCESS_KEY=<Kafka User Password or AWS SQS Secret Key>
-export TPA_EVENT_BOOTSTRAP_SERVER=<Kafka Bootstrap Server URL, For AWS SQS it is not needed>
 ```
+
+In case of Kafka Events, create environmental variable for bootstrap server
+```
+export TPA_EVENT_BOOTSTRAP_SERVER=<Kafka Bootstrap Server>
+```
+
+In case of AWS Cognito as OIDC, create environmental variable for Cognito Domain
+```
+export TPA_OIDC_COGNITO_DOMAIN=<AWS Cognito Domain>
+```
+
+Update `roles/tpa_single_node/vars/main.yml` file with the below values,
+
+- Storage Service:
+  1. Update the S3/Minio bucket names
+  2. Update the AWS region for AWS S3 or keep `us-west-1` for minio
+  3. In case of minio, update minio storage end point `tpa_single_node_storage_endpoint`
+
+- SQS Service:
+  1. Update the Event bus type, either `kafka` or `sqs`
+  2. Update the topics for each events
+  3. In case of Kafka, update the fields `tpa_single_node_kafka_security_protocol` and  `tpa_single_node_kafka_auth_mechanism`
+  4. In case of AWS SQS, update the AWS SQS region `tpa_single_node_sqs_region`
+
+Refer `roles/tpa_single_node/vars/main_example_aws.yml` and `roles/tpa_single_node/vars/main_example_nonaws.yml`
 
 7. Execute the following command (NOTE: you will have to provide credentials to authenticate to registry.redhat.io: https://access.redhat.com/RegistryAuthentication):
 

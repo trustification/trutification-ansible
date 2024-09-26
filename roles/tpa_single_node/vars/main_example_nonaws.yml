@@ -1,0 +1,66 @@
+---
+# vars file for tpa_scaffolding
+tpa_single_node_base_hostname: trustification
+tpa_single_node_certificates_dir: certs/
+tpa_single_node_config_dir: /etc/rhtpa
+tpa_single_node_kube_manifest_dir: "{{ tpa_single_node_config_dir }}/manifests"
+tpa_single_node_namespace: trustification
+tpa_single_node_podman_network: tcnet
+tpa_single_node_skip_os_install: true
+tpa_single_node_systemd_directory: /etc/systemd/system
+tpa_single_node_default_empty: ""
+
+# DB_SERVICE
+tpa_single_node_pg_host: 192.168.121.60
+tpa_single_node_pg_port: 5432
+tpa_single_node_pg_db: guac
+tpa_single_node_pg_user: guac
+tpa_single_node_pg_user_passwd: guac1234
+tpa_single_node_pg_ssl_mode: disable
+
+# Storage Service
+tpa_single_node_storage_access_key: "{{ lookup('env', 'TPA_STORAGE_ACCESS_KEY') }}" # minio root username
+tpa_single_node_storage_secret_key: "{{ lookup('env', 'TPA_STORAGE_SECRET_KEY') }}" # minio root password
+tpa_single_node_storage_bombastic_bucket: bombastic-default
+tpa_single_node_storage_v11y_bucket: v11y-default
+tpa_single_node_storage_vexination_bucket: vexination-default
+tpa_single_node_storage_region: eu-west-1 # For Minio just keep eu-west-1
+
+## Storage Service - Minio fields
+tpa_single_node_storage_endpoint: http://<minio-host> # <Enter minio storage URL pointing to API endpoint 9000>
+
+# SQS_SERVICE
+tpa_single_node_event_bus_type: kafka
+tpa_single_node_event_access_key_id: "{{ lookup('env', 'TPA_EVENT_ACCESS_KEY_ID') }}" # Kafka Username
+tpa_single_node_event_secret_access_key: "{{ lookup('env', 'TPA_EVENT_SECRET_ACCESS_KEY') }}" # Kafka password
+tpa_single_node_bombastic_topic_failed: bombastic-failed-default
+tpa_single_node_bombastic_topic_indexed: bombastic-indexed-default
+tpa_single_node_bombastic_topic_stored: bombastic-stored-default
+tpa_single_node_vexination_topic_failed: vexination-failed-default
+tpa_single_node_vexination_topic_indexed: vexination-indexed-default
+tpa_single_node_vexination_topic_stored: vexination-stored-default
+tpa_single_node_v11y_topic_failed: v11y-failed-default
+tpa_single_node_v11y_topic_indexed: v11y-indexed-default
+tpa_single_node_v11y_topic_stored: v11y-stored-default
+
+## SQS_SERVICE - Kafka fields
+tpa_single_node_kafka_bootstrap_servers: "{{ lookup('env', 'TPA_EVENT_BOOTSTRAP_SERVER') | default('tpa_single_node_default_empty', true) }}"
+# example - my-cluster-kafka-bootstrap:9092
+tpa_single_node_kafka_security_protocol: SASL_PLAINTEXT
+tpa_single_node_kafka_auth_mechanism: SCRAM-SHA-512
+
+# SSO_SERVICE
+tpa_single_node_oidc_issuer_url: "{{ lookup('env', 'TPA_OIDC_ISSUER_URL') | default('tpa_single_node_default_empty', true) }}"
+tpa_single_node_oidc_frontend_id: "{{ lookup('env', 'TPA_OIDC_FRONTEND_ID') | default('tpa_single_node_default_empty', true) }}"
+tpa_single_node_oidc_provider_client_id: "{{ lookup('env', 'TPA_OIDC_PROVIDER_CLIENT_ID') | default('tpa_single_node_default_empty', true) }}"
+tpa_single_node_oidc_provider_client_secret: "{{ lookup('env', 'TPA_OIDC_PROVIDER_CLIENT_SECRET') | default('tpa_single_node_default_empty', true) }}"
+
+# TSL Certificates
+tpa_single_node_guac_csub_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/guac-collectsub-tls-certificate.pem"
+tpa_single_node_guac_csub_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/guac-collectsub-tls-certificate.key"
+tpa_single_node_guac_graphql_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/guac-graphql-tls-certificate.pem"
+tpa_single_node_guac_graphql_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/guac-graphql-tls-certificate.key"
+
+# Target node(s) - Secret and Configmap locations
+tpa_single_node_storage_secret: "{{ tpa_single_node_kube_manifest_dir }}/storage-secret.yaml"
+tpa_single_node_event_secret: "{{ tpa_single_node_kube_manifest_dir }}/event-secret.yaml"

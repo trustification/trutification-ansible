@@ -76,3 +76,18 @@
   args:
     apply:
       become: true
+
+
+# Step 16
+- name: Configure/Deploy vexination api
+  ansible.builtin.include_tasks: vexination/api.yml
+  args:
+    apply:
+      become: true
+
+# Step 18
+- name: Configure/Deploy vexination Indexer
+  ansible.builtin.include_tasks: vexination/indexer.yml
+  args:
+    apply:
+      become: true
