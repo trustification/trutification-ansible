@@ -12,7 +12,7 @@ tpa_single_node_systemd_directory: /etc/systemd/system
 tpa_single_node_default_empty: ""
 
 # DB_SERVICE
-tpa_single_node_pg_host: "{{ lookup('env', 'TPA_PG_HOST') | default('192.168.121.60', true) }}"
+tpa_single_node_pg_host: "{{ lookup('env', 'TPA_PG_HOST') | default('192.168.121.60') }}"
 tpa_single_node_pg_port: 5432
 tpa_single_node_pg_db: guac
 tpa_single_node_pg_user: guac
@@ -20,30 +20,30 @@ tpa_single_node_pg_user_passwd: guac1234
 tpa_single_node_pg_ssl_mode: disable
 
 # Storage Service
-tpa_single_node_storage_type: s3 # Either s3 or minio
+tpa_single_node_storage_type: # Either s3 or minio
 tpa_single_node_storage_access_key: "{{ lookup('env', 'TPA_STORAGE_ACCESS_KEY') }}"
 tpa_single_node_storage_secret_key: "{{ lookup('env', 'TPA_STORAGE_SECRET_KEY') }}"
-tpa_single_node_storage_bombastic_bucket: bombastic-rhtpa # <bombastic storage bucket name>
-tpa_single_node_storage_v11y_bucket: v11y-rhtpa # <v11y storage bucket name>
-tpa_single_node_storage_vexination_bucket: vexination-rhtpa # <v11y storage bucket name>
-tpa_single_node_storage_region: eu-west-1 # <AWS S3 Storage region> # For Minio just keep eu-west-1
+tpa_single_node_storage_bombastic_bucket: # <bombastic storage bucket name>
+tpa_single_node_storage_v11y_bucket: # <v11y storage bucket name>
+tpa_single_node_storage_vexination_bucket: # <v11y storage bucket name>
+tpa_single_node_storage_region: # <AWS S3 Storage region> # For Minio just keep eu-west-1
 
 ## Storage Service - Minio fields
 tpa_single_node_storage_endpoint: # <Enter minio storage endpoint, For AWS this field is not necessary>
 
 # SQS_SERVICE
-tpa_single_node_event_bus_type: sqs # Either kafka or sqs
+tpa_single_node_event_bus_type: # Either kafka or sqs
 tpa_single_node_event_access_key_id: "{{ lookup('env', 'TPA_EVENT_ACCESS_KEY_ID') }}" # Kafka Username or AWS SQS Access Key ID
 tpa_single_node_event_secret_access_key: "{{ lookup('env', 'TPA_EVENT_SECRET_ACCESS_KEY') }}" # Kafka password or AWS SQS Secret Access Key
-tpa_single_node_bombastic_topic_failed: bombastic-failed-rhtpa # Bombastic Events topic failed
-tpa_single_node_bombastic_topic_indexed: bombastic-indexed-rhtpa # Bombastic Events topic indexed
-tpa_single_node_bombastic_topic_stored: bombastic-stored-rhtpa # Bombastic Events topic stored
-tpa_single_node_vexination_topic_failed: vexination-failed-rhtpa # Vexination Events topic failed
-tpa_single_node_vexination_topic_indexed: vexination-indexed-rhtpa # Vexination Events topic indexed
-tpa_single_node_vexination_topic_stored: vexination-stored-rhtpa # Vexination Events topic stored
-tpa_single_node_v11y_topic_failed: v11y-failed-rhtpa # v11y Events topic failed
-tpa_single_node_v11y_topic_indexed: v11y-indexed-rhtpa # v11y Events topic indexed
-tpa_single_node_v11y_topic_stored: v11y-stored-rhtpa # v11y Events topic stored
+tpa_single_node_bombastic_topic_failed: # Bombastic Events topic failed
+tpa_single_node_bombastic_topic_indexed: # Bombastic Events topic indexed
+tpa_single_node_bombastic_topic_stored: # Bombastic Events topic stored
+tpa_single_node_vexination_topic_failed: # Vexination Events topic failed
+tpa_single_node_vexination_topic_indexed: # Vexination Events topic indexed
+tpa_single_node_vexination_topic_stored: # Vexination Events topic stored
+tpa_single_node_v11y_topic_failed: # v11y Events topic failed
+tpa_single_node_v11y_topic_indexed: # v11y Events topic indexed
+tpa_single_node_v11y_topic_stored: # v11y Events topic stored
 
 ### Kafka fields
 # <Only needed for Kafka service, For AWS this field is not necessary>
@@ -54,7 +54,7 @@ tpa_single_node_kafka_security_protocol: # Example - SASL_PLAINTEXT
 tpa_single_node_kafka_auth_mechanism: # Example - SCRAM-SHA-512
 
 ### AWS SQS fields
-tpa_single_node_sqs_region: eu-west-1 # AWS SQS Region
+tpa_single_node_sqs_region: # AWS SQS Region
 
 # SSO_SERVICE
 tpa_single_node_oidc_issuer_url: "{{ lookup('env', 'TPA_OIDC_ISSUER_URL') | default('tpa_single_node_default_empty', true) }}"
