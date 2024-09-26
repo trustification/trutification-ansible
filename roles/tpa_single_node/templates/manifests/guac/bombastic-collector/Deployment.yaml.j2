@@ -54,15 +54,9 @@ spec:
               value: "{{ tpa_single_node_event_bus_type }}"
 {% if 'sqs' in tpa_single_node_event_bus_type %}
             - name: SQS_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  key: event_access_key_id
-                  name: event_secret
+              value: {{ tpa_single_node_storage_access_key }}
             - name: SQS_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  key: event_secret_access_key
-                  name: event_secret
+              value: {{ tpa_single_node_storage_secret_key }}
             - name: SQS_REGION
               value: "{{ tpa_single_node_sqs_region }}"
 {% elif 'kafka' in tpa_single_node_event_bus_type %}
