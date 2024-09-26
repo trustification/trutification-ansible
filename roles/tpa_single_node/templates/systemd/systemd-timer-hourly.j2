@@ -1,0 +1,11 @@
+[Unit]
+Description=Run {{ podman_spec.systemd_file}},service every 60 minutes
+Requires={{ podman_spec.systemd_file}}.service
+
+[Timer]
+OnCalendar=*:0/59 # The task will be executed every 15 minutes starting from the minute 0
+AccuracySec=12h
+Persistent=true
+
+[Install]
+WantedBy=timers.target

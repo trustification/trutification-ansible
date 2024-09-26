@@ -20,7 +20,7 @@
   when: podman_spec.configmap is defined
   register: copy_systemd_file
 
-- name: Copy Systemd file to Server
+- name: Copy Systemd file cronjob to Server
   ansible.builtin.template:
     src: systemd/systemd-cronjob-nocm.j2
     dest: "{{ tpa_single_node_systemd_directory + '/' + podman_spec.systemd_file }}.service"
@@ -28,11 +28,28 @@
   when: podman_spec.configmap is not defined
   register: copy_systemd_file
 
-- name: Restart Podman Service
+- name: Copy Systemd file timer to Server
+  ansible.builtin.template:
+    src: systemd/systemd-timer-hourly.j2
+    dest: "{{ tpa_single_node_systemd_directory + '/' + podman_spec.systemd_file }}.timer"
+    mode: "0600"
+  when: podman_spec.configmap is not defined
+  register: copy_systemd_file
+
+- name: Restart Cronjob Podman Service
   ansible.builtin.systemd:
     state: started
     enabled: true
     daemon_reload: false
     name: "{{ podman_spec.systemd_file }}"
+    no_block: true
+  when: copy_manifest.changed or copy_systemd_file.changed
+
+- name: Restart Timer Podman Service
+  ansible.builtin.systemd:
+    state: started
+    enabled: true
+    daemon_reload: false
+    name: "{{ podman_spec.systemd_file }}.timer"
     no_block: true
   when: copy_manifest.changed or copy_systemd_file.changed
