@@ -1,13 +1,14 @@
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: collector-osv
+  namespace: "{{ tpa_single_node_namespace }}"
   labels:
     app.kubernetes.io/name: collector-osv
     app.kubernetes.io/component: collector
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
     app.kubernetes.io/version: 1.1.1
     app.kubernetes.io/part-of: trusted-profile-analyzer
-  annotations: null
 spec:
   replicas: 1
   selector:
@@ -24,77 +25,6 @@ spec:
       annotations:
         configHash/auth: dac9d88322da8b671d9fc4f81500698ea05f108df8784b66db80d4242c9dee06
     spec:
-      containers:
-        - name: service
-          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:044b6070e52378a93cbcd65cbd5d10b866f102ee8d6040b92147df7b52202e83
-          imagePullPolicy: IfNotPresent
-          livenessProbe:
-            initialDelaySeconds: 2
-            httpGet:
-              path: /health/live
-              port: 9010
-          readinessProbe:
-            initialDelaySeconds: 2
-            httpGet:
-              path: /health/ready
-              port: 9010
-          command:
-            - /trust
-          args:
-            - collector
-            - osv
-            - -p
-            - '8080'
-            - --auth-configuration
-            - /etc/config/auth.yaml
-            - --v11y-url
-            - https://v11y-api.trustificcation.svc.cluster.local
-            - --guac-url
-            - https://guac-graphql.trustificcation.svc.cluster.local/query
-          env:
-            - name: NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: RUST_LOG
-              value: info
-            - name: INFRASTRUCTURE_ENABLED
-              value: 'true'
-            - name: INFRASTRUCTURE_BIND
-              value: '[::]:9010'
-            - name: HTTP_SERVER_BIND_ADDR
-              value: '::'
-            - name: HTTP_SERVER_TLS_ENABLED
-              value: 'true'
-            - name: HTTP_SERVER_TLS_KEY_FILE
-              value: /etc/tls/tls.key
-            - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
-              value: /etc/tls/tls.crt
-            - name: OIDC_PROVIDER_CLIENT_ID
-              value: walker
-            - name: OIDC_PROVIDER_CLIENT_SECRET
-              value: 6560cc91-4e20-4edd-881c-b15b169f8a80
-            - name: OIDC_PROVIDER_ISSUER_URL
-              value: https://sso$APP_DOMAIN_URL/realms/chicken
-            - name: CLIENT_TLS_CA_CERTIFICATES
-              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
-          volumeMounts:
-            - name: guac-config
-              mountPath: /guac
-              readOnly: true
-            - mountPath: /etc/tls
-              name: tls
-              readOnly: true
-            - name: config-auth
-              mountPath: /etc/config/auth.yaml
-              subPath: auth.yaml
-          ports:
-            - containerPort: 9010
-              protocol: TCP
-              name: infra
-            - containerPort: 8080
-              name: endpoint
-              protocol: TCP
       volumes:
         - name: guac-config
           configMap:
@@ -105,3 +35,79 @@ spec:
         - name: config-auth
           configMap:
             name: collector-osv-auth
+      containers:
+        - name: service
+          image: "{{ tpa_single_node_trustification_image }}"
+          imagePullPolicy: IfNotPresent
+          command: ["/trust"]
+          args:
+            - collector
+            - osv
+            - -p
+            - "8080"
+            - --auth-configuration
+            - /etc/config/auth.yaml
+            - --v11y-url
+            - https://v11y-api-pod:8080
+            - --guac-url
+            - https://guac-graphql-pod:8080/query
+          env:
+# TODO
+#            - name: NAMESPACE
+#              valueFrom:
+#                fieldRef:
+#                  fieldPath: metadata.namespace
+            - name: RUST_LOG
+              value: info
+            - name: INFRASTRUCTURE_ENABLED
+              value: "true"
+            - name: INFRASTRUCTURE_BIND
+              value: "[::]:9010"
+            - name: HTTP_SERVER_BIND_ADDR
+              value: "::"
+            - name: HTTP_SERVER_TLS_ENABLED
+              value: "true"
+            - name: HTTP_SERVER_TLS_KEY_FILE
+              value: /etc/tls/tls.key
+            - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
+              value: /etc/tls/tls.crt
+            - name: OIDC_PROVIDER_CLIENT_ID
+              value: "{{ tpa_single_node_oidc_provider_client_id }}"
+            - name: OIDC_PROVIDER_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: client_secret
+                  name: storage_secret
+            - name: OIDC_PROVIDER_ISSUER_URL
+              value: "{{ tpa_single_node_oidc_issuer_url }}"
+{% if client_tls_ca.stat.path is defined and client_tls_ca.stat.path | trim | length > 0 %}
+            - name: CLIENT_TLS_CA_CERTIFICATES
+              value: "{{ client_tls_ca.stat.path }}"
+{% endif %}
+          ports:
+            - containerPort: 9010
+              protocol: TCP
+              name: infra
+            - containerPort: 8080
+              name: endpoint
+              protocol: TCP
+          volumeMounts:
+            - name: guac-config
+              mountPath: /guac
+              readOnly: true
+            - mountPath: /etc/tls
+              name: tls
+              readOnly: true
+            - name: config-auth
+              mountPath: /etc/config/auth.yaml
+              subPath: auth.yaml
+          livenessProbe:
+            initialDelaySeconds: 2
+            httpGet:
+              path: /health/live
+              port: 9010
+          readinessProbe:
+            initialDelaySeconds: 2
+            httpGet:
+              path: /health/ready
+              port: 9010
