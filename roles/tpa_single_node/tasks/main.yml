@@ -63,6 +63,13 @@
     apply:
       become: true
 
+# Step 12
+- name: Configure/Deploy bombastic Indexer
+  ansible.builtin.include_tasks: bombastic/indexer.yml
+  args:
+    apply:
+      become: true
+
 # Step 14
 - name: Configure/Deploy collector osv
   ansible.builtin.include_tasks: collector/osv/main.yml
@@ -76,7 +83,6 @@
   args:
     apply:
       become: true
-
 
 # Step 16
 - name: Configure/Deploy vexination api

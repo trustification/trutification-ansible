@@ -1,12 +1,12 @@
 kind: Deployment
 metadata:
   name: bombastic-indexer
+  namespace: "{{ tpa_single_node_namespace }}"
   labels:
     app.kubernetes.io/name: bombastic-indexer
     app.kubernetes.io/component: bombastic
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
     app.kubernetes.io/version: 1.1.1
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: trusted-profile-analyzer
   annotations: null
 spec:
@@ -28,9 +28,15 @@ spec:
       volumes:
         - name: data
           emptyDir: {}
+        - name: v11yapisecret
+          secret:
+            secretName: storage_secret
+        - name: v11yapisqssecret
+          secret:
+            secretName: event_secret
       containers:
         - name: service
-          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:044b6070e52378a93cbcd65cbd5d10b866f102ee8d6040b92147df7b52202e83
+          image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: IfNotPresent
           livenessProbe:
             initialDelaySeconds: 2
@@ -42,69 +48,92 @@ spec:
             httpGet:
               path: /health/ready
               port: 9010
-          command:
-            - /trust
+          command: ["/trust"]
           args:
             - bombastic
             - indexer
             - --stored-topic
-            - bombastic-stored-default
+            - "{{ tpa_single_node_bombastic_topic_stored }}"
             - --indexed-topic
-            - bombastic-indexed-default
+            - "{{ tpa_single_node_bombastic_topic_indexed }}"
             - --failed-topic
-            - bombastic-failed-default
+            - "{{ tpa_single_node_bombastic_topic_failed }}"
             - --index-mode
             - file
             - --index-dir
             - /data/index
           env:
             - name: RUST_LOG
-              value: info
+              value: "info"
             - name: INFRASTRUCTURE_ENABLED
-              value: 'true'
+              value: "true"
             - name: INFRASTRUCTURE_BIND
-              value: '[::]:9010'
+              value: "[::]:9010"
             - name: STORAGE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  key: root-user
-                  name: infrastructure-minio
+                  key: storage_access_key
+                  name: storage_secret
             - name: STORAGE_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  key: root-password
-                  name: infrastructure-minio
-            - name: STORAGE_ENDPOINT
-              value: http://infrastructure-minio:9000
+                  key: storage_secret_key
+                  name: storage_secret
             - name: STORAGE_REGION
-              value: eu-west-1
+              value: "{{ tpa_single_node_storage_region }}"
             - name: STORAGE_BUCKET
-              value: bombastic-default
+              value: "{{ tpa_single_node_storage_bombastic_bucket }}"
+{% if 'minio' in tpa_single_node_storage_type %}
+            - name: STORAGE_ENDPOINT
+              value: "{{ tpa_single_node_storage_endpoint }}"
+{% endif %}
             - name: EVENT_BUS
-              value: kafka
+              value: "{{ tpa_single_node_event_bus_type }}"
+{% if 'sqs' in tpa_single_node_event_bus_type %}
+            - name: SQS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: event_access_key_id
+                  name: event_secret
+            - name: SQS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: event_secret_access_key
+                  name: event_secret
+            - name: SQS_REGION
+              value: "{{ tpa_single_node_sqs_region }}"
+{% elif 'kafka' in tpa_single_node_event_bus_type %}
             - name: KAFKA_BOOTSTRAP_SERVERS
-              value: my-cluster-kafka-bootstrap:9092
+              value: "{{ tpa_single_node_kafka_bootstrap_servers }}"
             - name: KAFKA_PROPERTIES_ENV_PREFIX
               value: TCK_
             - name: TCK_SECURITY__PROTOCOL
-              value: SASL_PLAINTEXT
+              value: "{{ tpa_single_node_kafka_security_protocol }}"
             - name: TCK_SASL__USERNAME
-              value: user1
+              valueFrom:
+                secretKeyRef:
+                  key: event_access_key_id
+                  name: event_secret
             - name: TCK_SASL__PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: password
-                  name: user1
+                  key: event_secret_access_key
+                  name: event_secret
             - name: TCK_SASL__MECHANISM
-              value: SCRAM-SHA-512
+              value: "{{ tpa_single_node_kafka_auth_mechanism }}"
+{% endif %}
             - name: INDEX_WRITER_MEMORY_BYTES
               value: 128MiB
             - name: INDEX_SYNC_INTERVAL
               value: 1m
-          volumeMounts:
-            - name: data
-              mountPath: /data
           ports:
             - containerPort: 9010
               protocol: TCP
               name: infra
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - mountPath: /etc/v11yapisecret
+              name: v11yapisecret
+            - mountPath: /etc/v11yapisqssecret
+              name: v11yapisqssecret
