@@ -19,6 +19,7 @@ tpa_single_node_pg_user_passwd: guac1234
 tpa_single_node_pg_ssl_mode: disable
 
 # Storage Service - S3 or Minio
+tpa_single_node_storage_type: s3 # Either <minio> or <s3>
 tpa_single_node_storage_endpoint: # <Enter minio storage endpoint, For AWS this field is not necessary>
 tpa_single_node_storage_region: eu-west-1 # <AWS S3 Storage region> - For Minio just keep us-west-1
 tpa_single_node_storage_access_key: "{{ lookup('env', 'TPA_STORAGE_ACCESS_KEY') }}"
@@ -27,11 +28,10 @@ tpa_single_node_storage_bombastic_bucket: bombastic-default
 tpa_single_node_storage_vexination_bucket: vexination-default
 tpa_single_node_storage_v11y_bucket: v11y-default
 
-# QUEUE Service - Kafka or SQL
+# QUEUE Service - Kafka or SQS
 tpa_single_node_event_bus_type: sqs # Either <kafka> or <sqs>
 tpa_single_node_event_access_key_id: "{{ lookup('env', 'TPA_EVENT_ACCESS_KEY_ID') }}" # Kafka Username or AWS SQS Access Key ID
 tpa_single_node_event_secret_access_key: "{{ lookup('env', 'TPA_EVENT_SECRET_ACCESS_KEY') }}" # Kafka password or AWS SQS Secret Access Key
-tpa_single_node_event_endpoint: "{{ lookup('env', 'TPA_EVENT_ENDPOINT') }}"
 
 ### Kafka - Only needed for Kafka service
 tpa_single_node_kafka_bootstrap_servers: "{{ lookup('env', 'TPA_EVENT_BOOTSTRAP_SERVER') | default('tpa_single_node_default_empty', true) }}"
@@ -39,6 +39,7 @@ tpa_single_node_kafka_bootstrap_servers: "{{ lookup('env', 'TPA_EVENT_BOOTSTRAP_
 tpa_single_node_kafka_security_protocol: SASL_PLAINTEXT
 # Kafka Authentication Mechanism which is spec.kafka.listeners.authentication.type in Block letters.
 tpa_single_node_kafka_auth_mechanism: SCRAM-SHA-512
+tpa_single_node_kafka_endpoint: # Exemple <my-cluster-kafka-bootstrap:9092>
 
 ### AWS SQS fields
 tpa_single_node_sqs_region: eu-west-1 # AWS SQS Region
