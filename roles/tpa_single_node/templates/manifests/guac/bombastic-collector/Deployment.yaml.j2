@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bombastic-collector
+  namespace: "{{ tpa_single_node_namespace }}"
+  labels:
+    app.kubernetes.io/name: bombastic-collector
+    app.kubernetes.io/component: guac
+    app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    app.kubernetes.io/version: 1.1.1
+    app.kubernetes.io/part-of: trusted-profile-analyzer
+  annotations: null
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bombastic-collector
+      app.kubernetes.io/component: guac
+      app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: bombastic-collector
+        app.kubernetes.io/component: guac
+        app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    spec:
+      containers:
+        - name: service
+          image: {{ tpa_single_node_guac_image }}
+          imagePullPolicy: IfNotPresent
+          command:
+            - /opt/guac/guacone
+          args:
+            - collect
+            - s3
+            - --poll
+          env:
+            - name: STORAGE_ACCESS_KEY
+              value: {{ tpa_single_node_storage_access_key }}
+            - name: STORAGE_SECRET_KEY
+              value: {{ tpa_single_node_storage_secret_key }}
+{% if 'minio' in tpa_single_node_storage_type %}   
+            - name: GUAC_S3_URL
+              value: "{{ tpa_single_node_storage_endpoint }}"
+{% elif 's3' in tpa_single_node_storage_type %}
+            - name: STORAGE_REGION
+              value: "{{ tpa_single_node_storage_region }}"
+{% endif %}
+            - name: GUAC_S3_BUCKET
+              value: "{{ tpa_single_node_storage_bombastic_bucket }}"
+            - name: GUAC_S3_MP
+              value: "{{ tpa_single_node_event_bus_type }}"
+{% if 'sqs' in tpa_single_node_event_bus_type %}
+            - name: SQS_ACCESS_KEY
+              value: {{ tpa_single_node_storage_access_key }}
+            - name: SQS_SECRET_KEY
+              value: {{ tpa_single_node_storage_secret_key }}
+            - name: SQS_REGION
+              value: "{{ tpa_single_node_sqs_region }}"
+{% elif 'kafka' in tpa_single_node_event_bus_type %}
+            - name: GUAC_S3_MP_ENDPOINT
+              value: "{{ tpa_single_node_kafka_bootstrap_servers }}"
+            - name: KAFKA_PROPERTIES_ENV_PREFIX
+              value: TCK_
+            - name: TCK_SECURITY__PROTOCOL
+              value: "{{ tpa_single_node_kafka_security_protocol }}"
+            - name: TCK_SASL__USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: event_access_key_id
+                  name: event_secret
+            - name: TCK_SASL__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: event_secret_access_key
+                  name: event_secret
+            - name: TCK_SASL__MECHANISM
+              value: "{{ tpa_single_node_kafka_auth_mechanism }}"
+{% endif %}
+            - name: GUAC_S3_QUEUES
+              value: "{{ tpa_single_node_bombastic_topic_indexed }}"
+            - name: GUAC_GQL_ADDR
+              value: 127.0.0.1:8080/query
+            - name: GUAC_CSUB_ADDR
+              value: 127.0.0.1:2782
+# TODO
+#            - name: GUAC_CSUB_TLS_ROOT_CA
+#              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+#            - name: GUAC_GQL_TLS_ROOT_CA
+#              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+          volumeMounts: null
+      volumes: null

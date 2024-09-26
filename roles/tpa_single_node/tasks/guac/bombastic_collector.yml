@@ -1,0 +1,9 @@
+---
+- name: Deploy Guac bombastic collector
+  ansible.builtin.include_tasks: install_manifest.yml
+  vars:
+    podman_spec:
+      state: started
+      systemd_file: guac-collector-bombastic
+      network: "{{ tpa_single_node_podman_network }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/guac/bombastic-collector/Deployment.yaml.j2') | from_yaml }}"
