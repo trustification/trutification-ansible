@@ -9,8 +9,13 @@
   Type=notify
   Environment=PODMAN_SYSTEMD_UNIT=%n
   TimeoutStartSec=600
-
   ExecStart=/usr/bin/podman kube play --replace --service-container=true "{{ kube_play_file }}"  --network "{{ podman_spec.network | default('podman') }}"
+  
+  [Timer]
+  #OnCalendar=hourly
+  OnCalendar=*:40/15 # The task will be executed every 15 minutes starting from the minute 0
+  AccuracySec=12h #maximum delay
+  Persistent=true
     
   [Install]
   WantedBy=default.target

@@ -9,8 +9,12 @@
   Type=notify
   Environment=PODMAN_SYSTEMD_UNIT=%n
   TimeoutStartSec=600
-
   ExecStart=/usr/bin/podman kube play --replace --service-container=true "{{ kube_play_file }}"  --network "{{ podman_spec.network | default('podman') }}" --configmap "{{ podman_spec.configmap | default(omit) }}"
+  
+  [Timer]
+  OnCalendar=hourly
+  AccuracySec=12h
+  Persistent=true
   
   [Install]
   WantedBy=default.target
