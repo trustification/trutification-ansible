@@ -1,12 +1,26 @@
 ---
+- name: Set a variable about Rhel
+  ansible.builtin.set_fact:
+    rhel: false
+
+- name: Set a variable if is a Rhel as expected
+  ansible.builtin.set_fact:
+    rhel: true
+  when:
+    - ansible_facts['distribution'] == 'RedHat'
+    - ansible_facts['distribution_major_version'] == '9'
+    - ansible_facts['distribution_version'] == '9.3'
+
 - name: Install Operating System Components
   ansible.builtin.include_tasks: os.yml
+  when: rhel
   args:
     apply:
       become: true
 
 - name: Execute Podman Actions
   ansible.builtin.include_tasks: podman.yml
+  when: rhel
   args:
     apply:
       become: true
