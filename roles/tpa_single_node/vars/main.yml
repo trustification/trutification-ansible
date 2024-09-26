@@ -4,6 +4,7 @@ tpa_single_node_base_hostname: trustification
 tpa_single_node_certificates_dir: certs/
 tpa_single_node_config_dir: /etc/rhtpa
 tpa_single_node_kube_manifest_dir: "{{ tpa_single_node_config_dir }}/manifests"
+tpa_single_node_secrets_dir: "{{ tpa_single_node_config_dir }}/secrets"
 tpa_single_node_namespace: trustification
 tpa_single_node_podman_network: tcnet
 tpa_single_node_skip_os_install: true
@@ -11,7 +12,7 @@ tpa_single_node_systemd_directory: /etc/systemd/system
 tpa_single_node_default_empty: ""
 
 # DB_SERVICE
-tpa_single_node_pg_host: 192.168.121.60
+tpa_single_node_pg_host: "{{ lookup('env', 'TPA_PG_HOST' default='192.168.121.60') }}"
 tpa_single_node_pg_port: 5432
 tpa_single_node_pg_db: guac
 tpa_single_node_pg_user: guac
@@ -70,6 +71,9 @@ tpa_single_node_guac_csub_tls_cert_pem_path: "{{ tpa_single_node_certificates_di
 tpa_single_node_guac_csub_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/guac-collectsub-tls-certificate.key"
 tpa_single_node_guac_graphql_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/guac-graphql-tls-certificate.pem"
 tpa_single_node_guac_graphql_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/guac-graphql-tls-certificate.key"
+tpa_single_node_collector_osv_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/collector-osv-tls-certificate.pem"
+tpa_single_node_collector_osv_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/collector-osv-tls-certificate.key"
+tpa_single_node_client_tls_ca_certificate_path: "{{ tpa_single_node_certificates_dir }}/service-ca.crt"
 
 # Target node(s) - Secret and Configmap locations
 tpa_single_node_storage_secret: "{{ tpa_single_node_kube_manifest_dir }}/storage-secret.yaml"
