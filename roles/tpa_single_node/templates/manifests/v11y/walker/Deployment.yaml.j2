@@ -65,9 +65,9 @@ spec:
               value: "{{ tpa_single_node_storage_endpoint }}"
 {% endif %}
             - name: STORAGE_REGION
-              value: "eu-west-1" # just a dummy value
+              value: "{{ tpa_single_node_storage_region }}" # just a dummy value
             - name: STORAGE_BUCKET
-              value: "v11y-default"
+              value: "{{ tpa_single_node_storage_v11y_bucket }}"
           ports:
             - containerPort: 9010
               protocol: TCP
