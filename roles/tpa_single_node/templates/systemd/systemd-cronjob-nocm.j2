@@ -9,7 +9,7 @@ Wants={{ podman_spec.systemd_file}}.timer
 [Service]
 Type=notify
 Environment=PODMAN_SYSTEMD_UNIT=%n
-TimeoutStartSec=600
+TimeoutStartSec=2400
 ExecStart=/usr/bin/podman kube play --replace --service-container=true "{{ kube_play_file }}"  --network "{{ podman_spec.network | default('podman') }}"
 
 [Install]
