@@ -1,0 +1,45 @@
+- name: Create configmap for spog-api
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/infra/Configmap-ui.yaml.j2"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-config.yaml"
+    mode: "0600"
+  register: configmap_spog_ui_config
+
+- name: Retrieve the checksum of the Spog api ConfigMap
+  ansible.builtin.stat:
+    path: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-config.yaml"
+    checksum_algorithm: sha256
+  register: spog_ui_configmap_checksum
+
+- name: Generate spog-api secret manifest
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/spog/api/Secret.yaml.j2"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/spog-api-Secret.yaml"
+    mode: "0600"
+  vars:
+    tpa_single_node_spog_api_tls_cert_pem: "{{ lookup('file', tpa_single_node_spog_api_tls_cert_pem_path) }}"
+    tpa_single_node_spog_api_tls_cert_key: "{{ lookup('file', tpa_single_node_spog_api_tls_cert_key_path) }}"
+
+- name: Play spog-api secret manifest
+  containers.podman.podman_play:
+    kube_file: "{{ tpa_single_node_kube_manifest_dir }}/spog-api-Secret.yaml"
+    state: started
+
+- name: Create configmap auth for collector-osv
+  ansible.builtin.include_tasks: infra/component_auth.yml
+  vars:
+    component:
+      name: "spog"
+      type: "api"
+
+- name: Deploy spog-api
+  ansible.builtin.include_tasks: install_manifest.yml
+  vars:
+    podman_spec:
+      state: started
+      systemd_file: spog-api
+      network: "{{ tpa_single_node_podman_network }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/spog/api/Deployment.yaml.j2') | from_yaml }}"
+      configmap: "{{ tpa_single_node_kube_manifest_dir }}/spog-api-configmap.yml"
+      configmap2: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-config.yaml"
+      configmap_changed: "{{ oidc_configmap_result.changed or configmap_spog_ui_config.changed }}"
