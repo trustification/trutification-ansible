@@ -28,10 +28,10 @@ spec:
       volumes:
         - name: data
           emptyDir: {}
-        - name: v11yapisecret
+        - name: bombastic-indexer-storage-secret
           secret:
             secretName: storage_secret
-        - name: v11yapisqssecret
+        - name: bombastic-indexer-event-secret
           secret:
             secretName: event_secret
       containers:
@@ -133,7 +133,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /data
-            - mountPath: /etc/v11yapisecret
-              name: v11yapisecret
-            - mountPath: /etc/v11yapisqssecret
-              name: v11yapisqssecret
+            - mountPath: /etc/bombastic-indexer-storage-secret
+              name: bombastic-indexer-storage-secret
+            - mountPath: /etc/bombastic-indexer-event-secret
+              name: bombastic-indexer-event-secret
