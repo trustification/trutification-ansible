@@ -1,0 +1,27 @@
+---
+- name: Confirmed required parameters provided
+  ansible.builtin.assert:
+    that:
+      - tpa_single_node_base_hostname is defined
+      - tpa_single_node_base_hostname | trim | length > 0
+    msg: "'tpa_single_node_base_hostname' must be specified"
+
+- name: Get RHTPA network details
+  containers.podman.podman_network:
+    name: "{{ tpa_single_node_podman_network }}"
+  register: tpa_podman_network_results
+
+- name: Set DNS Resolver
+  ansible.builtin.set_fact:
+    dns_resolver: "{{ tpa_podman_network_results.network.subnets[0].gateway }}"
+
+- name: Deploy vexination walker Pod
+  ansible.builtin.include_tasks: install_manifest_cronjob.yml
+  vars:
+    podman_spec:
+      state: stopped
+      systemd_file: vexination-walker
+      timer_type: monotonic # realtime
+      time_pattern: 1h # *:0/10 for realtime instead of monotonic
+      network: "{{ tpa_single_node_podman_network }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/vexination/walker/Deployment.yaml.j2') | from_yaml }}"

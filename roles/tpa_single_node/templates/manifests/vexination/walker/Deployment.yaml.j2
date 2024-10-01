@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vexination-walker
+  namespace: "{{ tpa_single_node_namespace }}"
+  labels:
+    name: vexination-walker
+    app: vexination-walker
+spec:
+  selector:
+    matchLabels:
+      app: vexination-walker
+  template:
+    spec:
+      restartPolicy: Never
+      volumes:
+        - name: walker-state
+          persistentVolumeClaim:
+            claimName: vexination-walker-state
+      containers:
+        - image: "{{ tpa_single_node_trustification_image }}"
+          imagePullPolicy: Always
+          name: walker
+          command:
+            - /trust
+          args:
+            - vexination
+            - walker
+            - --sink
+            - http://vexination-api-pod:8080/api/v1/vex
+            - --source
+            - https://www.redhat.com/.well-known/csaf/provider-metadata.json
+            - --ignore-distributions
+            - https://access.redhat.com/security/data/csaf/v2/advisories/
+            - '-3'
+            - --since-file
+            - /walker-state/since
+          env:
+            - name: RUST_LOG
+              value: "info"
+            - name: INFRASTRUCTURE_ENABLED
+              value: "true"
+            - name: INFRASTRUCTURE_BIND
+              value: "[::]:9010"
+            - name: OIDC_PROVIDER_CLIENT_ID
+              value: "{{ tpa_single_node_oidc_provider_client_id }}"
+            - name: OIDC_PROVIDER_CLIENT_SECRET
+              valueFrom:
+                  secretKeyRef:
+                    key: client_secret
+                    name: storage_secret
+            - name: OIDC_PROVIDER_ISSUER_URL
+              value: "{{ tpa_single_node_oidc_issuer_url }}"
+          volumeMounts:
+            - mountPath: /walker-state
+              name: walker-state
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 9010
+            initialDelaySeconds: 2
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 9010
+            initialDelaySeconds: 2
+          startupProbe:
+            httpGet:
+              path: /health/startup
+              port: 9010
