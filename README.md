@@ -96,9 +96,13 @@ Copy your certificate files in `./certs` directory using following names:
 - guac-graphql-tls-certificate.key
 - collector-osv-tls-certificate.pem
 - collector-osv-tls-certificate.key
+- collectorist-api-tls-certificate.pem
+- collectorist-api-tls-certificate.key
+- collectorist-api-tls-csub-certificate.crt
 
-Optionally, you can also copy `service-ca.crt` certificate to the same
-directory if you have OSV client that needs secure access to the collector.
+Optionally, you can also copy `collector-osv-tls-client-certificate.crt`
+certificate to the same directory if you have OSV client that needs secure
+access to the collector.
 
 5. Create Environment Variables for Storage, Events and OIDC 
 

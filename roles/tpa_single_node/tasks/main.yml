@@ -9,7 +9,7 @@
   when:
     - ansible_facts['distribution'] == 'RedHat'
     - ansible_facts['distribution_major_version'] == '9'
-    - ansible_facts['distribution_version'] == '9.3'
+    - (ansible_facts['distribution_version'] | split('.'))[1] | int >= 3
 
 - name: Install Operating System Components
   ansible.builtin.include_tasks: os.yml
@@ -86,7 +86,14 @@
 
 # Step 14
 - name: Configure/Deploy collector osv
-  ansible.builtin.include_tasks: collector/osv/main.yml
+  ansible.builtin.include_tasks: collector/osv.yml
+  args:
+    apply:
+      become: true
+
+# Step 15
+- name: Configure/Deploy collectorist api
+  ansible.builtin.include_tasks: collectorist/api.yml
   args:
     apply:
       become: true

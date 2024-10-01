@@ -1,0 +1,52 @@
+---
+- name: Create configmap for collectorist-api
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/collectorist/api/Configmap.yaml.j2"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-collectorist-api.yaml"
+    mode: "0600"
+  register: configmap2_result
+
+- name: Generate collectorist-api secret manifest
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/collectorist/api/Secret.yaml.j2"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Collectorist-Api-Secret.yaml"
+    mode: "0600"
+  vars:
+    tpa_single_node_collectorist_api_tls_cert_pem: "{{ lookup('file', tpa_single_node_collectorist_api_tls_cert_pem_path) }}"
+    tpa_single_node_collectorist_api_tls_cert_key: "{{ lookup('file', tpa_single_node_collectorist_api_tls_cert_key_path) }}"
+    tpa_single_node_collectorist_api_tls_csub_cert_crt: "{{ lookup('file', tpa_single_node_collectorist_api_tls_csub_cert_crt_path) }}"
+
+- name: Play collectorist-api secret manifest
+  containers.podman.podman_play:
+    kube_file: "{{ tpa_single_node_kube_manifest_dir }}/Collectorist-Api-Secret.yaml"
+    state: started
+
+- name: Create configmap auth for collectorist-api
+  ansible.builtin.include_tasks: infra/component_auth.yml
+  vars:
+    component:
+      name: "collectorist"
+      type: "api"
+
+- name: Generate Persistent Volume Claim for collectorist-api
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/collectorist/api/PersistentVolumeClaim.yaml.j2"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Collectorist-Api-PVC.yaml"
+    mode: "0600"
+
+- name: Create persistent volume for collectorist-api
+  containers.podman.podman_play:
+    kube_file: "{{ tpa_single_node_kube_manifest_dir }}/Collectorist-Api-PVC.yaml"
+    state: started
+
+- name: Deploy collectorist-api
+  ansible.builtin.include_tasks: install_manifest.yml
+  vars:
+    podman_spec:
+      state: started
+      systemd_file: collectorist-api
+      network: "{{ tpa_single_node_podman_network }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/collectorist/api/Deployment.yaml.j2') | from_yaml }}"
+      configmap: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-collectorist-api.yaml"
+      configmap2: "{{ tpa_single_node_kube_manifest_dir }}/collectorist-api-configmap.yml"
+      configmap_changed: "{{ oidc_configmap_result.changed or configmap2_result.changed }}"

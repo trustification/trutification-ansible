@@ -1,0 +1,14 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: collectorist-api
+  namespace: "{{ tpa_single_node_namespace }}"
+  labels:
+    app: collectorist-api
+    component: collectorist
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
