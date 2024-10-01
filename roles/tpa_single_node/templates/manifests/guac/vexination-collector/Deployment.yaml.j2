@@ -38,9 +38,15 @@ spec:
             - --poll
           env:
             - name: STORAGE_ACCESS_KEY
-              value: {{ tpa_single_node_storage_access_key }}
+              valueFrom:
+                secretKeyRef:
+                  key: storage_access_key
+                  name: storage_secret
             - name: STORAGE_SECRET_KEY
-              value: {{ tpa_single_node_storage_secret_key }}
+              valueFrom:
+                secretKeyRef:
+                  key: storage_secret_key
+                  name: storage_secret
 {% if 'minio' in tpa_single_node_storage_type %}   
             - name: GUAC_S3_URL
               value: "{{ tpa_single_node_storage_endpoint }}"
@@ -54,9 +60,15 @@ spec:
               value: "{{ tpa_single_node_event_bus_type }}"
 {% if 'sqs' in tpa_single_node_event_bus_type %}
             - name: SQS_ACCESS_KEY
-              value: {{ tpa_single_node_storage_access_key }}
+              valueFrom:
+                secretKeyRef:
+                  key: event_access_key_id
+                  name: event_secret
             - name: SQS_SECRET_KEY
-              value: {{ tpa_single_node_storage_secret_key }}
+              valueFrom:
+                secretKeyRef:
+                  key: event_secret_access_key
+                  name: event_secret
             - name: SQS_REGION
               value: "{{ tpa_single_node_sqs_region }}"
 {% elif 'kafka' in tpa_single_node_event_bus_type %}
@@ -90,5 +102,15 @@ spec:
 #              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
 #            - name: GUAC_GQL_TLS_ROOT_CA
 #              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
-          volumeMounts: null
-      volumes: null
+          volumeMounts:
+          - mountPath: /etc/vexcolstoragesecret
+            name: vex-collector-storage-secret
+          - mountPath: /etc/vexcoloidcsecret
+            name: vex-collector-oidc-secret
+      volumes:
+      - name: vex-collector-storage-secret
+        secret:
+          secretName: storage_secret
+      - name: vex-collector-oidc-secret
+        secret:
+          secretName: oidc_secret

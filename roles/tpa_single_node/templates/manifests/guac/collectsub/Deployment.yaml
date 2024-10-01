@@ -32,7 +32,7 @@ spec:
             secretName: guac-collectsub-tls
       containers:
         - name: service
-          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:a0cd9379eeaa15e95230fe330649b74928c776fbd35438b76fa17f3f4bbea954
+          image: {{ tpa_single_node_guac_image }}
           imagePullPolicy: IfNotPresent
           command:
             - /opt/guac/guaccsub

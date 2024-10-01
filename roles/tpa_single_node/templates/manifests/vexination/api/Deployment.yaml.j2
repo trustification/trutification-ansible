@@ -31,9 +31,12 @@ spec:
       - name: config-auth
         configMap:
           name: vexination-api-auth
-      - name: vexinationapisecret
+      - name: vexination-api-storage-secret
         secret:
           secretName: storage_secret
+      - name: vexination-api-oidc-secret
+        secret:
+          secretName: oidc_secret
       containers:
         - image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: IfNotPresent
@@ -43,7 +46,7 @@ spec:
             - "vexination"
             - "api"
             - "-p"
-            - "8080"
+            - "{{ tpa_single_node_vexination_api_port }}"
             - "--index-mode"
             - "file"
             - "--auth-configuration"
@@ -52,15 +55,17 @@ spec:
             - containerPort: 9010
               protocol: TCP
               name: infra
-            - containerPort: 8080
+            - containerPort: {{ tpa_single_node_vexination_api_port }}
               name: endpoint
               protocol: TCP
           volumeMounts:
           - name: config-auth
             mountPath: /etc/config/auth.yaml
             subPath: auth.yaml
-          - mountPath: /etc/vexinationapisecret
-            name: vexinationapisecret
+          - mountPath: /etc/vexapistoragesecret
+            name: vexination-api-storage-secret
+          - mountPath: /etc/vexapioidcsecret
+            name: vexination-api-oidc-secret
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:
@@ -86,13 +91,15 @@ spec:
             - name: OIDC_PROVIDER_ISSUER_URL
               value: "{{ tpa_single_node_oidc_issuer_url }}"
             - name: OIDC_PROVIDER_CLIENT_ID
-              value: "{{ tpa_single_node_oidc_provider_client_id }}"
+              valueFrom:
+                secretKeyRef:
+                  key: client_id
+                  name: oidc_secret
             - name: OIDC_PROVIDER_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   key: client_secret
-                  name: storage_secret
-
+                  name: oidc_secret
 {% if 'minio' in tpa_single_node_storage_type %}
             - name: STORAGE_ENDPOINT
               value: "{{ tpa_single_node_storage_endpoint }}"
