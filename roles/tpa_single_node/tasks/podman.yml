@@ -4,7 +4,7 @@
     that:
       - tpa_single_node_registry_username is defined
       - tpa_single_node_registry_username !=""
-    fail_msg: "tpa_single_node_registry_username is not exists, export the registry username and password"
+    fail_msg: "tpa_single_node_registry_username doesn't exist, export the registry username and password"
 
 - name: Podman login to registry.redhat.io
   when: rhel
