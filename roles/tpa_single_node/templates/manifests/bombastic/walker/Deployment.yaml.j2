@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bombastic-walker
+  namespace: "{{ tpa_single_node_namespace }}"
+  labels:
+    app.kubernetes.io/name: bombastic-walker
+    app.kubernetes.io/component: walker
+    app.kubernetes.io/part-of: trustification
+spec: 
+  selector:
+    matchLabels:
+      app: vexination-walker
+  template:
+    spec:
+      restartPolicy: Never
+      volumes:
+        - name: walker-state
+          persistentVolumeClaim:
+            claimName: bombastic-walker-state
+      containers:  
+        - image: "{{ tpa_single_node_trustification_image }}"
+          imagePullPolicy: Always
+          name: walker
+          command:
+            - /trust
+          args:
+            - bombastic
+            - walker
+            - --sink
+            - http://127.0.0.1:8082/api/v1/sbom
+            - --source
+            - https://access.redhat.com/security/data/sbom/beta/
+            - "-3"
+            - --signing-key
+            - https://access.redhat.com/security/data/97f5eac4.txt#77E79ABE93673533ED09EBE2DCE3823597F5EAC4
+            - --fix-licenses
+            - "true"
+            - --since-file
+            - /walker-state/since
+          env:
+            - name: RUST_LOG
+              value: ${LOG_LEVEL}
+            - name: INFRASTRUCTURE_ENABLED
+              value: "true"
+            - name: INFRASTRUCTURE_BIND
+              value: "[::]:9010"
+            - name: OIDC_PROVIDER_CLIENT_ID
+              value: "{{ tpa_single_node_oidc_provider_client_id }}"
+            - name: OIDC_PROVIDER_CLIENT_SECRET
+              valueFrom:
+                  secretKeyRef:
+                    key: client_secret
+                    name: storage_secret
+            - name: OIDC_PROVIDER_ISSUER_URL
+              value: "{{ tpa_single_node_oidc_issuer_url }}"
+          ports:
+            - containerPort: 9010
+              protocol: TCP
+              name: infra
+          volumeMounts:
+            - mountPath: /walker-state
+              name: walker-state
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 9010
+            initialDelaySeconds: 2
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 9010
+            initialDelaySeconds: 2
+          startupProbe:
+            httpGet:
+              path: /health/startup
+              port: 9010
