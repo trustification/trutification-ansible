@@ -28,7 +28,7 @@ spec:
             - bombastic
             - walker
             - --sink
-            - http://127.0.0.1:{{ tpa_single_node_bombastic_api_port }}/api/v1/sbom
+            - http://bombastic-api-pod:{{ tpa_single_node_bombastic_api_port }}/api/v1/sbom
             - --source
             - https://access.redhat.com/security/data/sbom/beta/
             - "-3"

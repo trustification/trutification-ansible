@@ -11,6 +11,7 @@ CERTS=(
     'collector-osv-tls-client-certificate.crt'
     'collectorist-api-tls-certificate'
     'collectorist-api-tls-csub-certificate.crt'
+    'spog-api-tls-certificate'
 )
 
 rm -f *.key *.pem *.crt
