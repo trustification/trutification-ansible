@@ -28,15 +28,15 @@ spec:
         config/checksum: "{{ oidc_configmap_checksum.stat.checksum }}"
     spec:
       volumes:
-      - name: config-auth
-        configMap:
-          name: vexination-api-auth
-      - name: vexination-api-storage-secret
-        secret:
-          secretName: storage_secret
-      - name: vexination-api-oidc-secret
-        secret:
-          secretName: oidc_secret
+        - name: config-auth
+          configMap:
+            name: vexination-api-auth
+        - name: vexination-api-storage-secret
+          secret:
+            secretName: storage_secret
+        - name: vexination-api-oidc-secret
+          secret:
+            secretName: oidc_secret
       containers:
         - image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: IfNotPresent
@@ -46,7 +46,7 @@ spec:
             - "vexination"
             - "api"
             - "-p"
-            - "{{ tpa_single_node_vexination_api_port }}"
+            - {{ tpa_single_node_vexination_api_port }}
             - "--index-mode"
             - "file"
             - "--auth-configuration"
@@ -59,13 +59,13 @@ spec:
               name: endpoint
               protocol: TCP
           volumeMounts:
-          - name: config-auth
-            mountPath: /etc/config/auth.yaml
-            subPath: auth.yaml
-          - mountPath: /etc/vexapistoragesecret
-            name: vexination-api-storage-secret
-          - mountPath: /etc/vexapioidcsecret
-            name: vexination-api-oidc-secret
+            - name: config-auth
+              mountPath: /etc/config/auth.yaml
+              subPath: auth.yaml
+            - mountPath: /etc/vexapistoragesecret
+              name: vexination-api-storage-secret
+            - mountPath: /etc/vexapioidcsecret
+              name: vexination-api-oidc-secret
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:

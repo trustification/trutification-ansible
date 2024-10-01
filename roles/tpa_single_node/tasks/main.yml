@@ -116,8 +116,8 @@
 - name: Configure/Deploy vexination Walker
   ansible.builtin.include_tasks: vexination/walker.yml
   args:
-      apply:
-        become: true
+    apply:
+      become: true
 
 # Step 22
 - name: Configure/Deploy spog api

@@ -103,14 +103,14 @@ spec:
 #            - name: GUAC_GQL_TLS_ROOT_CA
 #              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
           volumeMounts:
-          - mountPath: /etc/vexcolstoragesecret
-            name: vex-collector-storage-secret
-          - mountPath: /etc/vexcoloidcsecret
-            name: vex-collector-oidc-secret
+            - mountPath: /etc/vexcolstoragesecret
+              name: vex-collector-storage-secret
+            - mountPath: /etc/vexcoloidcsecret
+              name: vex-collector-oidc-secret
       volumes:
-      - name: vex-collector-storage-secret
-        secret:
-          secretName: storage_secret
-      - name: vex-collector-oidc-secret
-        secret:
-          secretName: oidc_secret
+        - name: vex-collector-storage-secret
+          secret:
+            secretName: storage_secret
+        - name: vex-collector-oidc-secret
+          secret:
+            secretName: oidc_secret

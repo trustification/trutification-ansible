@@ -17,6 +17,9 @@ spec:
         - name: walker-state
           persistentVolumeClaim:
             claimName: vexination-walker-state
+        - name: vexination-walker-oidc-secret
+          secret:
+            secretName: oidc_secret
       containers:
         - image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: Always
@@ -27,7 +30,7 @@ spec:
             - vexination
             - walker
             - --sink
-            - http://vexination-api-pod:8080/api/v1/vex
+            - http://vexination-api-pod:{{ tpa_single_node_vexination_api_port }}/api/v1/vex
             - --source
             - https://www.redhat.com/.well-known/csaf/provider-metadata.json
             - --ignore-distributions
@@ -43,17 +46,22 @@ spec:
             - name: INFRASTRUCTURE_BIND
               value: "[::]:9010"
             - name: OIDC_PROVIDER_CLIENT_ID
-              value: "{{ tpa_single_node_oidc_provider_client_id }}"
+              valueFrom:
+                secretKeyRef:
+                  key: client_id
+                  name: oidc_secret
             - name: OIDC_PROVIDER_CLIENT_SECRET
               valueFrom:
-                  secretKeyRef:
-                    key: client_secret
-                    name: storage_secret
+                secretKeyRef:
+                  key: client_secret
+                  name: oidc_secret
             - name: OIDC_PROVIDER_ISSUER_URL
               value: "{{ tpa_single_node_oidc_issuer_url }}"
           volumeMounts:
             - mountPath: /walker-state
               name: walker-state
+            - mountPath: /etc/vexwalkeroidcsecret
+              name: vexination-walker-oidc-secret
           livenessProbe:
             httpGet:
               path: /health/live

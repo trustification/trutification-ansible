@@ -81,7 +81,7 @@ tpa_single_node_storage_secret: "{{ tpa_single_node_kube_manifest_dir }}/storage
 tpa_single_node_event_secret: "{{ tpa_single_node_kube_manifest_dir }}/event-secret.yaml"
 tpa_single_node_oidc_secret: "{{ tpa_single_node_kube_manifest_dir }}/oidc-secret.yaml"
 
-#ports
+# ports
 tpa_single_node_vexination_api_port: 8081
 tpa_single_node_bombastic_api_port: 8082
 tpa_single_node_spog_api_port: 8084

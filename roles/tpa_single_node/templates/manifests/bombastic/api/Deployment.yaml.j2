@@ -26,7 +26,6 @@ spec:
         configHash/auth: f1603b2e10b24822d2b2ae28973e973fb20d68559f0caff8327d5a9a7326b106
     spec:
       volumes:
-
         - name: config-auth
           configMap:
             name: bombastic-api-auth
@@ -36,9 +35,6 @@ spec:
         - name: bombastic-api-oidc-secret
           secret:
             secretName: oidc_secret
-        - name: tls
-          secret:
-            secretName: tls
       containers:
         - name: service
           image: "{{ tpa_single_node_trustification_image }}"
@@ -48,7 +44,7 @@ spec:
             - bombastic
             - api
             - -p
-            - "{{ tpa_single_node_bombastic_api_port }}"
+            - {{ tpa_single_node_bombastic_api_port }}
             - --validator
             - sbom
             - --index-mode
@@ -56,10 +52,6 @@ spec:
             - --auth-configuration
             - /etc/config/auth.yaml
           env:
-            - name: NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
             - name: RUST_LOG
               value: info
             - name: INFRASTRUCTURE_ENABLED
@@ -116,9 +108,6 @@ spec:
               name: endpoint
               protocol: TCP
           volumeMounts:
-            - mountPath: /etc/tls
-              name: tls
-              readOnly: true
             - name: bombastic-api-storage-secret
               mountPath: /etc/bombasticapistorage
             - name: bombastic-api-oidc-secret
