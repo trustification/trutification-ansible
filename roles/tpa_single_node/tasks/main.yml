@@ -133,6 +133,13 @@
     apply:
       become: true
 
+# Step 20
+- name: Init Dataset
+  ansible.builtin.include_tasks: dataset/init.yml
+  args:
+    apply:
+      become: true
+
 # Step 22
 - name: Configure/Deploy spog api
   ansible.builtin.include_tasks: spog/api.yml
