@@ -33,10 +33,10 @@ spec:
       volumes:
         - name: data
           emptyDir: {}
-        - name: v11yapisecret
+        - name: v11y-indexer-storage-secret
           secret:
             secretName: storage_secret
-        - name: v11yapisqssecret
+        - name: v11y-indexer-event-secret
           secret:
             secretName: event_secret
 
@@ -153,9 +153,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /data
-            - mountPath: /etc/v11yapisecret
-              name: v11yapisecret
-            - mountPath: /etc/v11yapisqssecret
-              name: v11yapisqssecret
+            - mountPath: /etc/v11yapistoragesecret
+              name: v11y-indexer-storage-secret
+            - mountPath: /etc/v11yapieventsecret
+              name: v11y-indexer-event-secret
 
 

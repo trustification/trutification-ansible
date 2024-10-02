@@ -73,7 +73,16 @@ tpa_single_node_guac_graphql_tls_cert_key_path: "{{ tpa_single_node_certificates
 tpa_single_node_collector_osv_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/collector-osv-tls-certificate.pem"
 tpa_single_node_collector_osv_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/collector-osv-tls-certificate.key"
 tpa_single_node_client_tls_ca_certificate_path: "{{ tpa_single_node_certificates_dir }}/service-ca.crt"
+tpa_single_node_spog_api_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/spog-api-tls-certificate.pem"
+tpa_single_node_spog_api_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/spog-api-tls-certificate.key"
 
 # Target node(s) - Secret and Configmap locations
 tpa_single_node_storage_secret: "{{ tpa_single_node_kube_manifest_dir }}/storage-secret.yaml"
 tpa_single_node_event_secret: "{{ tpa_single_node_kube_manifest_dir }}/event-secret.yaml"
+tpa_single_node_oidc_secret: "{{ tpa_single_node_kube_manifest_dir }}/oidc-secret.yaml"
+
+# ports
+tpa_single_node_vexination_api_port: 8081
+tpa_single_node_bombastic_api_port: 8082
+tpa_single_node_spog_api_port: 8084
+tpa_single_node_v11y_api_port: 8087

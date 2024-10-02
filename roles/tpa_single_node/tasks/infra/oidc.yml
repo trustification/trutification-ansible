@@ -11,6 +11,21 @@
 - name: Check OIDC Walker is defined
   ansible.builtin.assert:
     that:
+      - tpa_single_node_oidc_provider_client_id is defined
+      - tpa_single_node_oidc_provider_client_id != ""
       - tpa_single_node_oidc_provider_client_secret is defined
       - tpa_single_node_oidc_provider_client_secret != ""
-    fail_msg: OIDC Walker Secret is not defined
+      - tpa_single_node_oidc_frontend_id is defined
+      - tpa_single_node_oidc_frontend_id != ""
+    fail_msg: OIDC FrondEnd, Walker ID and Secret is not defined
+
+- name: Generate OIDC secret manifest
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/infra/Secret-oidc.yaml.j2"
+    dest: "{{ tpa_single_node_oidc_secret }}"
+    mode: "0600"
+
+- name: Apply storage secret manifest
+  containers.podman.podman_play:
+    kube_file: "{{ tpa_single_node_oidc_secret }}"
+    state: started

@@ -33,10 +33,10 @@ spec:
       volumes:
         - name: data
           emptyDir: {}
-        - name: vexinationapisecret
+        - name: vex-indexer-storage-secret
           secret:
             secretName: storage_secret
-        - name: vexinationapisqssecret
+        - name: vex-indexer-event-secret
           secret:
             secretName: event_secret
 
@@ -154,9 +154,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /data
-            - mountPath: /etc/vexinationapisecret
-              name: vexinationapisecret
-            - mountPath: /etc/vexinationapisqssecret
-              name: vexinationapisqssecret
+            - mountPath: /etc/vexindexstoragesecret
+              name: vex-indexer-storage-secret
+            - mountPath: /etc/vexindexeventsecret
+              name: vex-indexer-event-secret
 
 

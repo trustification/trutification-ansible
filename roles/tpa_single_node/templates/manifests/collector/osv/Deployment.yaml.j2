@@ -23,7 +23,7 @@ spec:
         app.kubernetes.io/component: collector
         app.kubernetes.io/instance: redhat-trusted-profile-analyzer
       annotations:
-        configHash/auth: dac9d88322da8b671d9fc4f81500698ea05f108df8784b66db80d4242c9dee06
+        configHash/auth: "{{ oidc_configmap_checksum.stat.checksum }}"
     spec:
       volumes:
         - name: guac-config
@@ -35,6 +35,9 @@ spec:
         - name: config-auth
           configMap:
             name: collector-osv-auth
+        - name: collector-oidc-secret
+          secret:
+            secretName: oidc_secret
       containers:
         - name: service
           image: "{{ tpa_single_node_trustification_image }}"
@@ -48,9 +51,9 @@ spec:
             - --auth-configuration
             - /etc/config/auth.yaml
             - --v11y-url
-            - https://v11y-api-pod:8080
+            - http://v11y-api-pod:{{ tpa_single_node_v11y_api_port }}
             - --guac-url
-            - https://guac-graphql-pod:8080/query
+            - http://guac-graphql-pod:8080/query
           env:
 # TODO
 #            - name: NAMESPACE
@@ -72,12 +75,15 @@ spec:
             - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
               value: /etc/tls/tls.crt
             - name: OIDC_PROVIDER_CLIENT_ID
-              value: "{{ tpa_single_node_oidc_provider_client_id }}"
+              valueFrom:
+                secretKeyRef:
+                  key: client_id
+                  name: oidc_secret
             - name: OIDC_PROVIDER_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   key: client_secret
-                  name: storage_secret
+                  name: oidc_secret
             - name: OIDC_PROVIDER_ISSUER_URL
               value: "{{ tpa_single_node_oidc_issuer_url }}"
 {% if client_tls_ca.stat.path is defined and client_tls_ca.stat.path | trim | length > 0 %}
@@ -98,6 +104,8 @@ spec:
             - mountPath: /etc/tls
               name: tls
               readOnly: true
+            - mountPath: /etc/colloidcsecret
+              name: collector-oidc-secret
             - name: config-auth
               mountPath: /etc/config/auth.yaml
               subPath: auth.yaml

@@ -26,12 +26,15 @@ spec:
         configHash/auth: f1603b2e10b24822d2b2ae28973e973fb20d68559f0caff8327d5a9a7326b106
     spec:
       volumes:
-        - name: bombastic-collector-storage-secret
+        - name: config-auth
+          configMap:
+            name: bombastic-api-auth
+        - name: bombastic-api-storage-secret
           secret:
             secretName: storage_secret
-        - name: tls
+        - name: bombastic-api-oidc-secret
           secret:
-            secretName: tls
+            secretName: oidc_secret
       containers:
         - name: service
           image: "{{ tpa_single_node_trustification_image }}"
@@ -41,7 +44,7 @@ spec:
             - bombastic
             - api
             - -p
-            - "8080"
+            - {{ tpa_single_node_bombastic_api_port }}
             - --validator
             - sbom
             - --index-mode
@@ -49,10 +52,6 @@ spec:
             - --auth-configuration
             - /etc/config/auth.yaml
           env:
-            - name: NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
             - name: RUST_LOG
               value: info
             - name: INFRASTRUCTURE_ENABLED
@@ -68,12 +67,15 @@ spec:
             - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
               value: /etc/tls/tls.crt
             - name: OIDC_PROVIDER_CLIENT_ID
-              value: "{{ tpa_single_node_oidc_provider_client_id }}"
+              valueFrom:
+                secretKeyRef:
+                  key: client_id
+                  name: oidc_secret
             - name: OIDC_PROVIDER_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   key: client_secret
-                  name: storage_secret
+                  name: oidc_secret
             - name: OIDC_PROVIDER_ISSUER_URL
               value: "{{ tpa_single_node_oidc_issuer_url }}"
             - name: STORAGE_ACCESS_KEY
@@ -102,15 +104,17 @@ spec:
             - containerPort: 9010
               protocol: TCP
               name: infra
-            - containerPort: 8080
+            - containerPort: {{ tpa_single_node_bombastic_api_port }}
               name: endpoint
               protocol: TCP
           volumeMounts:
-            - mountPath: /etc/bombastic-api-storage-secret
-              name: bombastic-api-storage-secret
-            - mountPath: /etc/tls
-              name: tls
-              readOnly: true
+            - name: bombastic-api-storage-secret
+              mountPath: /etc/bombasticapistorage
+            - name: bombastic-api-oidc-secret
+              mountPath: /etc/bombasticapioidc
+            - name: config-auth
+              mountPath: /etc/config/auth.yaml
+              subPath: auth.yaml
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:
