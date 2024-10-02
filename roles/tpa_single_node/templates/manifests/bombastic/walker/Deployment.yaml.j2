@@ -18,6 +18,9 @@ spec:
         - name: walker-state
           persistentVolumeClaim:
             claimName: bombastic-walker-state
+        - name: oidc-secret
+          secret:
+            secretName: oidc_secret
       containers:  
         - image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: Always
@@ -46,12 +49,15 @@ spec:
             - name: INFRASTRUCTURE_BIND
               value: "[::]:9010"
             - name: OIDC_PROVIDER_CLIENT_ID
-              value: "{{ tpa_single_node_oidc_provider_client_id }}"
+              valueFrom:
+                secretKeyRef:
+                  key: client_id
+                  name: oidc_secret
             - name: OIDC_PROVIDER_CLIENT_SECRET
               valueFrom:
-                  secretKeyRef:
-                    key: client_secret
-                    name: storage_secret
+                secretKeyRef:
+                  key: client_secret
+                  name: oidc_secret
             - name: OIDC_PROVIDER_ISSUER_URL
               value: "{{ tpa_single_node_oidc_issuer_url }}"
           ports:
@@ -61,6 +67,8 @@ spec:
           volumeMounts:
             - mountPath: /walker-state
               name: walker-state
+            - mountPath: /etc/oidc-secret
+              name: oidc-secret
           livenessProbe:
             httpGet:
               path: /health/live
