@@ -1,11 +1,8 @@
 ---
-- name: Check whether client TLS CA certificate can be used
-  ansible.builtin.set_fact:
-    tpa_single_node_collector_osv_tls_client_cert_crt: "{{
-      lookup('file', tpa_single_node_collector_osv_tls_client_cert_crt_path)
-    }}"
-  when:
-    - tpa_single_node_collector_osv_tls_client_cert_crt_path is file
+- name: Check whether client TLS CA certificate file exists
+  ansible.builtin.stat:
+    path: "{{ tpa_single_node_collector_osv_tls_client_cert_crt_path }}"
+  register: tpa_single_node_collector_osv_tls_client_cert_crt
 
 - name: Create configmap for collectorist-api
   ansible.builtin.template:
