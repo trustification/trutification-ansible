@@ -1,0 +1,11 @@
+---
+- name: Deploy bombastic walker Pod
+  ansible.builtin.include_tasks: install_manifest_cronjob.yml
+  vars:
+    podman_spec:
+      state: stopped
+      systemd_file: bombastic-walker
+      network: "{{ tpa_single_node_podman_network }}"
+      timer_type: monotonic # realtime
+      time_pattern: 1h # *:0/10 for realtime instead of monotonic
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/bombastic/walker/Deployment.yaml.j2') | from_yaml }}"
