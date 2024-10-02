@@ -1,20 +1,15 @@
 ---
-- name: Copy client TLS CA certificate if it exists
-  ansible.builtin.copy:
-    src: "{{ tpa_single_node_client_tls_ca_certificate_path }}"
-    dest: "{{ tpa_single_node_secrets_dir }}/service-ca.crt"
-    mode: "0600"
-  when:
-    - tpa_single_node_client_tls_ca_certificate_path is file
-
 - name: Check whether client TLS CA certificate can be used
-  ansible.builtin.stat:
-    path: "{{ tpa_single_node_secrets_dir }}/service-ca.crt"
-  register: client_tls_ca
+  ansible.builtin.set_fact:
+    tpa_single_node_collector_osv_tls_client_cert_crt: "{{
+      lookup('file', tpa_single_node_collector_osv_tls_client_cert_crt_path)
+    }}"
+  when:
+    - tpa_single_node_collector_osv_tls_client_cert_crt_path is file
 
 - name: Create configmap for collectorist-api
   ansible.builtin.template:
-    src: "{{ role_path }}/templates/manifests/collector/osv/Configmap-collectorist-api.yaml.j2"
+    src: "{{ role_path }}/templates/manifests/collectorist/api/Configmap.yaml.j2"
     dest: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-collectorist-api.yaml"
     mode: "0600"
   register: configmap2_result

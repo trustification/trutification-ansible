@@ -4,7 +4,6 @@ tpa_single_node_base_hostname: trustification
 tpa_single_node_certificates_dir: certs/
 tpa_single_node_config_dir: /etc/rhtpa
 tpa_single_node_kube_manifest_dir: "{{ tpa_single_node_config_dir }}/manifests"
-tpa_single_node_secrets_dir: "{{ tpa_single_node_config_dir }}/secrets"
 tpa_single_node_namespace: trustification
 tpa_single_node_podman_network: tcnet
 tpa_single_node_skip_os_install: true
@@ -72,7 +71,10 @@ tpa_single_node_guac_graphql_tls_cert_pem_path: "{{ tpa_single_node_certificates
 tpa_single_node_guac_graphql_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/guac-graphql-tls-certificate.key"
 tpa_single_node_collector_osv_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/collector-osv-tls-certificate.pem"
 tpa_single_node_collector_osv_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/collector-osv-tls-certificate.key"
-tpa_single_node_client_tls_ca_certificate_path: "{{ tpa_single_node_certificates_dir }}/service-ca.crt"
+tpa_single_node_collector_osv_tls_client_cert_crt_path: "{{ tpa_single_node_certificates_dir }}/collector-osv-tls-client-certificate.crt"
+tpa_single_node_collectorist_api_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/collectorist-api-tls-certificate.pem"
+tpa_single_node_collectorist_api_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/collectorist-api-tls-certificate.key"
+tpa_single_node_collectorist_api_tls_csub_cert_crt_path: "{{ tpa_single_node_certificates_dir }}/collectorist-api-tls-csub-certificate.crt"
 tpa_single_node_spog_api_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/spog-api-tls-certificate.pem"
 tpa_single_node_spog_api_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/spog-api-tls-certificate.key"
 

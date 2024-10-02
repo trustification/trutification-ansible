@@ -1,59 +1,63 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: collector-osv
+  name: collectorist-api
   namespace: "{{ tpa_single_node_namespace }}"
   labels:
-    app.kubernetes.io/name: collector-osv
-    app.kubernetes.io/component: collector
+    app.kubernetes.io/name: collectorist-api
+    app.kubernetes.io/component: collectorist
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
     app.kubernetes.io/version: 1.1.1
+    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: trusted-profile-analyzer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: collector-osv
-      app.kubernetes.io/component: collector
+      app.kubernetes.io/name: collectorist-api
+      app.kubernetes.io/component: collectorist
       app.kubernetes.io/instance: redhat-trusted-profile-analyzer
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: collector-osv
-        app.kubernetes.io/component: collector
+        app.kubernetes.io/name: collectorist-api
+        app.kubernetes.io/component: collectorist
         app.kubernetes.io/instance: redhat-trusted-profile-analyzer
       annotations:
-        configHash/auth: "{{ oidc_configmap_checksum.stat.checksum }}"
+        configHash/api: dac9d88322da8b671d9fc4f81500698ea05f108df8784b66db80d4242c9dee06
+        configHash/auth: d0dbc7f46adf81df142f3171f2234c47b7864a450fd1e404be4210c22caf81ea
     spec:
       volumes:
-        - name: guac-config
-          configMap:
-            name: collectorist-api
         - name: tls
           secret:
-            secretName: collector-osv-tls
+            secretName: collectorist-api-tls
         - name: config-auth
           configMap:
-            name: collector-osv-auth
-        - name: collector-oidc-secret
-          secret:
-            secretName: oidc_secret
+            name: collectorist-api-auth
+        - name: data
+          persistentVolumeClaim:
+            claimName: collectorist-api
+        - name: config
+          configMap:
+            name: collectorist-api
       containers:
         - name: service
           image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: IfNotPresent
           command: ["/trust"]
           args:
-            - collector
-            - osv
+            - collectorist
+            - api
             - -p
             - "8080"
+            - --csub-url
+            - http://guac-collectsub-pod:2782
             - --auth-configuration
             - /etc/config/auth.yaml
-            - --v11y-url
-            - http://v11y-api-pod:{{ tpa_single_node_v11y_api_port }}
-            - --guac-url
-            - http://guac-graphql-pod:8080/query
+            - --storage-base
+            - /data
+            - --collector-config
+            - /config/collectorist.yaml
           env:
 # TODO
 #            - name: NAMESPACE
@@ -86,10 +90,8 @@ spec:
                   name: oidc_secret
             - name: OIDC_PROVIDER_ISSUER_URL
               value: "{{ tpa_single_node_oidc_issuer_url }}"
-{% if tpa_single_node_collector_osv_tls_client_cert_crt %}
-            - name: CLIENT_TLS_CA_CERTIFICATES
+            - name: CSUB_CA_CERTIFICATE_PEM_PATH
               value: /etc/tls/service-ca.crt
-{% endif %}
           ports:
             - containerPort: 9010
               protocol: TCP
@@ -98,14 +100,14 @@ spec:
               name: endpoint
               protocol: TCP
           volumeMounts:
-            - name: guac-config
-              mountPath: /guac
+            - name: data
+              mountPath: /data
+            - name: config
+              mountPath: /config
               readOnly: true
             - mountPath: /etc/tls
               name: tls
               readOnly: true
-            - mountPath: /etc/colloidcsecret
-              name: collector-oidc-secret
             - name: config-auth
               mountPath: /etc/config/auth.yaml
               subPath: auth.yaml

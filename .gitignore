@@ -1,4 +1,3 @@
-certs/
 venv/
 vm-testing/inventory
 vm-testing/vars.yml
