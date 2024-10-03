@@ -1,0 +1,51 @@
+---
+- name: Generate spog-ui secret manifest
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/spog/ui/Secret.yaml.j2"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/spog-ui-Secret.yaml"
+    mode: "0600"
+  vars:
+    tpa_single_node_spog_ui_tls_cert_pem: "{{ lookup('file', tpa_single_node_spog_ui_tls_cert_pem_path) }}"
+    tpa_single_node_spog_ui_tls_cert_key: "{{ lookup('file', tpa_single_node_spog_ui_tls_cert_key_path) }}"
+
+- name: Play spog-api secret manifest
+  containers.podman.podman_play:
+    kube_file: "{{ tpa_single_node_kube_manifest_dir }}/spog-ui-Secret.yaml"
+    state: started
+
+- name: Create configmap for spog-ui-backend
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/spog/ui/Configmap-backend.yaml.j2"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-backend.yaml"
+    mode: "0600"
+  register: configmap_spog_ui_backend
+
+- name: Retrieve the checksum of the spog-ui-backend
+  ansible.builtin.stat:
+    path: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-backend.yaml"
+    checksum_algorithm: sha256
+  register: spog_ui_backend_configmap_checksum
+
+- name: Create configmap for spog-ui-branding
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/spog/ui/Configmap-branding.yaml.j2"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-branding.yaml"
+    mode: "0600"
+  register: configmap_spog_ui_branding
+
+- name: Retrieve the checksum of the spog-ui-branding
+  ansible.builtin.stat:
+    path: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-branding.yaml"
+    checksum_algorithm: sha256
+  register: spog_ui_branding_configmap_checksum
+
+- name: Deploy spog-ui
+  ansible.builtin.include_tasks: install_manifest.yml
+  vars:
+    podman_spec:
+      state: started
+      systemd_file: spog-ui
+      network: "{{ tpa_single_node_podman_network }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/spog/ui/Deployment.yaml.j2') | from_yaml }}"
+      configmap: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-backend.yaml"
+      configmap2: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-branding.yaml"

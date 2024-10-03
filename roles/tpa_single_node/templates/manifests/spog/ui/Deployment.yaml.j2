@@ -1,0 +1,90 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: spog-ui
+  namespace: {{ tpa_single_node_namespace }}
+  labels:
+    app.kubernetes.io/name: spog-ui
+    app.kubernetes.io/component: spog
+    app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    app.kubernetes.io/version: 1.1.1
+    app.kubernetes.io/part-of: trusted-profile-analyzer
+  annotations: null
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: spog-ui
+      app.kubernetes.io/component: spog
+      app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+  template:
+    metadata:
+      annotations:
+        configHash/backend: {{ spog_ui_backend_configmap_checksum.stat.checksum }}
+        configHash/branding: {{ spog_ui_branding_configmap_checksum.stat.checksum }}
+      labels:
+        app.kubernetes.io/name: spog-ui
+        app.kubernetes.io/component: spog
+        app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    spec:
+      volumes:
+        - name: endpoints
+          emptyDir: {}
+        - name: run
+          emptyDir: {}
+        - name: config
+          configMap:
+            optional: true
+            name: spog-ui-backend
+        - name: branding
+          configMap:
+            name: spog-ui-branding
+      containers:
+        - name: service
+          image: {{ tpa_single_node_trustification_image }}
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: 64Mi
+            requests:
+              memory: 64Mi
+          command:
+            - /nginx.sh
+          env:
+            - name: API_URL
+              value: http://spog-api-pod:{{ tpa_single_node_spog_api_port }}
+            - name: BOMBASTIC_URL
+              value: http://bombastic-api-pod:{{ tpa_single_node_bombastic_api_port }}
+            - name: VEXINATION_URL
+              value: http://vexination-api-pod:{{ tpa_single_node_vexination_api_port }}
+            - name: ISSUER_URL
+              value: {{ tpa_single_node_oidc_issuer_url }}
+            - name: CLIENT_ID
+              value: frontend
+            - name: BACKEND_JSON_FILE
+              value: /etc/config/backend.json
+          volumeMounts:
+            - name: config
+              mountPath: /etc/config
+              readOnly: true
+            - name: endpoints
+              mountPath: /endpoints
+            - name: run
+              mountPath: /run
+            - name: branding
+              mountPath: /public/branding
+          ports:
+            - containerPort: {{ tpa_single_node_spog_ui_port }}
+              name: endpoint
+              protocol: TCP
+              hostPort: {{ tpa_single_node_spog_ui_port }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ tpa_single_node_spog_ui_port }}
+            initialDelaySeconds: 2
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ tpa_single_node_spog_ui_port }}
+            initialDelaySeconds: 2
