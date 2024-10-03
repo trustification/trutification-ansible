@@ -146,3 +146,10 @@
   args:
     apply:
       become: true
+
+# Step 23
+- name: Configure/Deploy spog ui
+  ansible.builtin.include_tasks: spog/ui.yml
+  args:
+    apply:
+      become: true
