@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: init-dataset
+  namespace: "{{ tpa_single_node_namespace }}"
+  labels:
+    app: init-dataset
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: init-dataset
+  template:
+    metadata:
+      labels:
+        app: init-dataset
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: run
+          image: "{{ tpa_single_node_trustification_image }}"
+          imagePullPolicy: IfNotPresent
+          command: [ "/usr/bin/bash" ]
+          args:
+            - "-ce"
+            - |
+              set -e
+              /trust bombastic walker --sink http://bombastic-api-pod:{{ tpa_single_node_bombastic_api_port }} --source file:/data/sbom
+              /trust vexination walker --sink http://vexination-api-pod:{{ tpa_single_node_vexination_api_port }}/api/v1/vex --source file:/data/csaf
+          env:
+            - name: OIDC_PROVIDER_CLIENT_ID
+              value: "{{ tpa_single_node_oidc_provider_client_id }}"
+            - name: OIDC_PROVIDER_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: client_secret
+                  name: oidc_secret
+            - name: OIDC_PROVIDER_ISSUER_URL
+              value: "{{ tpa_single_node_oidc_issuer_url }}"
+            - name: RUST_LOG
+              value: "info"

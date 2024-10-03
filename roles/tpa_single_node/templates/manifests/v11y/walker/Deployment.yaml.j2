@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: v11y-walker
-  namespace: trustification
+  namespace: "{{ tpa_single_node_namespace }}"
   labels:
     app: v11y-walker
 spec:
