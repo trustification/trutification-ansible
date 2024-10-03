@@ -4,5 +4,6 @@ exclude_paths:
   - vm-testing
   - input-template
   - roles/tpa_single_node/tasks/infra/postgresql.yml
+  - roles/tpa_single_node/templates/branding
 skip_list:
   - name[template]
