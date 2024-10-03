@@ -24,8 +24,8 @@ spec:
             - "-ce"
             - |
               set -e
-              /trust bombastic walker --sink http://bombastic-api-pod:8082 --source file:/data/sbom
-              /trust vexination walker --sink http://vexination-api-pod:8080/api/v1/vex --source file:/data/csaf
+              /trust bombastic walker --sink http://bombastic-api-pod:{{ tpa_single_node_bombastic_api_port }} --source file:/data/sbom
+              /trust vexination walker --sink http://vexination-api-pod:{{ tpa_single_node_vexination_api_port }}/api/v1/vex --source file:/data/csaf
           env:
             - name: OIDC_PROVIDER_CLIENT_ID
               value: "{{ tpa_single_node_oidc_provider_client_id }}"
