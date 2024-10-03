@@ -88,3 +88,9 @@ tpa_single_node_vexination_api_port: 8081
 tpa_single_node_bombastic_api_port: 8082
 tpa_single_node_spog_api_port: 8084
 tpa_single_node_v11y_api_port: 8087
+
+# Services suspended
+tpa_single_node_bombastic_walker_suspended: true
+tpa_single_node_datasset_job_suspended: true
+tpa_single_node_vexination_walker_suspended: true
+tpa_single_node_v11y_walker_suspended: false
