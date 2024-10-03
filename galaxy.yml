@@ -12,11 +12,10 @@ description: Install and configure RHTPA, a downstream redistribution of the Tru
 license_file: Apache-2.0
 tags: [rhtpa, tpa, trusted profile analyzer, security, application, tools]
 # NOTE: when updating, also update dependencies in requirements.yml
-dependencies:
-  containers.podman: ">=1.15.4"
+dependencies: {}
 repository: https://github.com/trustification/trustification-ansible
 documentation: http://TODO.com
 homepage: https://github.com/trustification/trustification-ansible
 issues: https://github.com/trustification/trustification-ansible/issues
 
-build_ignore: [.ansible-lint, .github, .gitignore, .vscode, ansible-navigator.log, molecule, requirements-testing.txt, vm-testing, input-template, .idea]
+build_ignore: [.ansible-lint, .github, .gitignore, .vscode, ansible-navigator.log, requirements-testing.txt, vm-testing, input-template, .idea]

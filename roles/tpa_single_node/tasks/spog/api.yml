@@ -21,9 +21,9 @@
     tpa_single_node_spog_api_tls_cert_key: "{{ lookup('file', tpa_single_node_spog_api_tls_cert_key_path) }}"
 
 - name: Play spog-api secret manifest
-  containers.podman.podman_play:
-    kube_file: "{{ tpa_single_node_kube_manifest_dir }}/spog-api-Secret.yaml"
-    state: started
+  ansible.builtin.command:
+    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/spog-api-Secret.yaml"
+  changed_when: true
 
 - name: Create configmap auth for collector-osv
   ansible.builtin.include_tasks: infra/component_auth.yml
