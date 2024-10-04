@@ -47,15 +47,15 @@ spec:
             - spog
             - api
             - -p
-            - '8080'
+            - {{ tpa_single_node_spog_api_port }}
             - --bombastic-url
-            - http://bombastic-api-pod:{{ tpa_single_node_bombastic_api_port }}
+            - http://192.168.121.60:{{ tpa_single_node_bombastic_api_port }}
             - --vexination-url
-            - http://vexination-api-pod:{{ tpa_single_node_vexination_api_port }}
+            - http://192.168.121.60:{{ tpa_single_node_vexination_api_port }}
             - --collectorist-url
             - http://collectorist-api-pod:8080
             - --v11y-url
-            - http://v11y-api-pod:{{ tpa_single_node_v11y_api_port }}
+            - http://192.168.121.60:{{ tpa_single_node_v11y_api_port }}
             - --crda-url
             - https://rhda.rhcloud.com/api/v4/analysis
             - --guac
@@ -73,7 +73,7 @@ spec:
             - name: HTTP_SERVER_BIND_ADDR
               value: '::'
             - name: HTTP_SERVER_TLS_ENABLED
-              value: 'true'
+              value: 'false'
             - name: HTTP_SERVER_TLS_KEY_FILE
               value: /etc/tls/tls.key
             - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
@@ -101,6 +101,8 @@ spec:
             - containerPort: {{ tpa_single_node_spog_api_port }}
               name: endpoint
               protocol: TCP
+              hostPort: {{ tpa_single_node_spog_api_port }}
+              hostIP: 192.168.121.60
           volumeMounts:
             - mountPath: /etc/tls
               name: tls

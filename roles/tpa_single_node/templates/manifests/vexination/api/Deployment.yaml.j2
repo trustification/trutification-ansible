@@ -58,6 +58,8 @@ spec:
             - containerPort: {{ tpa_single_node_vexination_api_port }}
               name: endpoint
               protocol: TCP
+              hostPort: {{ tpa_single_node_bombastic_api_port }}
+              hostIP: 192.168.121.60    
           volumeMounts:
             - name: config-auth
               mountPath: /etc/config/auth.yaml
