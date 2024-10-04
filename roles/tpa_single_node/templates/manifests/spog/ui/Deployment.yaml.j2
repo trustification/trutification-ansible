@@ -52,15 +52,15 @@ spec:
             - /nginx.sh
           env:
             - name: API_URL
-              value: http://spog-api-pod:{{ tpa_single_node_spog_api_port }}
+              value: http://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_spog_api_port }}
             - name: BOMBASTIC_URL
-              value: http://bombastic-api-pod:{{ tpa_single_node_bombastic_api_port }}
+              value: http://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_bombastic_api_port }}
             - name: VEXINATION_URL
-              value: http://vexination-api-pod:{{ tpa_single_node_vexination_api_port }}
+              value: http://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_vexination_api_port }}
             - name: ISSUER_URL
               value: {{ tpa_single_node_oidc_issuer_url }}
             - name: CLIENT_ID
-              value: frontend
+              value: {{ tpa_single_node_oidc_frontend_id }}
             - name: BACKEND_JSON_FILE
               value: /etc/config/backend.json
           volumeMounts:
@@ -78,6 +78,7 @@ spec:
               name: endpoint
               protocol: TCP
               hostPort: {{ tpa_single_node_spog_ui_port }}
+              hostIP: {{ tpa_single_node_rhel_host }}
           livenessProbe:
             httpGet:
               path: /
