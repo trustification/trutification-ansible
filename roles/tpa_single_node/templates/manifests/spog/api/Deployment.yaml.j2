@@ -49,13 +49,13 @@ spec:
             - -p
             - {{ tpa_single_node_spog_api_port }}
             - --bombastic-url
-            - http://192.168.121.60:{{ tpa_single_node_bombastic_api_port }}
+            - http://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_bombastic_api_port }}
             - --vexination-url
-            - http://192.168.121.60:{{ tpa_single_node_vexination_api_port }}
+            - http://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_vexination_api_port }}
             - --collectorist-url
             - http://collectorist-api-pod:8080
             - --v11y-url
-            - http://192.168.121.60:{{ tpa_single_node_v11y_api_port }}
+            - http://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_v11y_api_port }}
             - --crda-url
             - https://rhda.rhcloud.com/api/v4/analysis
             - --guac
@@ -102,7 +102,7 @@ spec:
               name: endpoint
               protocol: TCP
               hostPort: {{ tpa_single_node_spog_api_port }}
-              hostIP: 192.168.121.60
+              hostIP: {{ tpa_single_node_rhel_host }}
           volumeMounts:
             - mountPath: /etc/tls
               name: tls

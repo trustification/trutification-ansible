@@ -108,7 +108,7 @@ spec:
               name: endpoint
               protocol: TCP
               hostPort: {{ tpa_single_node_bombastic_api_port }}
-              hostIP: 192.168.121.60         
+              hostIP: {{ tpa_single_node_rhel_host }}         
           volumeMounts:
             - name: bombastic-api-storage-secret
               mountPath: /etc/bombasticapistorage
