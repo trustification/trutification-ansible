@@ -20,16 +20,27 @@
   loop:
     - "{{ tpa_single_node_kube_manifest_dir }}"
 
+- name: Check if RHTPA network exists
+  ansible.builtin.command:
+    cmd: "podman network inspect {{ tpa_single_node_podman_network }}"
+  register: network_inspect_result
+  failed_when: false
+  changed_when: false
+
 - name: Create RHTPA network
-  containers.podman.podman_network:
-    name: "{{ tpa_single_node_podman_network }}"
+  ansible.builtin.command:
+    cmd: "podman network create {{ tpa_single_node_podman_network }}"
+  when: network_inspect_result.rc != 0
+  changed_when: true
 
 - name: Pull trustification image from registry.redhat.io
   when: rhel
-  containers.podman.podman_image:
-    name: "{{ tpa_single_node_trustification_image }}"
+  ansible.builtin.command:
+    cmd: "podman pull {{ tpa_single_node_trustification_image }}"
+  changed_when: true
 
 - name: Pull Guac image from registry.redhat.io
   when: rhel
-  containers.podman.podman_image:
-    name: "{{ tpa_single_node_guac_image }}"
+  ansible.builtin.command:
+    cmd: "podman pull {{ tpa_single_node_guac_image }}"
+  changed_when: true

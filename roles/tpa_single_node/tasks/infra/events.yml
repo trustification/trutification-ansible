@@ -24,6 +24,6 @@
     mode: "0600"
 
 - name: Apply Event Storage manifest
-  containers.podman.podman_play:
-    kube_file: "{{ tpa_single_node_event_secret }}"
-    state: started
+  ansible.builtin.command:
+    cmd: "podman kube play {{ tpa_single_node_event_secret }}"
+  changed_when: true

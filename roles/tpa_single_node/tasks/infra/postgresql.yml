@@ -1,21 +1,5 @@
 # @postgres-remove
 ---
-- name: Confirmed required parameters provided
-  ansible.builtin.assert:
-    that:
-      - tpa_single_node_base_hostname is defined
-      - tpa_single_node_base_hostname | trim | length > 0
-    msg: "'tpa_single_node_base_hostname' must be specified"
-
-- name: Get RHTPA network details
-  containers.podman.podman_network:
-    name: "{{ tpa_single_node_podman_network }}"
-  register: tpa_podman_network_results
-
-- name: Set DNS Resolver
-  ansible.builtin.set_fact:
-    dns_resolver: "{{ tpa_podman_network_results.network.subnets[0].gateway }}"
-
 - name: "Find out if PostgreSQL is initialized"
   ansible.builtin.stat:
     path: "/var/lib/pgsql/data/pg_hba.conf"
