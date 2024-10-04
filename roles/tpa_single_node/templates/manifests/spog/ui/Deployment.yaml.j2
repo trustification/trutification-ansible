@@ -60,7 +60,7 @@ spec:
             - name: ISSUER_URL
               value: {{ tpa_single_node_oidc_issuer_url }}
             - name: CLIENT_ID
-              value: {{ tpa_single_node_oidc_provider_client_id }}
+              value: {{ tpa_single_node_oidc_frontend_id }}
             - name: BACKEND_JSON_FILE
               value: /etc/config/backend.json
           volumeMounts:
