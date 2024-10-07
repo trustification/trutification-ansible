@@ -57,6 +57,7 @@ tpa_single_node_kafka_auth_mechanism: # Example - SCRAM-SHA-512
 tpa_single_node_sqs_region: eu-west-1 # AWS SQS Region
 
 # SSO_SERVICE
+tpa_single_node_oidc_type: cognito # Either cognito or keycloak
 tpa_single_node_oidc_issuer_url: "{{ lookup('env', 'TPA_OIDC_ISSUER_URL') | default('tpa_single_node_default_empty', true) }}"
 tpa_single_node_oidc_frontend_id: "{{ lookup('env', 'TPA_OIDC_FRONTEND_ID') | default('tpa_single_node_default_empty', true) }}"
 tpa_single_node_oidc_provider_client_id: "{{ lookup('env', 'TPA_OIDC_PROVIDER_CLIENT_ID') | default('tpa_single_node_default_empty', true) }}"

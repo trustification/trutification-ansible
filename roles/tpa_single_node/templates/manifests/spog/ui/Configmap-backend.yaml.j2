@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/name: spog-ui
     app.kubernetes.io/component: backend
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer    
-{% if tpa_single_node_aws_cognito_domain is defined %}
+{% if tpa_single_node_oidc_type == 'cognito' %}
 data:
   backend.json: |
     { "oidc": {
