@@ -15,32 +15,11 @@
     mode: "0600"
   register: copy_manifest
 
-- name: Copy Systemd file to Server
+- name: Copy Systemd with configmap file(s) to Server
   ansible.builtin.template:
-    src: systemd/systemd-cm.j2
+    src: systemd/systemd.j2
     dest: "{{ tpa_single_node_systemd_directory + '/' + podman_spec.systemd_file }}.service"
     mode: "0600"
-  when:
-    - podman_spec.configmap is defined
-    - podman_spec.configmap2 is not defined
-  register: copy_systemd_file
-
-- name: Copy Systemd file to Server
-  ansible.builtin.template:
-    src: systemd/systemd-twocms.j2
-    dest: "{{ tpa_single_node_systemd_directory + '/' + podman_spec.systemd_file }}.service"
-    mode: "0600"
-  when:
-    - podman_spec.configmap is defined
-    - podman_spec.configmap2 is defined
-  register: copy_systemd_file
-
-- name: Copy Systemd file to Server
-  ansible.builtin.template:
-    src: systemd/systemd-nocm.j2
-    dest: "{{ tpa_single_node_systemd_directory + '/' + podman_spec.systemd_file }}.service"
-    mode: "0600"
-  when: podman_spec.configmap is not defined
   register: copy_systemd_file
 
 - name: Restart Podman Service

@@ -14,18 +14,10 @@
 
 - name: Copy Systemd file to Server
   ansible.builtin.template:
-    src: systemd/systemd-cronjob-cm.j2
+    src: systemd/systemd-cronjob.j2
     dest: "{{ tpa_single_node_systemd_directory + '/' + podman_spec.systemd_file }}.service"
     mode: "0600"
   when: podman_spec.configmap is defined
-  register: copy_systemd_file
-
-- name: Copy Systemd file cronjob to Server
-  ansible.builtin.template:
-    src: systemd/systemd-cronjob-nocm.j2
-    dest: "{{ tpa_single_node_systemd_directory + '/' + podman_spec.systemd_file }}.service"
-    mode: "0600"
-  when: podman_spec.configmap is not defined
   register: copy_systemd_file
 
 - name: Copy Systemd file timer to Server

@@ -39,6 +39,12 @@
     checksum_algorithm: sha256
   register: spog_ui_branding_configmap_checksum
 
+- name: Create configmap for spog-ui-nginx-config
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/spog/ui/Configmap-nginx-config.yaml.j2"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-nginx-config.yaml"
+    mode: "0600"
+  register: configmap_spog_ui_branding
 - name: Deploy spog-ui
   ansible.builtin.include_tasks: install_manifest.yml
   vars:
@@ -47,5 +53,7 @@
       systemd_file: spog-ui
       network: "{{ tpa_single_node_podman_network }}"
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/spog/ui/Deployment.yaml.j2') | from_yaml }}"
-      configmap: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-backend.yaml"
-      configmap2: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-branding.yaml"
+      configmaps:
+        - "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-backend.yaml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-branding.yaml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-nginx-config.yaml"

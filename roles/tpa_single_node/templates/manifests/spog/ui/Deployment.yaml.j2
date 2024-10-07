@@ -39,6 +39,12 @@ spec:
         - name: branding
           configMap:
             name: spog-ui-branding
+        - name: nginx-config
+          configMap:
+            name: spog-ui-nginx-config
+        - name: tls
+          secret:
+            secretName: spog-ui-tls
       containers:
         - name: service
           image: {{ tpa_single_node_trustification_image }}
@@ -63,6 +69,8 @@ spec:
               value: {{ tpa_single_node_oidc_frontend_id }}
             - name: BACKEND_JSON_FILE
               value: /etc/config/backend.json
+            - name: OIDC_PROVIDER_INSECURE_TLS
+              value: "true"
           volumeMounts:
             - name: config
               mountPath: /etc/config
@@ -73,6 +81,11 @@ spec:
               mountPath: /run
             - name: branding
               mountPath: /public/branding
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+            - name: tls
+              mountPath: /etc/nginx/ssl
+              readOnly: true
           ports:
             - containerPort: {{ tpa_single_node_spog_ui_port }}
               name: endpoint

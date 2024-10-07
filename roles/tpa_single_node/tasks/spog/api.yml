@@ -40,6 +40,7 @@
       systemd_file: spog-api
       network: "{{ tpa_single_node_podman_network }}"
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/spog/api/Deployment.yaml.j2') | from_yaml }}"
-      configmap: "{{ tpa_single_node_kube_manifest_dir }}/spog-api-configmap.yml"
-      configmap2: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-config.yaml"
+      configmaps:
+        - "{{ tpa_single_node_kube_manifest_dir }}/spog-api-configmap.yml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-config.yaml"
       configmap_changed: "{{ oidc_configmap_result.changed or configmap_spog_ui_config.changed }}"
