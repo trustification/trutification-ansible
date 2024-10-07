@@ -71,8 +71,8 @@ tpa_single_node_collectorist_api_tls_cert_key_path: "{{ tpa_single_node_certific
 tpa_single_node_collectorist_api_tls_csub_cert_crt_path: "{{ tpa_single_node_certificates_dir }}/collectorist-api-tls-csub-certificate.crt"
 tpa_single_node_spog_api_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/spog-api-tls-certificate.pem"
 tpa_single_node_spog_api_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/spog-api-tls-certificate.key"
-tpa_single_node_spog_ui_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/spog-ui-tls-certificate.pem"
-tpa_single_node_spog_ui_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/spog-ui-tls-certificate.key"
+tpa_single_node_nginx_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/nginx-tls-certificate.pem"
+tpa_single_node_nginx_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/nginx-tls-certificate.key"
 
 # Target node(s) - Secret and Configmap locations
 tpa_single_node_storage_secret: "{{ tpa_single_node_kube_manifest_dir }}/storage-secret.yaml"

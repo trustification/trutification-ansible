@@ -39,12 +39,6 @@ spec:
         - name: branding
           configMap:
             name: spog-ui-branding
-        - name: nginx-config
-          configMap:
-            name: nginx-config
-        - name: tls
-          secret:
-            secretName: spog-ui-tls
       containers:
         - name: service
           image: {{ tpa_single_node_trustification_image }}
@@ -58,7 +52,7 @@ spec:
             - /nginx.sh
           env:
             - name: API_URL
-              value: http://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_spog_api_port }}
+              value: https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_spog_api_port }}
             - name: BOMBASTIC_URL
               value: http://bombastic-api-pod:{{ tpa_single_node_bombastic_api_port }}
             - name: VEXINATION_URL
@@ -81,23 +75,12 @@ spec:
               mountPath: /run
             - name: branding
               mountPath: /public/branding
-            - name: nginx-config
-              mountPath: /etc/nginx/nginx.conf
-              subPath: nginx.conf  
-            - name: tls
-              mountPath: /etc/nginx/ssl
-              readOnly: true
           ports:
             - containerPort: {{ tpa_single_node_spog_ui_port }}
               name: endpoint
-              hostPort: 80
+              hostPort: {{ tpa_single_node_spog_ui_port }}
               hostIP: {{ tpa_single_node_rhel_host }}
               protocol: TCP
-            - containerPort: 443
-              name: endpoint-ssl
-              protocol: TCP
-              hostPort: 443
-              hostIP: {{ tpa_single_node_rhel_host }}
           livenessProbe:
             httpGet:
               path: /

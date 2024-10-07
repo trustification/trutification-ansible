@@ -31,16 +31,6 @@ spec:
         - name: service
           image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: IfNotPresent
-          livenessProbe:
-            initialDelaySeconds: 2
-            httpGet:
-              path: /health/live
-              port: 9010
-          readinessProbe:
-            initialDelaySeconds: 2
-            httpGet:
-              path: /health/ready
-              port: 9010
           command:
             - /trust
           args:
@@ -63,7 +53,6 @@ spec:
             - --auth-configuration
             - /etc/config/auth.yaml
           env:
-
             - name: RUST_LOG
               value: info
             - name: INFRASTRUCTURE_ENABLED
@@ -73,7 +62,7 @@ spec:
             - name: HTTP_SERVER_BIND_ADDR
               value: '::'
             - name: HTTP_SERVER_TLS_ENABLED
-              value: 'false'
+              value: 'true'
             - name: HTTP_SERVER_TLS_KEY_FILE
               value: /etc/tls/tls.key
             - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
@@ -115,6 +104,16 @@ spec:
               subPath: spog-ui.yaml
             - mountPath: /etc/spogapioidcsecret
               name: spog-api-oidc-secret
+          livenessProbe:
+            initialDelaySeconds: 2
+            httpGet:
+              path: /health/live
+              port: 9010
+          readinessProbe:
+            initialDelaySeconds: 2
+            httpGet:
+              path: /health/ready
+              port: 9010
       volumes:
         - name: tls
           secret:
