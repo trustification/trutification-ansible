@@ -90,8 +90,13 @@ spec:
           ports:
             - containerPort: {{ tpa_single_node_spog_ui_port }}
               name: endpoint
-              protocol: TCP
               hostPort: {{ tpa_single_node_spog_ui_port }}
+              hostIP: {{ tpa_single_node_rhel_host }}
+              protocol: TCP
+            - containerPort: 443
+              name: endpoint-ssl
+              protocol: TCP
+              hostPort: 443
               hostIP: {{ tpa_single_node_rhel_host }}
           livenessProbe:
             httpGet:

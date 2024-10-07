@@ -43,47 +43,34 @@ data:
         include /etc/nginx/conf.d/*.conf;
 
         server {
+            listen 443 ssl;
+            server_name _;
+
+            # SSL certificate and key
+            ssl_certificate /etc/nginx/ssl/server.crt;
+            ssl_certificate_key /etc/nginx/ssl/server.key;
+
+            # SSL options for stronger security
+            ssl_protocols TLSv1.2 TLSv1.3;
+            ssl_ciphers HIGH:!aNULL:!MD5;
+            ssl_prefer_server_ciphers on;
+
+            # Location block to forward traffic to backend service
+            location / {
+                proxy_pass http://127.0.0.1:8080;  # Backend HTTP service
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+            }         
+        }
+        
+        server {
             listen 8080;
             server_name  _;
             return 301 https://$host$request_uri;
         }         
         
-        server {
-            listen 443 ssl;
-            server_name _;
-
-            root   /public;
-            absolute_redirect off;
-
-            error_page 404 =200 /index.html;
-
-            location /endpoints/ {
-                alias /endpoints/;
-            }
-
-            location / {
-                index index.html;
-            }
-
-            location /branding/ {
-                try_files $uri @default;
-            }
-
-            location @default {
-                rewrite ^/branding(.*)$ $1 break;
-                root /public/branding-default;
-            }
-
-            location ~* \.html$ {
-                add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
-            }
-         
-            ssl_certificate /etc/nginx/ssl/server.crt;
-            ssl_certificate_key /etc/nginx/ssl/server.key;
-            ssl_protocols TLSv1.2 TLSv1.3;
-            ssl_ciphers HIGH:!aNULL:!MD5;
-        }
-
         types {
             application/wasm wasm;
         }
