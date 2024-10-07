@@ -52,7 +52,7 @@ spec:
             - /nginx.sh
           env:
             - name: API_URL
-              value: http://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_spog_api_port }}
+              value: http://spog-api-pod:{{ tpa_single_node_spog_api_port }}
             - name: BOMBASTIC_URL
               value: http://bombastic-api-pod:{{ tpa_single_node_bombastic_api_port }}
             - name: VEXINATION_URL
