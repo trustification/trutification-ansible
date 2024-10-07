@@ -43,6 +43,37 @@ data:
         include /etc/nginx/conf.d/*.conf;
 
         server {
+            listen 80;
+            server_name  _;
+               
+            root   /public;
+            absolute_redirect off;
+
+            error_page 404 =200 /index.html;
+
+            location /endpoints/ {
+                alias /endpoints/;
+            }
+
+            location / {
+                index index.html;
+            }
+
+            location /branding/ {
+                try_files $uri @default;
+            }
+
+            location @default {
+                rewrite ^/branding(.*)$ $1 break;
+                root /public/branding-default;
+            }
+
+            location ~* \.html$ {
+                add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
+            }         
+        }
+
+        server {
             listen 443 ssl;
             server_name _;
 
@@ -57,20 +88,14 @@ data:
 
             # Location block to forward traffic to backend service
             location / {
-                proxy_pass http://127.0.0.1:8080;  # Backend HTTP service
+                proxy_pass http://127.0.0.1:80;  # Backend HTTP service
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
                 proxy_set_header X-Forwarded-Proto $scheme;
-            }         
-        }
-        
-        server {
-            listen 8080;
-            server_name  _;
-            return 301 https://$host$request_uri;
+            }
         }         
-        
+
         types {
             application/wasm wasm;
         }
