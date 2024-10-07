@@ -108,6 +108,8 @@ access to the collector.
 
 ```
 export TPA_PG_HOST=<POSTGRES_HOST_IP>
+export TPA_PG_USER=<DB_USER>
+export TPA_PG_PASSWORD==<DB_PASSWORD>
 export TPA_STORAGE_ACCESS_KEY=<Storage Access Key>
 export TPA_STORAGE_SECRET_KEY=<Storage Secret Key>
 export TPA_OIDC_ISSUER_URL=<AWS Cognito or Keycloak Issuer URL. Incase of Keycloak endpoint auth/realms/chicken is needed>

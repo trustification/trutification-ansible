@@ -1,4 +1,0 @@
-ansible-lint==24.6.1
-# testing farm should depend on setuptools, but it doesn't; list them here explicitly
-#setuptools==72.1.0
-#tft-cli==0.0.17

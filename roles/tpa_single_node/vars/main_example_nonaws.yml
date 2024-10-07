@@ -8,7 +8,6 @@ tpa_single_node_kube_manifest_dir: "{{ tpa_single_node_config_dir }}/manifests"
 tpa_single_node_secrets_dir: "{{ tpa_single_node_config_dir }}/secrets"
 tpa_single_node_namespace: trustification
 tpa_single_node_podman_network: tcnet
-tpa_single_node_skip_os_install: true
 tpa_single_node_systemd_directory: /etc/systemd/system
 tpa_single_node_default_empty: ""
 

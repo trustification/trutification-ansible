@@ -1,0 +1,3 @@
+ansible-lint==24.9.0
+antsibull-docs==2.14.0
+galaxy-importer==0.4.25
