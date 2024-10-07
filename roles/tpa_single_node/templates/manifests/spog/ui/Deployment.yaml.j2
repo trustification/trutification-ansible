@@ -41,7 +41,7 @@ spec:
             name: spog-ui-branding
         - name: nginx-config
           configMap:
-            name: spog-ui-nginx-config
+            name: nginx-config
         - name: tls
           secret:
             secretName: spog-ui-tls
@@ -83,6 +83,7 @@ spec:
               mountPath: /public/branding
             - name: nginx-config
               mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf  
             - name: tls
               mountPath: /etc/nginx/ssl
               readOnly: true
