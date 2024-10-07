@@ -42,4 +42,4 @@
     daemon_reload: false
     name: "{{ podman_spec.systemd_file }}.timer"
     no_block: true
-  when: copy_manifest.changed or copy_systemd_file_timer.changed
+  when: copy_manifest.changed or copy_systemd_timer_file.changed
