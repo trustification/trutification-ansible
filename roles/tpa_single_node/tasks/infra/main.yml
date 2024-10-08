@@ -13,3 +13,6 @@
 
 - name: Configure Events
   ansible.builtin.include_tasks: infra/events.yml
+
+- name: Configure Trust Anchor
+  ansible.builtin.include_tasks: infra/trust_anchor.yml

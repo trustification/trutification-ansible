@@ -36,3 +36,4 @@
       configmaps:
         - "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-backend.yaml"
         - "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-branding.yaml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/custom-trust-anchor-configmap.yml"

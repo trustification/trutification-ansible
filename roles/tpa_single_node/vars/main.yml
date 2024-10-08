@@ -59,6 +59,7 @@ tpa_single_node_oidc_provider_client_id: "{{ lookup('env', 'TPA_OIDC_PROVIDER_CL
 tpa_single_node_oidc_provider_client_secret: "{{ lookup('env', 'TPA_OIDC_PROVIDER_CLIENT_SECRET') | default('tpa_single_node_default_empty', true) }}"
 
 # TSL Certificates
+tpa_single_node_root_ca: "{{ tpa_single_node_certificates_dir }}/rootCA.crt"
 tpa_single_node_guac_csub_tls_crt_path: "{{ tpa_single_node_certificates_dir }}/guac-collectsub-tls.crt"
 tpa_single_node_guac_csub_tls_key_path: "{{ tpa_single_node_certificates_dir }}/guac-collectsub-tls.key"
 tpa_single_node_guac_graphql_tls_crt_path: "{{ tpa_single_node_certificates_dir }}/guac-graphql-tls.crt"

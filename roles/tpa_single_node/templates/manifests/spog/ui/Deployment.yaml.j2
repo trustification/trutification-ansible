@@ -39,6 +39,9 @@ spec:
         - name: branding
           configMap:
             name: spog-ui-branding
+        - name: trust-anchor
+          configMap:
+            name: custom-trust-anchor
       containers:
         - name: service
           image: {{ tpa_single_node_trustification_image }}
@@ -52,11 +55,11 @@ spec:
             - /nginx.sh
           env:
             - name: API_URL
-              value: https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_spog_api_port }}
+              value: https://spog-api-pod:{{ tpa_single_node_spog_api_port }}
             - name: BOMBASTIC_URL
-              value: https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_bombastic_api_port }}
+              value: https://bombastic-api-pod:{{ tpa_single_node_bombastic_api_port }}
             - name: VEXINATION_URL
-              value: https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_vexination_api_port }}
+              value: https://vexination-api-pod:{{ tpa_single_node_vexination_api_port }}
             - name: ISSUER_URL
               value: {{ tpa_single_node_oidc_issuer_url }}
             - name: CLIENT_ID
@@ -75,6 +78,11 @@ spec:
               mountPath: /run
             - name: branding
               mountPath: /public/branding
+
+            - name: trust-anchor
+              configMap:
+                name: custom-trust-anchor
+                defaultMode: 420
           ports:
             - containerPort: {{ tpa_single_node_spog_ui_port }}
               name: endpoint
