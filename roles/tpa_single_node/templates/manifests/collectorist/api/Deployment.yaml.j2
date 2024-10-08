@@ -49,7 +49,7 @@ spec:
             - collectorist
             - api
             - -p
-            - "8080"
+            - {{ tpa_single_node_collectorist_api_port }}
             - --csub-url
             - http://guac-collectsub-pod:2782
             - --auth-configuration
@@ -59,11 +59,10 @@ spec:
             - --collector-config
             - /config/collectorist.yaml
           env:
-# TODO
-#            - name: NAMESPACE
-#              valueFrom:
-#                fieldRef:
-#                  fieldPath: metadata.namespace
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
             - name: RUST_LOG
               value: info
             - name: INFRASTRUCTURE_ENABLED
@@ -96,7 +95,7 @@ spec:
             - containerPort: 9010
               protocol: TCP
               name: infra
-            - containerPort: 8080
+            - containerPort: {{ tpa_single_node_collectorist_api_port }}
               name: endpoint
               protocol: TCP
           volumeMounts:

@@ -26,6 +26,9 @@ spec:
         configHash/auth: f1603b2e10b24822d2b2ae28973e973fb20d68559f0caff8327d5a9a7326b106
     spec:
       volumes:
+        - name: tls
+          secret:
+            secretName: bombastic-api-tls
         - name: config-auth
           configMap:
             name: bombastic-api-auth
@@ -61,7 +64,7 @@ spec:
             - name: HTTP_SERVER_BIND_ADDR
               value: "::"
             - name: HTTP_SERVER_TLS_ENABLED
-              value: 'false'
+              value: 'true'
             - name: HTTP_SERVER_TLS_KEY_FILE
               value: /etc/tls/tls.key
             - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
@@ -110,6 +113,9 @@ spec:
               hostPort: {{ tpa_single_node_bombastic_api_port }}
               hostIP: {{ tpa_single_node_rhel_host }}         
           volumeMounts:
+            - name: tls
+              mountPath: /etc/tls
+              readOnly: true
             - name: bombastic-api-storage-secret
               mountPath: /etc/bombasticapistorage
             - name: bombastic-api-oidc-secret

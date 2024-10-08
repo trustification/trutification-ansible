@@ -28,6 +28,9 @@ spec:
         config/checksum: "{{ oidc_configmap_checksum.stat.checksum }}"
     spec:
       volumes:
+        - name: tls
+          secret:
+            secretName: vexination-api-tls
         - name: config-auth
           configMap:
             name: vexination-api-auth
@@ -61,6 +64,9 @@ spec:
               hostPort: {{ tpa_single_node_vexination_api_port }}
               hostIP: {{ tpa_single_node_rhel_host }}    
           volumeMounts:
+            - name: tls
+              mountPath: /etc/tls
+              readOnly: true
             - name: config-auth
               mountPath: /etc/config/auth.yaml
               subPath: auth.yaml
@@ -87,7 +93,12 @@ spec:
               value: "[::]:9010"
             - name: HTTP_SERVER_BIND_ADDR
               value: "::"
-
+            - name: HTTP_SERVER_TLS_ENABLED
+              value: 'true'
+            - name: HTTP_SERVER_TLS_KEY_FILE
+              value: /etc/tls/tls.key
+            - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
+              value: /etc/tls/tls.crt
             - name: INDEX_SYNC_INTERVAL
               value: 1m
             - name: OIDC_PROVIDER_ISSUER_URL
