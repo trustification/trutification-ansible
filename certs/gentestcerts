@@ -12,7 +12,7 @@ CERTS=(
     'collectorist-api-tls-certificate'
     'collectorist-api-tls-csub-certificate.crt'
     'spog-api-tls-certificate'
-    'spog-ui-tls-certificate'
+    'nginx-tls-certificate'
 )
 
 rm -f *.key *.pem *.crt
