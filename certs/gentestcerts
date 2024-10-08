@@ -11,6 +11,8 @@ CERTS=(
     'collector-osv-tls-client-certificate.crt'
     'collectorist-api-tls-certificate'
     'collectorist-api-tls-csub-certificate.crt'
+    'bombastic-api-tls-certificate'
+    'vexination-api-tls-certificate'
     'spog-api-tls-certificate'
     'nginx-tls-certificate'
 )

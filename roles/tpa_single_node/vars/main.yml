@@ -69,6 +69,10 @@ tpa_single_node_collector_osv_tls_client_cert_crt_path: "{{ tpa_single_node_cert
 tpa_single_node_collectorist_api_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/collectorist-api-tls-certificate.pem"
 tpa_single_node_collectorist_api_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/collectorist-api-tls-certificate.key"
 tpa_single_node_collectorist_api_tls_csub_cert_crt_path: "{{ tpa_single_node_certificates_dir }}/collectorist-api-tls-csub-certificate.crt"
+tpa_single_node_bombastic_api_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/bombastic-api-tls-certificate.pem"
+tpa_single_node_bombastic_api_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/bombastic-api-tls-certificate.key"
+tpa_single_node_vexination_api_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/vexination-api-tls-certificate.pem"
+tpa_single_node_vexination_api_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/vexination-api-tls-certificate.key"
 tpa_single_node_spog_api_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/spog-api-tls-certificate.pem"
 tpa_single_node_spog_api_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/spog-api-tls-certificate.key"
 tpa_single_node_nginx_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/nginx-tls-certificate.pem"
@@ -85,6 +89,7 @@ tpa_single_node_vexination_api_port: 8081
 tpa_single_node_bombastic_api_port: 8082
 tpa_single_node_spog_api_port: 8084
 tpa_single_node_v11y_api_port: 8087
+tpa_single_node_collectorist_api_port: 8088
 
 # Services suspended
 tpa_single_node_bombastic_walker_suspended: true
