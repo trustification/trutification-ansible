@@ -39,17 +39,17 @@ spec:
             - -p
             - {{ tpa_single_node_spog_api_port }}
             - --bombastic-url
-            - https://bombastic-api-pod:{{ tpa_single_node_bombastic_api_port }}
+            - https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_bombastic_api_port }}
             - --vexination-url
-            - https://vexination-api-pod:{{ tpa_single_node_vexination_api_port }}
+            - https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_vexination_api_port }}
             - --collectorist-url
-            - http://collectorist-api-pod:{{ tpa_single_node_collectorist_api_port }}
+            - http://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_collectorist_api_port }}
             - --v11y-url
-            - http://v11y-api-pod:{{ tpa_single_node_v11y_api_port }}
+            - http://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_v11y_api_port }}
             - --crda-url
             - https://rhda.rhcloud.com/api/v4/analysis
             - --guac
-            - http://guac-graphql-pod:8080/query
+            - http://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_v11y_api_port }}/query
             - --auth-configuration
             - /etc/config/auth.yaml
           env:

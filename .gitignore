@@ -13,7 +13,7 @@ venv/
 artifacts/
 # context/ directory produced by ansible-builder
 context/
-certificates/
+certs/
 *.log
 *+00:00.json
 *.swp

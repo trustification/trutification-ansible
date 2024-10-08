@@ -59,15 +59,15 @@ tpa_single_node_oidc_provider_client_id: "{{ lookup('env', 'TPA_OIDC_PROVIDER_CL
 tpa_single_node_oidc_provider_client_secret: "{{ lookup('env', 'TPA_OIDC_PROVIDER_CLIENT_SECRET') | default('tpa_single_node_default_empty', true) }}"
 
 # TSL Certificates
-tpa_single_node_guac_csub_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/guac-collectsub-tls-certificate.pem"
-tpa_single_node_guac_csub_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/guac-collectsub-tls-certificate.key"
-tpa_single_node_guac_graphql_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/guac-graphql-tls-certificate.pem"
-tpa_single_node_guac_graphql_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/guac-graphql-tls-certificate.key"
-tpa_single_node_collector_osv_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/collector-osv-tls-certificate.pem"
-tpa_single_node_collector_osv_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/collector-osv-tls-certificate.key"
+tpa_single_node_guac_csub_tls_crt_path: "{{ tpa_single_node_certificates_dir }}/guac-collectsub-tls-certificate.pem"
+tpa_single_node_guac_csub_tls_key_path: "{{ tpa_single_node_certificates_dir }}/guac-collectsub-tls-certificate.key"
+tpa_single_node_guac_graphql_tls_crt_path: "{{ tpa_single_node_certificates_dir }}/guac-graphql-tls-certificate.pem"
+tpa_single_node_guac_graphql_tls_key_path: "{{ tpa_single_node_certificates_dir }}/guac-graphql-tls-certificate.key"
+tpa_single_node_collector_osv_tls_crt_path: "{{ tpa_single_node_certificates_dir }}/collector-osv-tls-certificate.pem"
+tpa_single_node_collector_osv_tls_key_path: "{{ tpa_single_node_certificates_dir }}/collector-osv-tls-certificate.key"
 tpa_single_node_client_tls_ca_certificate_path: "{{ tpa_single_node_certificates_dir }}/service-ca.crt"
-tpa_single_node_spog_api_tls_cert_pem_path: "{{ tpa_single_node_certificates_dir }}/spog-api-tls-certificate.pem"
-tpa_single_node_spog_api_tls_cert_key_path: "{{ tpa_single_node_certificates_dir }}/spog-api-tls-certificate.key"
+tpa_single_node_spog_api_tls_crt_path: "{{ tpa_single_node_certificates_dir }}/spog-api-tls-certificate.pem"
+tpa_single_node_spog_api_tls_key_path: "{{ tpa_single_node_certificates_dir }}/spog-api-tls-certificate.key"
 
 # Target node(s) - Secret and Configmap locations
 tpa_single_node_storage_secret: "{{ tpa_single_node_kube_manifest_dir }}/storage-secret.yaml"

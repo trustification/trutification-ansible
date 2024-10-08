@@ -12,9 +12,9 @@
     dest: "{{ tpa_single_node_kube_manifest_dir }}/Collectorist-Api-Secret.yaml"
     mode: "0600"
   vars:
-    tpa_single_node_collectorist_api_tls_cert_pem: "{{ lookup('file', tpa_single_node_collectorist_api_tls_cert_pem_path) }}"
-    tpa_single_node_collectorist_api_tls_cert_key: "{{ lookup('file', tpa_single_node_collectorist_api_tls_cert_key_path) }}"
-    tpa_single_node_collectorist_api_tls_csub_cert_crt: "{{ lookup('file', tpa_single_node_collectorist_api_tls_csub_cert_crt_path) }}"
+    tpa_single_node_collectorist_api_tls_cert_pem: "{{ lookup('file', tpa_single_node_collectorist_api_tls_crt_path) }}"
+    tpa_single_node_collectorist_api_tls_cert_key: "{{ lookup('file', tpa_single_node_collectorist_api_tls_key_path) }}"
+    tpa_single_node_collectorist_api_tls_csub_cert_crt: "{{ lookup('file', tpa_single_node_collectorist_api_tls_csub_crt_path) }}"
 
 - name: Play collectorist-api secret manifest
   ansible.builtin.command:
