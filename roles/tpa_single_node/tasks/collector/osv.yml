@@ -40,6 +40,7 @@
       systemd_file: collector-osv
       network: "{{ tpa_single_node_podman_network }}"
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/collector/osv/Deployment.yaml.j2') | from_yaml }}"
-      configmap: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-collectorist-api.yaml"
-      configmap2: "{{ tpa_single_node_kube_manifest_dir }}/collector-osv-configmap.yml"
-      configmap_changed: "{{ oidc_configmap_result.changed or configmap2_result.changed }}"
+      configmaps:
+        - "{{ tpa_single_node_kube_manifest_dir }}/Configmap-collectorist-api.yaml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/collector-osv-configmap.yml"
+        - "{{ oidc_configmap_result.changed or configmap2_result.changed }}"

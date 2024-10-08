@@ -10,7 +10,12 @@ Wants={{ podman_spec.systemd_file}}.timer
 Type=notify
 Environment=PODMAN_SYSTEMD_UNIT=%n
 TimeoutStartSec=2400
-ExecStart=/usr/bin/podman kube play --replace --service-container=true "{{ kube_play_file }}"  --network "{{ podman_spec.network | default('podman') }}" --configmap "{{ podman_spec.configmap | default(omit) }}"
-  
+ExecStart=/usr/bin/podman kube play --replace --service-container=true "{{ kube_play_file }}"  --network "{{ podman_spec.network | default('podman') }}"
+{% if podman_spec.configmaps is defined -%}
+  {%- for configmap in podman_spec.configmaps -%}
+ --configmap "{{ configmap | default(omit) }}" 
+  {% endfor -%}
+{% endif -%} 
+
 [Install]
 WantedBy=default.target
