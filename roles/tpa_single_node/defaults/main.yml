@@ -3,8 +3,5 @@
 tpa_single_node_system_packages:
   - podman
   - podman-plugins
-  # @postgres-remove
-  - postgresql
-  - postgresql-server
   - python3-pip
   - python3-cryptography
