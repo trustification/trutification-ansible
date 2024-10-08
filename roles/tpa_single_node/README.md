@@ -1,38 +1,138 @@
-Role Name
-=========
+<!--- to update this file, update files in the role's meta/ directory (and/or its README.j2 template) and run "make role-readme" -->
+# Ansible Role: redhat.trusted_profile_analyzer.tpa_single_node
+Version: 1.2.0
 
-A brief description of the role goes here.
+Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_profile_analyzer/) service on a single managed node by using the `tas_single_node` role.
+ Requires RHEL 9.2 or later.
 
-Requirements
-------------
+## Role Arguments
+### Required
+|Option|Description|Type|Default|
+|---|---|---|---|
+| tpa_single_node_rhel_host | Ip of the instance. | str |  |
+| tpa_single_node_storage_access_key | Storage access key, readed form the env var TPA_STORAGE_ACCESS_KEY. | str |  |
+| tpa_single_node_storage_secret_key | Storage access key, readed form the env var TPA_STORAGE_SECRET_KEY. | str |  |
+| tpa_single_node_event_access_key_id | Kafka Username or AWS SQS Access Key ID, readed from TPA_EVENT_ACCESS_KEY_ID env var | str |  |
+| tpa_single_node_event_secret_access_key | Kafka password or AWS SQS Secret Access Key, readed from TPA_EVENT_SECRET_ACCESS_KEY env var | str |  |
+| tpa_single_node_guac_csub_tls_cert_pem_path | guac-collectsub-tls-certificate.pem path on the controller machine | str |  |
+| tpa_single_node_guac_csub_tls_cert_key_path | guac-collectsub-tls-certificate.key path on the controller machine | str |  |
+| tpa_single_node_guac_graphql_tls_cert_pem_path | guac-graphql-tls-certificate.pem path on the controller machine | str |  |
+| tpa_single_node_guac_graphql_tls_cert_key_path | guac-graphql-tls-certificate.key path on the controller machine | str |  |
+| tpa_single_node_collector_osv_tls_cert_pem_path | collector-osv-tls-certificate.pem path on the controller machine | str |  |
+| tpa_single_node_collector_osv_tls_cert_key_path | collector-osv-tls-certificate.key path on the controller machine | str |  |
+| tpa_single_node_collector_osv_tls_client_cert_crt_path | collector-osv-tls-client-certificate.crt path on the controller machine | str |  |
+| tpa_single_node_collectorist_api_tls_cert_pem_path | collectorist-api-tls-certificate.pem path on the controller machine | str |  |
+| tpa_single_node_collectorist_api_tls_cert_key_path | collectorist-api-tls-certificate.key path on the controller machine | str |  |
+| tpa_single_node_collectorist_api_tls_csub_cert_crt_path | collectorist-api-tls-csub-certificate.crt path on the controller machine | str |  |
+| tpa_single_node_bombastic_api_tls_cert_pem_path | bombastic-api-tls-certificate.pem path on the controller machine | str |  |
+| tpa_single_node_bombastic_api_tls_cert_key_path | bombastic-api-tls-certificate.key path on the controller machine | str |  |
+| tpa_single_node_vexination_api_tls_cert_pem_path | vexination-api-tls-certificate.pem path on the controller machine | str |  |
+| tpa_single_node_vexination_api_tls_cert_key_path | vexination-api-tls-certificate.key path on the controller machine | str |  |
+| tpa_single_node_spog_api_tls_cert_pem_path | spog-api-tls-certificate.pem path on the controller machine | str |  |
+| tpa_single_node_spog_api_tls_cert_key_path | spog-api-tls-certificate.key path on the controller machine | str |  |
+| tpa_single_node_nginx_tls_cert_pem_path | nginx-tls-certificate.pem path on the controller machine | str |  |
+| tpa_single_node_nginx_tls_cert_key_path | nginx-tls-certificate.key path on the controller machine | str |  |
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+### Optional
+|Option|Description|Type|Default|
+|---|---|---|---|
+| tpa_single_node_trustification_image | Trustification image. | str |  `registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:2943d20c8ac831f4ae4f209c8ca6807619404062`  |
+| tpa_single_node_guac_image | Guac image. | str |  `registry.redhat.io/rhtpa/rhtpa-guac-rhel9:f0688194637cc759052e02c350c38dbabc19484e`  |
+| tpa_single_node_base_hostname | The user name logging in to the registry to pull images. | str |  `trustification`  |
+| tpa_single_node_certificates_dir | Folder where to place the certificates to deploy on the instance. | str |  `certs`  |
+| tpa_single_node_config_dir | Configuration directory on the instace. | str |  `/etc/rhtpa`  |
+| tpa_single_node_kube_manifest_dir | Configuration directory on the instace containing the manifests. | str |  `/etc/rhtpa/manifests`  |
+| tpa_single_node_namespace | Podman network namespace. | str |  `trustification`  |
+| tpa_single_node_podman_network | Podman network name. | str |  `tcnet`  |
+| tpa_single_node_systemd_directory | Folder where to store the systemd configurations files. | str |  `/etc/systemd/system`  |
+| tpa_single_node_default_empty | Default empty value. | str |  |
+| tpa_single_node_pg_host | Host ip of the postgresql db instance. Readed from the TPA_PG_HOST env | str |  |
+| tpa_single_node_pg_port | Port of the postgresql db instance. | str |  `5432`  |
+| tpa_single_node_pg_db | DB name. | str |  `guac`  |
+| tpa_single_node_pg_user | DB username. | str |  `guac`  |
+| tpa_single_node_pg_user_passwd | DB password. | str |  `guac1234`  |
+| tpa_single_node_pg_ssl_mode | DB SSL mode enabled/disabled. | str |  `disable`  |
+| tpa_single_node_storage_type | Storage type s3/minio/other s3 compatible. | str |  `minio`  |
+| tpa_single_node_storage_bombastic_bucket | Bombastic storage bucket name. | str |  `bombastic-default`  |
+| tpa_single_node_storage_v11y_bucket | V11y storage bucket name. | str |  `v11y-default`  |
+| tpa_single_node_storage_vexination_bucket | V11y storage bucket name. | str |  `vexination-default`  |
+| tpa_single_node_storage_region | AWS S3 Storage region | str |  `eu-west-1`  |
+| tpa_single_node_storage_endpoint | Minio storage endpoint if used instead of S3 | str |  `eu-west-1`  |
+| tpa_single_node_event_bus_type | Kafka or SQS | str |  `kafka`  |
+| tpa_single_node_bombastic_topic_failed | Bombastic Events topic failed | str |  `bombastic-failed-default`  |
+| tpa_single_node_bombastic_topic_indexed | Bombastic Events topic indexed | str |  `bombastic-indexed-default`  |
+| tpa_single_node_bombastic_topic_stored | Bombastic Events topic stored | str |  `bombastic-stored-default`  |
+| tpa_single_node_vexination_topic_failed | Vexination Events topic failed | str |  `vexination-failed-default`  |
+| tpa_single_node_vexination_topic_indexed | Vexination Events topic indexed | str |  `vexination-indexed-default`  |
+| tpa_single_node_vexination_topic_stored | Vexination Events topic stored | str |  `vexination-stored-default`  |
+| tpa_single_node_v11y_topic_failed | V11y Events topic failed | str |  `vv1y-failed-default`  |
+| tpa_single_node_v11y_topic_indexed | V11y Events topic indexed | str |  `v11y-indexed-default`  |
+| tpa_single_node_v11y_topic_stored | V11y Events topic stored | str |  `v11y-stored-default`  |
+| tpa_single_node_kafka_bootstrap_servers | Kafka bootstrap servers readed from TPA_EVENT_BOOTSTRAP_SERVER env var | str |  |
+| tpa_single_node_kafka_security_protocol | Kafka security protocol | str |  `SASL_PLAINTEXT`  |
+| tpa_single_node_kafka_auth_mechanism | Kafka auth mechanism | str |  `SCRAM-SHA-512`  |
+| tpa_single_node_sqs_region | AWS SQS Region | str |  `eu-west-1`  |
+| tpa_single_node_oidc_type | Keycloak or AWS Cognito | str |  `keycloak`  |
+| tpa_single_node_oidc_issuer_url | Readed from TPA_OIDC_ISSUER_URL env var | str |  |
+| tpa_single_node_oidc_frontend_id | Readed from TPA_OIDC_FRONTEND_ID env var | str |  |
+| tpa_single_node_oidc_provider_client_id | Readed from TPA_OIDC_PROVIDER_CLIENT_ID env var | str |  |
+| tpa_single_node_oidc_provider_client_secret | Readed from TPA_OIDC_PROVIDER_CLIENT_SECRET env var | str |  |
+| tpa_single_node_aws_cognito_domain | Readed from TPA_OIDC_COGNITO_DOMAIN env var | str |  |
+| tpa_single_node_storage_secret | storage-secret.yaml path on the target machine | str |  `/etc/rhtpa/manifests/storage-secret.yaml`  |
+| tpa_single_node_event_secret | event-secret.yaml path on the target machine | str |  `/etc/rhtpa/manifests/event-secret.yaml`  |
+| tpa_single_node_oidc_secret | oidc-secret.yaml path on the target machine | str |  `/etc/rhtpa/manifests/oidc-secret.yaml`  |
+| tpa_single_node_spog_ui_port | Spog ui port | int |  `8080`  |
+| tpa_single_node_vexination_api_port | Vexination api port | int |  `8081`  |
+| tpa_single_node_bombastic_api_port | Bombastic api port | int |  `8082`  |
+| tpa_single_node_spog_api_port | Spog api api port | int |  `8084`  |
+| tpa_single_node_v11y_api_port | V11y api api port | int |  `8087`  |
+| tpa_single_node_collectorist_api_port | Collectorist api api port | int |  `8088`  |
+| tpa_single_node_bombastic_walker_suspended | Bombastic walker suspended flag | bool |  `true`  |
+| tpa_single_node_dataset_job_suspended | Dataset job suspended flag | bool |  `true`  |
+| tpa_single_node_vexination_walker_suspended | Vexination walker job suspended flag | bool |  `true`  |
+| tpa_single_node_v11y_walker_suspended | V11y walker job suspended flag | bool |  `false`  |
 
-Role Variables
---------------
+## Example Playbook
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```
+- hosts: rhtpa
+  vars:
+    tpa_single_node_rhel_host: # TODO: required, type: str
+    tpa_single_node_storage_access_key: # TODO: required, type: str
+    tpa_single_node_storage_secret_key: # TODO: required, type: str
+    tpa_single_node_event_access_key_id: # TODO: required, type: str
+    tpa_single_node_event_secret_access_key: # TODO: required, type: str
+    tpa_single_node_guac_csub_tls_cert_pem_path: # TODO: required, type: str
+    tpa_single_node_guac_csub_tls_cert_key_path: # TODO: required, type: str
+    tpa_single_node_guac_graphql_tls_cert_pem_path: # TODO: required, type: str
+    tpa_single_node_guac_graphql_tls_cert_key_path: # TODO: required, type: str
+    tpa_single_node_collector_osv_tls_cert_pem_path: # TODO: required, type: str
+    tpa_single_node_collector_osv_tls_cert_key_path: # TODO: required, type: str
+    tpa_single_node_collector_osv_tls_client_cert_crt_path: # TODO: required, type: str
+    tpa_single_node_collectorist_api_tls_cert_pem_path: # TODO: required, type: str
+    tpa_single_node_collectorist_api_tls_cert_key_path: # TODO: required, type: str
+    tpa_single_node_collectorist_api_tls_csub_cert_crt_path: # TODO: required, type: str
+    tpa_single_node_bombastic_api_tls_cert_pem_path: # TODO: required, type: str
+    tpa_single_node_bombastic_api_tls_cert_key_path: # TODO: required, type: str
+    tpa_single_node_vexination_api_tls_cert_pem_path: # TODO: required, type: str
+    tpa_single_node_vexination_api_tls_cert_key_path: # TODO: required, type: str
+    tpa_single_node_spog_api_tls_cert_pem_path: # TODO: required, type: str
+    tpa_single_node_spog_api_tls_cert_key_path: # TODO: required, type: str
+    tpa_single_node_nginx_tls_cert_pem_path: # TODO: required, type: str
+    tpa_single_node_nginx_tls_cert_key_path: # TODO: required, type: str
+    
+  tasks:
+    - name: Include TPA single node role
+      ansible.builtin.include_role:
+        name: redhat.trusted_profile_analyzer.tpa_single_node
+      vars:
+        ansible_become: true
+```
 
-Dependencies
-------------
+## License
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Apache-2.0
 
-Example Playbook
-----------------
+## Author and Project Information
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-Apache
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Red Hat
