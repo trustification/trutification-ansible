@@ -2,8 +2,8 @@
 - name: Set location of Podman Play Manifest
   ansible.builtin.set_fact:
     kube_play_file: >-
-      {{ tpa_single_node_kube_manifest_dir + '/' + podman_spec.kube_file_content.metadata.namespace + '_'
-      + podman_spec.kube_file_content.metadata.name + '.yml' }}
+      {{ tpa_single_node_kube_manifest_dir + '/Deployments/' + podman_spec.kube_file_content.metadata.namespace + '_'
+      + podman_spec.kube_file_content.metadata.name + '.yaml' }}
 
 - name: Copy Manifest to Server
   ansible.builtin.copy:

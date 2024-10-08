@@ -19,6 +19,10 @@
     mode: "0700"
   loop:
     - "{{ tpa_single_node_kube_manifest_dir }}"
+    - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps"
+    - "{{ tpa_single_node_kube_manifest_dir }}/Deployments"
+    - "{{ tpa_single_node_kube_manifest_dir }}/Secrets"
+    - "{{ tpa_single_node_kube_manifest_dir }}/PVCs"
 
 - name: Check if RHTPA network exists
   ansible.builtin.command:

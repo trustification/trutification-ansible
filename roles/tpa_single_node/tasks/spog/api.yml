@@ -1,20 +1,20 @@
 - name: Create configmap for spog-api
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/infra/Configmap-ui.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-config.yaml"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/spog-ui-config.yaml"
     mode: "0600"
   register: configmap_spog_ui_config
 
 - name: Retrieve the checksum of the Spog api ConfigMap
   ansible.builtin.stat:
-    path: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-config.yaml"
+    path: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/spog-ui-config.yaml"
     checksum_algorithm: sha256
   register: spog_ui_configmap_checksum
 
 - name: Generate spog-api secret manifest
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/spog/api/Secret.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/spog-api-Secret.yaml"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/spog-api.yaml"
     mode: "0600"
   vars:
     tpa_single_node_spog_api_tls_cert_pem: "{{ lookup('file', tpa_single_node_spog_api_tls_crt_path) }}"
@@ -22,7 +22,7 @@
 
 - name: Play spog-api secret manifest
   ansible.builtin.command:
-    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/spog-api-Secret.yaml"
+    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/Secrets/spog-api.yaml"
   changed_when: true
 
 - name: Create configmap auth for collector-osv
@@ -41,6 +41,6 @@
       network: "{{ tpa_single_node_podman_network }}"
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/spog/api/Deployment.yaml.j2') | from_yaml }}"
       configmaps:
-        - "{{ tpa_single_node_kube_manifest_dir }}/spog-api-configmap.yml"
-        - "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-config.yaml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/spog-api.yaml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/spog-ui-config.yaml"
       configmap_changed: "{{ oidc_configmap_result.changed or configmap_spog_ui_config.changed }}"

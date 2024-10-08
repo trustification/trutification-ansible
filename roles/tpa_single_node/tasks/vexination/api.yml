@@ -2,7 +2,7 @@
 - name: Generate vexination-api secret manifest
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/vexination/api/Secret.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/vexination-api-Secret.yaml"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/vexination-api.yaml"
     mode: "0600"
   vars:
     tpa_single_node_vexination_api_tls_cert_pem: "{{ lookup('file', tpa_single_node_vexination_api_tls_crt_path) }}"
@@ -10,7 +10,7 @@
 
 - name: Play vexination-api secret manifest
   ansible.builtin.command:
-    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/vexination-api-Secret.yaml"
+    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/Secrets/vexination-api.yaml"
   changed_when: true
 
 - name: Create configmap auth for vexination-api
@@ -29,5 +29,5 @@
       network: "{{ tpa_single_node_podman_network }}"
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/vexination/api/Deployment.yaml.j2') | from_yaml }}"
       configmaps:
-        - "{{ tpa_single_node_kube_manifest_dir }}/vexination-api-configmap.yml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/vexination-api.yaml"
       configmap_changed: oidc_configmap_result.changed

@@ -2,14 +2,14 @@
 - name: Create configmap for collectorist-api
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/collectorist/api/Configmap.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-collectorist-api.yaml"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api.yaml"
     mode: "0600"
   register: configmap2_result
 
 - name: Generate collectorist-api secret manifest
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/collectorist/api/Secret.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/Collectorist-Api-Secret.yaml"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/collectorist-api.yaml"
     mode: "0600"
   vars:
     tpa_single_node_collectorist_api_tls_cert_pem: "{{ lookup('file', tpa_single_node_collectorist_api_tls_crt_path) }}"
@@ -18,7 +18,7 @@
 
 - name: Play collectorist-api secret manifest
   ansible.builtin.command:
-    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/Collectorist-Api-Secret.yaml"
+    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/Secrets/collectorist-api.yaml"
   changed_when: true
 
 - name: Create configmap auth for collectorist-api
@@ -31,12 +31,12 @@
 - name: Generate Persistent Volume Claim for collectorist-api
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/collectorist/api/PersistentVolumeClaim.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/Collectorist-Api-PVC.yaml"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/PVCs/collectorist-api.yaml"
     mode: "0600"
 
 - name: Create persistent volume for collectorist-api
   ansible.builtin.command:
-    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/Collectorist-Api-PVC.yaml"
+    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/PVCs/collectorist-api.yaml"
   changed_when: true
 
 - name: Deploy collectorist-api
@@ -48,6 +48,5 @@
       network: "{{ tpa_single_node_podman_network }}"
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/collectorist/api/Deployment.yaml.j2') | from_yaml }}"
       configmaps:
-        - "{{ tpa_single_node_kube_manifest_dir }}/Configmap-collectorist-api.yaml"
-        - "{{ tpa_single_node_kube_manifest_dir }}/collectorist-api-configmap.yml"
-        - "{{ oidc_configmap_result.changed or configmap2_result.changed }}"
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api.yaml"
+      configmap_changed: "{{ oidc_configmap_result.changed or configmap2_result.changed }}"

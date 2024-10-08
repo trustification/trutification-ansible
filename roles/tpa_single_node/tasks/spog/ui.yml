@@ -2,26 +2,26 @@
 - name: Create configmap for spog-ui-backend
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/spog/ui/Configmap-backend.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-backend.yaml"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/spog-ui-backend.yaml"
     mode: "0600"
   register: configmap_spog_ui_backend
 
 - name: Retrieve the checksum of the spog-ui-backend
   ansible.builtin.stat:
-    path: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-backend.yaml"
+    path: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/spog-ui-backend.yaml"
     checksum_algorithm: sha256
   register: spog_ui_backend_configmap_checksum
 
 - name: Create configmap for spog-ui-branding
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/spog/ui/Configmap-branding.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-branding.yaml"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/spog-ui-branding.yaml"
     mode: "0600"
   register: configmap_spog_ui_branding
 
 - name: Retrieve the checksum of the spog-ui-branding
   ansible.builtin.stat:
-    path: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-branding.yaml"
+    path: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/spog-ui-branding.yaml"
     checksum_algorithm: sha256
   register: spog_ui_branding_configmap_checksum
 
@@ -34,6 +34,6 @@
       network: "{{ tpa_single_node_podman_network }}"
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/spog/ui/Deployment.yaml.j2') | from_yaml }}"
       configmaps:
-        - "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-backend.yaml"
-        - "{{ tpa_single_node_kube_manifest_dir }}/Configmap-spog-ui-branding.yaml"
-        - "{{ tpa_single_node_kube_manifest_dir }}/custom-trust-anchor-configmap.yml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/spog-ui-backend.yaml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/spog-ui-branding.yaml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/custom-trust-anchor.yaml"

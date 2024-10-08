@@ -7,14 +7,14 @@
 - name: Create configmap for collectorist-api
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/collectorist/api/Configmap.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-collectorist-api.yaml"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api.yaml"
     mode: "0600"
   register: configmap2_result
 
 - name: Generate collector-osv secret manifest
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/collector/osv/Secret.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/Collector-Osv-Secret.yaml"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/collector-osv.yaml"
     mode: "0600"
   vars:
     tpa_single_node_collector_osv_tls_cert_pem: "{{ lookup('file', tpa_single_node_collector_osv_tls_crt_path) }}"
@@ -22,7 +22,7 @@
 
 - name: Play collector-osv secret manifest
   ansible.builtin.command:
-    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/Collector-Osv-Secret.yaml"
+    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/Secrets/collector-osv.yaml"
   changed_when: true
 
 - name: Create configmap auth for collector-osv
@@ -41,6 +41,6 @@
       network: "{{ tpa_single_node_podman_network }}"
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/collector/osv/Deployment.yaml.j2') | from_yaml }}"
       configmaps:
-        - "{{ tpa_single_node_kube_manifest_dir }}/Configmap-collectorist-api.yaml"
-        - "{{ tpa_single_node_kube_manifest_dir }}/collector-osv-configmap.yml"
-        - "{{ oidc_configmap_result.changed or configmap2_result.changed }}"
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api.yaml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collector-osv-configmap.yml"
+      configmap_changed: "{{ oidc_configmap_result.changed or configmap2_result.changed }}"

@@ -80,9 +80,9 @@ tpa_single_node_nginx_tls_crt_path: "{{ tpa_single_node_certificates_dir }}/ngin
 tpa_single_node_nginx_tls_key_path: "{{ tpa_single_node_certificates_dir }}/nginx-tls.key"
 
 # Target node(s) - Secret and Configmap locations
-tpa_single_node_storage_secret: "{{ tpa_single_node_kube_manifest_dir }}/storage-secret.yaml"
-tpa_single_node_event_secret: "{{ tpa_single_node_kube_manifest_dir }}/event-secret.yaml"
-tpa_single_node_oidc_secret: "{{ tpa_single_node_kube_manifest_dir }}/oidc-secret.yaml"
+tpa_single_node_storage_secret: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/storage.yaml"
+tpa_single_node_event_secret: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/event.yaml"
+tpa_single_node_oidc_secret: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/oidc.yaml"
 
 # ports
 tpa_single_node_spog_ui_port: 8080
