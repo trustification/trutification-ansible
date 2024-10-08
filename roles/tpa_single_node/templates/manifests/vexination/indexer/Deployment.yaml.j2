@@ -9,79 +9,67 @@ metadata:
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
     app.kubernetes.io/version: 1.1.1
     app.kubernetes.io/part-of: trusted-profile-analyzer
-  annotations: 
+  annotations: null
 spec:
   replicas: 1
-
   strategy:
     type: Recreate
-
   selector:
     matchLabels:
       app.kubernetes.io/name: vexination-indexer
       app.kubernetes.io/component: vexination
       app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-
   template:
     metadata:
       labels:
         app.kubernetes.io/name: vexination-indexer
         app.kubernetes.io/component: vexination
         app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-
     spec:
       volumes:
         - name: data
           emptyDir: {}
-        - name: vex-indexer-storage-secret
+        - name: vexination-indexer-storage-secret
           secret:
             secretName: storage_secret
-        - name: vex-indexer-event-secret
+        - name: vexination-indexer-event-secret
           secret:
             secretName: event_secret
-
       containers:
         - name: service
-
           image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: IfNotPresent
-
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:
               path: /health/live
               port: 9010
-          
           readinessProbe:
             initialDelaySeconds: 2
             httpGet:
               path: /health/ready
               port: 9010
-
           command: ["/trust"]
           args:
-            - "vexination"
-            - "indexer"
-            - "--stored-topic"
+            - vexination
+            - indexer
+            - --stored-topic
             - "{{ tpa_single_node_vexination_topic_stored }}"
-            - "--indexed-topic"
+            - --indexed-topic
             - "{{ tpa_single_node_vexination_topic_indexed }}"
-            - "--failed-topic"
+            - --failed-topic
             - "{{ tpa_single_node_vexination_topic_failed }}"
-            - "--index-mode"
-            - "file"
-            - "--index-dir"
-            - "/data/index"
-
+            - --index-mode
+            - file
+            - --index-dir
+            - /data/index
           env:
             - name: RUST_LOG
               value: "info"
-    
             - name: INFRASTRUCTURE_ENABLED
               value: "true"
             - name: INFRASTRUCTURE_BIND
               value: "[::]:9010"
-
             - name: STORAGE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
@@ -95,17 +83,13 @@ spec:
             - name: STORAGE_REGION
               value: "{{ tpa_single_node_storage_region }}"
             - name: STORAGE_BUCKET
-              value: "{{ tpa_single_node_storage_v11y_bucket }}"
-
+              value: "{{ tpa_single_node_storage_vexination_bucket }}"
 {% if 'minio' in tpa_single_node_storage_type %}
             - name: STORAGE_ENDPOINT
               value: "{{ tpa_single_node_storage_endpoint }}"
 {% endif %}
-
             - name: EVENT_BUS
               value: "{{ tpa_single_node_event_bus_type }}"
-
-
 {% if 'sqs' in tpa_single_node_event_bus_type %}
             - name: SQS_ACCESS_KEY
               valueFrom:
@@ -139,24 +123,18 @@ spec:
             - name: TCK_SASL__MECHANISM
               value: "{{ tpa_single_node_kafka_auth_mechanism }}"
 {% endif %}
-
             - name: INDEX_WRITER_MEMORY_BYTES
               value: 128MiB
             - name: INDEX_SYNC_INTERVAL
               value: 1m
-
-
           ports:
             - containerPort: 9010
               protocol: TCP
               name: infra
-
           volumeMounts:
             - name: data
               mountPath: /data
-            - mountPath: /etc/vexindexstoragesecret
-              name: vex-indexer-storage-secret
-            - mountPath: /etc/vexindexeventsecret
-              name: vex-indexer-event-secret
-
-
+            - mountPath: /etc/vexination-indexer-storage-secret
+              name: vexination-indexer-storage-secret
+            - mountPath: /etc/vexination-indexer-event-secret
+              name: vexination-indexer-event-secret
