@@ -8,5 +8,4 @@ metadata:
     app.kubernetes.io/component: tls
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer    
 data:
-  tls.crt: |
-  {{ lookup('file', tpa_single_node_root_ca) }}
+  tls.crt: {{ lookup('file', tpa_single_node_root_ca) | tojson }}
