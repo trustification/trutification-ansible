@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: guac-graphql
-  namespace: trustification
+  namespace: {{ tpa_single_node_namespace }}
   labels:
     app.kubernetes.io/name: guac-graphql
     app.kubernetes.io/component: guac
@@ -43,7 +43,7 @@ spec:
           command:
             - /opt/guac/guacgql 
           args:
-            - --gql-listen-port=8080
+            - --gql-listen-port={{ tpa_single_node_guac_graphql_port }}
             - --gql-backend=ent
             - --db-address=postgres://{{ tpa_single_node_pg_user }}:{{ tpa_single_node_pg_user_passwd }}@{{ tpa_single_node_pg_host }}:{{ tpa_single_node_pg_port }}/{{ tpa_single_node_pg_db }}?sslmode={{ tpa_single_node_pg_ssl_mode }}
             - --db-driver=postgres
@@ -60,13 +60,13 @@ spec:
           readinessProbe:
             httpGet:
               path: /healthz
-              port: 8080
+              port: {{ tpa_single_node_guac_graphql_port }}
               scheme: HTTPS
           ports:
             - containerPort: 9010
               protocol: TCP
               name: infra
-            - containerPort: 8080
+            - containerPort: {{ tpa_single_node_guac_graphql_port }}
               protocol: TCP
               name: endpoint
       volumes:

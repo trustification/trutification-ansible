@@ -1,0 +1,12 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: custom-trust-anchor
+  namespace: {{ tpa_single_node_namespace }}
+  labels:
+    app.kubernetes.io/name: custom-trust-anchor
+    app.kubernetes.io/component: tls
+    app.kubernetes.io/instance: redhat-trusted-profile-analyzer    
+data:
+  tls.crt: |
+    {{ lookup('file', tpa_single_node_root_ca) | indent (4)}}

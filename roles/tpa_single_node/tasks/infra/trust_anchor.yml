@@ -1,0 +1,7 @@
+---
+- name: Generate Trust Anchor ConfigMap
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/infra/Configmap-trust-anchor.yaml.j2"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/custom-trust-anchor.yaml"
+    mode: "0600"
+  register: custom_trust_anchor_configmap_result

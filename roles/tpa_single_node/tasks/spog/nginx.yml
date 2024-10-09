@@ -2,21 +2,21 @@
 - name: Generate nginx secret manifest
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/nginx/Secret.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/nginx-Secret.yaml"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/nginx.yaml"
     mode: "0600"
   vars:
-    tpa_single_node_nginx_tls_cert_pem: "{{ lookup('file', tpa_single_node_nginx_tls_cert_pem_path) }}"
-    tpa_single_node_nginx_tls_cert_key: "{{ lookup('file', tpa_single_node_nginx_tls_cert_key_path) }}"
+    tpa_single_node_nginx_tls_cert_pem: "{{ lookup('file', tpa_single_node_nginx_tls_crt_path) }}"
+    tpa_single_node_nginx_tls_cert_key: "{{ lookup('file', tpa_single_node_nginx_tls_key_path) }}"
 
 - name: Play spog-api secret manifest
   ansible.builtin.command:
-    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/nginx-Secret.yaml"
+    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/Secrets/nginx.yaml"
   changed_when: true
 
 - name: Create configmap for nginx
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/nginx/Configmap.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/Configmap-nginx.yaml"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/nginx.yaml"
     mode: "0600"
 
 - name: Deploy nginx reverse proxy
@@ -28,4 +28,4 @@
       network: "{{ tpa_single_node_podman_network }}"
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/nginx/Deployment.yaml.j2') | from_yaml }}"
       configmaps:
-        - "{{ tpa_single_node_kube_manifest_dir }}/Configmap-nginx.yaml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/nginx.yaml"

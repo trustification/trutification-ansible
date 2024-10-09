@@ -37,6 +37,9 @@ spec:
         - name: vexination-api-storage-secret
           secret:
             secretName: storage_secret
+        - name: trust-anchor
+          configMap:
+            name: custom-trust-anchor
         - name: vexination-api-oidc-secret
           secret:
             secretName: oidc_secret
@@ -72,6 +75,9 @@ spec:
               subPath: auth.yaml
             - mountPath: /etc/vexapistoragesecret
               name: vexination-api-storage-secret
+            - name: trust-anchor
+              mountPath: /etc/trust-anchor
+              readOnly: true
             - mountPath: /etc/vexapioidcsecret
               name: vexination-api-oidc-secret
           livenessProbe:

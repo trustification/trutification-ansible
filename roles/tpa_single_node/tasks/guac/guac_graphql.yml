@@ -2,12 +2,12 @@
 - name: Generate Guac graphql secret manifest
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/guac/graphql/Secret.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/Guac-Graphql-Secret.yaml"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/guac-graphql.yaml"
     mode: "0600"
 
 - name: Play Guac graphql secret manifest
   ansible.builtin.command:
-    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/Guac-Graphql-Secret.yaml"
+    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/Secrets/guac-graphql.yaml"
   changed_when: true
 
 - name: Deploy guac-graphql Pod
@@ -17,4 +17,4 @@
       state: started
       systemd_file: guac-graphql
       network: "{{ tpa_single_node_podman_network }}"
-      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/guac/graphql/Deployment.yaml') | from_yaml }}"
+      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/guac/graphql/Deployment.yaml.j2') | from_yaml }}"

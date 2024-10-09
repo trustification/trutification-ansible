@@ -104,7 +104,6 @@
   args:
     apply:
       become: true
-
 # Step 17
 - name: Configure/Deploy Guac vexination collector
   ansible.builtin.include_tasks: guac/vexination_collector.yml
@@ -147,7 +146,6 @@
     apply:
       become: true
 
-# Step 23
 - name: Configure/Deploy nginx reverse proxy
   ansible.builtin.include_tasks: spog/nginx.yml
   args:
