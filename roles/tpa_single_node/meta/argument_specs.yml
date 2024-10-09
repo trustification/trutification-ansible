@@ -240,43 +240,53 @@ argument_specs:
         type: "str"
         required: false
         version_added: "1.2.0"
-      tpa_single_node_guac_csub_tls_cert_pem_path:
-        description: "guac-collectsub-tls-certificate.pem path on the controller machine"
+      tpa_single_node_root_ca:
+        description: "rootCA path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_guac_csub_tls_cert_key_path:
-        description: "guac-collectsub-tls-certificate.key path on the controller machine"
+      tpa_single_node_guac_csub_tls_crt_path:
+        description: "guac-collectsub-tls.crt path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_guac_graphql_tls_cert_pem_path:
-        description: "guac-graphql-tls-certificate.pem path on the controller machine"
+      tpa_single_node_guac_csub_tls_key_path:
+        description: "guac-collectsub-tls.key path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_guac_graphql_tls_cert_key_path:
+      tpa_single_node_guac_graphql_tls_crt_path:
+        description: "guac-graphql-tls.crt path on the controller machine"
+        type: "str"
+        required: true
+        version_added: "1.2.0"
+      tpa_single_node_guac_graphql_tls_key_path:
         description: "guac-graphql-tls-certificate.key path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_collector_osv_tls_cert_pem_path:
-        description: "collector-osv-tls-certificate.pem path on the controller machine"
+      tpa_single_node_collector_osv_tls_crt_path:
+        description: "collector-osv-tls.crt path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_collector_osv_tls_cert_key_path:
-        description: "collector-osv-tls-certificate.key path on the controller machine"
+      tpa_single_node_collector_osv_tls_key_path:
+        description: "collector-osv-tls.key path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_collector_osv_tls_client_cert_crt_path:
-        description: "collector-osv-tls-client-certificate.crt path on the controller machine"
+      tpa_single_node_collector_osv_tls_client_crt_path:
+        description: "collector-osv-tls-client.crt path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_collectorist_api_tls_cert_pem_path:
-        description: "collectorist-api-tls-certificate.pem path on the controller machine"
+      tpa_single_node_collectorist_api_tls_crt_path:
+        description: "collectorist-api-tls.crt path on the controller machine"
+        type: "str"
+        required: true
+        version_added: "1.2.0"
+      tpa_single_node_collectorist_api_tls_key_path:
+        description: "collectorist-api-tls.key path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
@@ -285,48 +295,48 @@ argument_specs:
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_collectorist_api_tls_csub_cert_crt_path:
-        description: "collectorist-api-tls-csub-certificate.crt path on the controller machine"
+      tpa_single_node_collectorist_api_tls_csub_crt_path:
+        description: "collectorist-api-tls-csub.crt path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_bombastic_api_tls_cert_pem_path:
-        description: "bombastic-api-tls-certificate.pem path on the controller machine"
+      tpa_single_node_bombastic_api_tls_crt_path:
+        description: "bombastic-api-tls.crt path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_bombastic_api_tls_cert_key_path:
-        description: "bombastic-api-tls-certificate.key path on the controller machine"
+      tpa_single_node_bombastic_api_tls_key_path:
+        description: "bombastic-api-tls.key path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_vexination_api_tls_cert_pem_path:
-        description: "vexination-api-tls-certificate.pem path on the controller machine"
+      tpa_single_node_vexination_api_tls_crt_path:
+        description: "vexination-api-tls.crt path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_vexination_api_tls_cert_key_path:
-        description: "vexination-api-tls-certificate.key path on the controller machine"
+      tpa_single_node_vexination_api_tls_key_path:
+        description: "vexination-api-tls.key path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_spog_api_tls_cert_pem_path:
-        description: "spog-api-tls-certificate.pem path on the controller machine"
+      tpa_single_node_spog_api_tls_crt_path:
+        description: "spog-api-tls.crt path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_spog_api_tls_cert_key_path:
-        description: "spog-api-tls-certificate.key path on the controller machine"
+      tpa_single_node_spog_api_tls_key_path:
+        description: "spog-api-tls.key path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_nginx_tls_cert_pem_path:
-        description: "nginx-tls-certificate.pem path on the controller machine"
+      tpa_single_node_nginx_tls_crt_path:
+        description: "nginx-tls.crt path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_nginx_tls_cert_key_path:
-        description: "nginx-tls-certificate.key path on the controller machine"
+      tpa_single_node_nginx_tls_key_path:
+        description: "nginx-tls.ke path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
@@ -361,20 +371,25 @@ argument_specs:
         version_added: "1.2.0"
         default: 8082
       tpa_single_node_spog_api_port:
-        description: "Spog api api port"
+        description: "Spog api port"
         type: "int"
         version_added: "1.2.0"
         default: 8084
       tpa_single_node_v11y_api_port:
-        description: "V11y api api port"
+        description: "V11y api port"
         type: "int"
         version_added: "1.2.0"
         default: 8087
       tpa_single_node_collectorist_api_port:
-        description: "Collectorist api api port"
+        description: "Collectorist-api port"
         type: "int"
         version_added: "1.2.0"
         default: 8088
+      tpa_single_node_guac_graphql_port:
+        description: "Guac GraphQl port"
+        type: "int"
+        version_added: "1.2.0"
+        default: 8089
       tpa_single_node_bombastic_walker_suspended:
         description: "Bombastic walker suspended flag"
         type: "bool"
