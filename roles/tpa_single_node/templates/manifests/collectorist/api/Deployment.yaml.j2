@@ -30,6 +30,9 @@ spec:
       volumes:
         - name: tls
           secret:
+            secretName: tls_cert
+        - name: collectorist-tls
+          secret:
             secretName: collectorist-api-tls
         - name: config-auth
           configMap:
@@ -90,7 +93,7 @@ spec:
             - name: OIDC_PROVIDER_ISSUER_URL
               value: "{{ tpa_single_node_oidc_issuer_url }}"
             - name: CSUB_CA_CERTIFICATE_PEM_PATH
-              value: /etc/tls/service-ca.crt
+              value: /etc/collectoristtls/service-ca.crt
           ports:
             - containerPort: 9010
               protocol: TCP
@@ -110,6 +113,9 @@ spec:
             - name: config-auth
               mountPath: /etc/config/auth.yaml
               subPath: auth.yaml
+            - mountPath: /etc/collectoristtls
+              name: collectorist-tls
+              readOnly: true
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:

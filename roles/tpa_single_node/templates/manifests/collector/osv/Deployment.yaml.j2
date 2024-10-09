@@ -31,13 +31,16 @@ spec:
             name: collectorist-api
         - name: tls
           secret:
-            secretName: collector-osv-tls
+            secretName: tls_cert
         - name: config-auth
           configMap:
             name: collector-osv-auth
         - name: collector-oidc-secret
           secret:
             secretName: oidc_secret
+        - name: collector-tls
+          secret:
+            secretName: collector-osv-tls
       containers:
         - name: service
           image: "{{ tpa_single_node_trustification_image }}"
@@ -88,7 +91,7 @@ spec:
               value: "{{ tpa_single_node_oidc_issuer_url }}"
 {% if tpa_single_node_collector_osv_tls_client_cert_crt %}
             - name: CLIENT_TLS_CA_CERTIFICATES
-              value: /etc/tls/service-ca.crt
+              value: /etc/collectortls/service-ca.crt
 {% endif %}
           ports:
             - containerPort: 9010
@@ -109,6 +112,9 @@ spec:
             - name: config-auth
               mountPath: /etc/config/auth.yaml
               subPath: auth.yaml
+            - mountPath: /etc/collectortls
+              name: collector-tls
+              readOnly: true
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:

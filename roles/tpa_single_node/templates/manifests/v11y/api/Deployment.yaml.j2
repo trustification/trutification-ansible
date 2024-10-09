@@ -37,6 +37,9 @@ spec:
         - name: v11y-api-oidc-secret
           secret:
             secretName: oidc_secret
+        - name: tls
+          secret:
+            secretName: tls_cert
       containers:
         - image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: IfNotPresent
@@ -59,6 +62,9 @@ spec:
               name: endpoint
               protocol: TCP
           volumeMounts:
+            - mountPath: /etc/tls
+              name: tls
+              readOnly: true
             - name: config-auth
               mountPath: /etc/config/auth.yaml
               subPath: auth.yaml
@@ -117,3 +123,9 @@ spec:
                 secretKeyRef:
                   key: storage_secret_key
                   name: storage_secret
+            - name: HTTP_SERVER_TLS_ENABLED
+              value: "true"
+            - name: HTTP_SERVER_TLS_KEY_FILE
+              value: "/etc/tls/tls.key"
+            - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
+              value: "/etc/tls/tls.crt"

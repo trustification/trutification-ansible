@@ -1,0 +1,14 @@
+---
+- name: Generate TLS Cert secret manifest
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/infra/Secret-tls.yaml.j2"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/tls-cert.yaml"
+    mode: "0600"
+  vars:
+    tpa_single_node_trust_tls_cert_pem: "{{ lookup('file', tpa_single_node_trust_cert_tls_crt_path) }}"
+    tpa_single_node_trust_tls_cert_key: "{{ lookup('file', tpa_single_node_trust_cert_tls_key_path) }}"
+
+- name: Play Guac csub secret manifest
+  ansible.builtin.command:
+    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/Secrets/tls-cert.yaml"
+  changed_when: true

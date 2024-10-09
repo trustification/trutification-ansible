@@ -245,88 +245,28 @@ argument_specs:
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_guac_csub_tls_crt_path:
-        description: "guac-collectsub-tls.crt path on the controller machine"
+      tpa_single_node_trust_cert_tls_crt_path:
+        description: "pem path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_guac_csub_tls_key_path:
-        description: "guac-collectsub-tls.key path on the controller machine"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
-      tpa_single_node_guac_graphql_tls_crt_path:
-        description: "guac-graphql-tls.crt path on the controller machine"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
-      tpa_single_node_guac_graphql_tls_key_path:
-        description: "guac-graphql-tls-certificate.key path on the controller machine"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
-      tpa_single_node_collector_osv_tls_crt_path:
-        description: "collector-osv-tls.crt path on the controller machine"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
-      tpa_single_node_collector_osv_tls_key_path:
-        description: "collector-osv-tls.key path on the controller machine"
+      tpa_single_node_trust_cert_tls_key_path:
+        description: "key path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
       tpa_single_node_collector_osv_tls_client_crt_path:
-        description: "collector-osv-tls-client.crt path on the controller machine"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
-      tpa_single_node_collectorist_api_tls_crt_path:
-        description: "collectorist-api-tls.crt path on the controller machine"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
-      tpa_single_node_collectorist_api_tls_key_path:
-        description: "collectorist-api-tls.key path on the controller machine"
+        description: "collector-osv-tls-client-certificate.crt path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
       tpa_single_node_collectorist_api_tls_csub_crt_path:
-        description: "collectorist-api-tls-csub.crt path on the controller machine"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
-      tpa_single_node_bombastic_api_tls_crt_path:
-        description: "bombastic-api-tls.crt path on the controller machine"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
-      tpa_single_node_bombastic_api_tls_key_path:
-        description: "bombastic-api-tls.key path on the controller machine"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
-      tpa_single_node_vexination_api_tls_crt_path:
-        description: "vexination-api-tls.crt path on the controller machine"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
-      tpa_single_node_vexination_api_tls_key_path:
-        description: "vexination-api-tls.key path on the controller machine"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
-      tpa_single_node_spog_api_tls_crt_path:
-        description: "spog-api-tls.crt path on the controller machine"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
-      tpa_single_node_spog_api_tls_key_path:
-        description: "spog-api-tls.key path on the controller machine"
+        description: "collectorist-api-tls-csub-certificate.crt path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
       tpa_single_node_nginx_tls_crt_path:
-        description: "nginx-tls.crt path on the controller machine"
+        description: "nginx-tls-certificate.pem path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"

@@ -17,8 +17,7 @@
     dest: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/collector-osv.yaml"
     mode: "0600"
   vars:
-    tpa_single_node_collector_osv_tls_cert_pem: "{{ lookup('file', tpa_single_node_collector_osv_tls_crt_path) }}"
-    tpa_single_node_collector_osv_tls_cert_key: "{{ lookup('file', tpa_single_node_collector_osv_tls_key_path) }}"
+    tpa_single_node_collector_osv_tls_client_cert: "{{ lookup('file', tpa_single_node_collector_osv_tls_client_crt_path) }}"
 
 - name: Play collector-osv secret manifest
   ansible.builtin.command:
