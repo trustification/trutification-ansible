@@ -78,11 +78,9 @@ spec:
               mountPath: /run
             - name: branding
               mountPath: /public/branding
-
             - name: trust-anchor
-              configMap:
-                name: custom-trust-anchor
-                defaultMode: 420
+              mountPath: /etc/trust-anchor
+              readOnly: true
           ports:
             - containerPort: {{ tpa_single_node_spog_ui_port }}
               name: endpoint
