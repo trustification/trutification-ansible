@@ -32,12 +32,12 @@ argument_specs:
         version_added: "1.2.0"
         default: "certs"
       tpa_single_node_config_dir:
-        description: "Configuration directory on the instace."
+        description: "Configuration directory on the instance."
         type: "str"
         version_added: "1.2.0"
         default: "/etc/rhtpa"
       tpa_single_node_kube_manifest_dir:
-        description: "Configuration directory on the instace containing the manifests."
+        description: "Configuration directory on the instance containing the manifests."
         type: "str"
         version_added: "1.2.0"
         default: "/etc/rhtpa/manifests"
@@ -336,7 +336,7 @@ argument_specs:
         required: true
         version_added: "1.2.0"
       tpa_single_node_nginx_tls_key_path:
-        description: "nginx-tls.ke path on the controller machine"
+        description: "nginx-tls.key path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
@@ -381,7 +381,7 @@ argument_specs:
         version_added: "1.2.0"
         default: 8087
       tpa_single_node_collectorist_api_port:
-        description: "Collectorist-api port"
+        description: "Collectorist api port"
         type: "int"
         version_added: "1.2.0"
         default: 8088

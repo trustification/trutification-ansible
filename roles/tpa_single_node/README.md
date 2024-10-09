@@ -33,7 +33,7 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 | tpa_single_node_spog_api_tls_crt_path | spog-api-tls.crt path on the controller machine | str |  |
 | tpa_single_node_spog_api_tls_key_path | spog-api-tls.key path on the controller machine | str |  |
 | tpa_single_node_nginx_tls_crt_path | nginx-tls.crt path on the controller machine | str |  |
-| tpa_single_node_nginx_tls_key_path | nginx-tls.ke path on the controller machine | str |  |
+| tpa_single_node_nginx_tls_key_path | nginx-tls.key path on the controller machine | str |  |
 
 ### Optional
 |Option|Description|Type|Default|
@@ -42,8 +42,8 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 | tpa_single_node_guac_image | Guac image. | str |  `registry.redhat.io/rhtpa/rhtpa-guac-rhel9:f0688194637cc759052e02c350c38dbabc19484e`  |
 | tpa_single_node_base_hostname | The user name logging in to the registry to pull images. | str |  `trustification`  |
 | tpa_single_node_certificates_dir | Folder where to place the certificates to deploy on the instance. | str |  `certs`  |
-| tpa_single_node_config_dir | Configuration directory on the instace. | str |  `/etc/rhtpa`  |
-| tpa_single_node_kube_manifest_dir | Configuration directory on the instace containing the manifests. | str |  `/etc/rhtpa/manifests`  |
+| tpa_single_node_config_dir | Configuration directory on the instance. | str |  `/etc/rhtpa`  |
+| tpa_single_node_kube_manifest_dir | Configuration directory on the instance containing the manifests. | str |  `/etc/rhtpa/manifests`  |
 | tpa_single_node_namespace | Podman network namespace. | str |  `trustification`  |
 | tpa_single_node_podman_network | Podman network name. | str |  `tcnet`  |
 | tpa_single_node_systemd_directory | Folder where to store the systemd configurations files. | str |  `/etc/systemd/system`  |
@@ -88,7 +88,7 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 | tpa_single_node_bombastic_api_port | Bombastic api port | int |  `8082`  |
 | tpa_single_node_spog_api_port | Spog api port | int |  `8084`  |
 | tpa_single_node_v11y_api_port | V11y api port | int |  `8087`  |
-| tpa_single_node_collectorist_api_port | Collectorist-api port | int |  `8088`  |
+| tpa_single_node_collectorist_api_port | Collectorist api port | int |  `8088`  |
 | tpa_single_node_guac_graphql_port | Guac GraphQl port | int |  `8089`  |
 | tpa_single_node_bombastic_walker_suspended | Bombastic walker suspended flag | bool |  `true`  |
 | tpa_single_node_dataset_job_suspended | Dataset job suspended flag | bool |  `true`  |
