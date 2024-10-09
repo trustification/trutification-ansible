@@ -14,24 +14,25 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 | tpa_single_node_storage_secret_key | Storage access key, readed form the env var TPA_STORAGE_SECRET_KEY. | str |  |
 | tpa_single_node_event_access_key_id | Kafka Username or AWS SQS Access Key ID, readed from TPA_EVENT_ACCESS_KEY_ID env var | str |  |
 | tpa_single_node_event_secret_access_key | Kafka password or AWS SQS Secret Access Key, readed from TPA_EVENT_SECRET_ACCESS_KEY env var | str |  |
-| tpa_single_node_guac_csub_tls_cert_pem_path | guac-collectsub-tls-certificate.pem path on the controller machine | str |  |
-| tpa_single_node_guac_csub_tls_cert_key_path | guac-collectsub-tls-certificate.key path on the controller machine | str |  |
-| tpa_single_node_guac_graphql_tls_cert_pem_path | guac-graphql-tls-certificate.pem path on the controller machine | str |  |
-| tpa_single_node_guac_graphql_tls_cert_key_path | guac-graphql-tls-certificate.key path on the controller machine | str |  |
-| tpa_single_node_collector_osv_tls_cert_pem_path | collector-osv-tls-certificate.pem path on the controller machine | str |  |
-| tpa_single_node_collector_osv_tls_cert_key_path | collector-osv-tls-certificate.key path on the controller machine | str |  |
-| tpa_single_node_collector_osv_tls_client_cert_crt_path | collector-osv-tls-client-certificate.crt path on the controller machine | str |  |
-| tpa_single_node_collectorist_api_tls_cert_pem_path | collectorist-api-tls-certificate.pem path on the controller machine | str |  |
-| tpa_single_node_collectorist_api_tls_cert_key_path | collectorist-api-tls-certificate.key path on the controller machine | str |  |
-| tpa_single_node_collectorist_api_tls_csub_cert_crt_path | collectorist-api-tls-csub-certificate.crt path on the controller machine | str |  |
-| tpa_single_node_bombastic_api_tls_cert_pem_path | bombastic-api-tls-certificate.pem path on the controller machine | str |  |
-| tpa_single_node_bombastic_api_tls_cert_key_path | bombastic-api-tls-certificate.key path on the controller machine | str |  |
-| tpa_single_node_vexination_api_tls_cert_pem_path | vexination-api-tls-certificate.pem path on the controller machine | str |  |
-| tpa_single_node_vexination_api_tls_cert_key_path | vexination-api-tls-certificate.key path on the controller machine | str |  |
-| tpa_single_node_spog_api_tls_cert_pem_path | spog-api-tls-certificate.pem path on the controller machine | str |  |
-| tpa_single_node_spog_api_tls_cert_key_path | spog-api-tls-certificate.key path on the controller machine | str |  |
-| tpa_single_node_nginx_tls_cert_pem_path | nginx-tls-certificate.pem path on the controller machine | str |  |
-| tpa_single_node_nginx_tls_cert_key_path | nginx-tls-certificate.key path on the controller machine | str |  |
+| tpa_single_node_root_ca | rootCA path on the controller machine | str |  |
+| tpa_single_node_guac_csub_tls_crt_path | guac-collectsub-tls.crt path on the controller machine | str |  |
+| tpa_single_node_guac_csub_tls_key_path | guac-collectsub-tls.key path on the controller machine | str |  |
+| tpa_single_node_guac_graphql_tls_crt_path | guac-graphql-tls.crt path on the controller machine | str |  |
+| tpa_single_node_guac_graphql_tls_key_path | guac-graphql-tls-certificate.key path on the controller machine | str |  |
+| tpa_single_node_collector_osv_tls_crt_path | collector-osv-tls.crt path on the controller machine | str |  |
+| tpa_single_node_collector_osv_tls_key_path | collector-osv-tls.key path on the controller machine | str |  |
+| tpa_single_node_collector_osv_tls_client_crt_path | collector-osv-tls-client.crt path on the controller machine | str |  |
+| tpa_single_node_collectorist_api_tls_crt_path | collectorist-api-tls.crt path on the controller machine | str |  |
+| tpa_single_node_collectorist_api_tls_key_path | collectorist-api-tls.key path on the controller machine | str |  |
+| tpa_single_node_collectorist_api_tls_csub_crt_path | collectorist-api-tls-csub.crt path on the controller machine | str |  |
+| tpa_single_node_bombastic_api_tls_crt_path | bombastic-api-tls.crt path on the controller machine | str |  |
+| tpa_single_node_bombastic_api_tls_key_path | bombastic-api-tls.key path on the controller machine | str |  |
+| tpa_single_node_vexination_api_tls_crt_path | vexination-api-tls.crt path on the controller machine | str |  |
+| tpa_single_node_vexination_api_tls_key_path | vexination-api-tls.key path on the controller machine | str |  |
+| tpa_single_node_spog_api_tls_crt_path | spog-api-tls.crt path on the controller machine | str |  |
+| tpa_single_node_spog_api_tls_key_path | spog-api-tls.key path on the controller machine | str |  |
+| tpa_single_node_nginx_tls_crt_path | nginx-tls.crt path on the controller machine | str |  |
+| tpa_single_node_nginx_tls_key_path | nginx-tls.key path on the controller machine | str |  |
 
 ### Optional
 |Option|Description|Type|Default|
@@ -40,8 +41,8 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 | tpa_single_node_guac_image | Guac image. | str |  `registry.redhat.io/rhtpa/rhtpa-guac-rhel9:f0688194637cc759052e02c350c38dbabc19484e`  |
 | tpa_single_node_base_hostname | The user name logging in to the registry to pull images. | str |  `trustification`  |
 | tpa_single_node_certificates_dir | Folder where to place the certificates to deploy on the instance. | str |  `certs`  |
-| tpa_single_node_config_dir | Configuration directory on the instace. | str |  `/etc/rhtpa`  |
-| tpa_single_node_kube_manifest_dir | Configuration directory on the instace containing the manifests. | str |  `/etc/rhtpa/manifests`  |
+| tpa_single_node_config_dir | Configuration directory on the instance. | str |  `/etc/rhtpa`  |
+| tpa_single_node_kube_manifest_dir | Configuration directory on the instance containing the manifests. | str |  `/etc/rhtpa/manifests`  |
 | tpa_single_node_namespace | Podman network namespace. | str |  `trustification`  |
 | tpa_single_node_podman_network | Podman network name. | str |  `tcnet`  |
 | tpa_single_node_systemd_directory | Folder where to store the systemd configurations files. | str |  `/etc/systemd/system`  |
@@ -84,9 +85,10 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 | tpa_single_node_spog_ui_port | Spog ui port | int |  `8080`  |
 | tpa_single_node_vexination_api_port | Vexination api port | int |  `8081`  |
 | tpa_single_node_bombastic_api_port | Bombastic api port | int |  `8082`  |
-| tpa_single_node_spog_api_port | Spog api api port | int |  `8084`  |
-| tpa_single_node_v11y_api_port | V11y api api port | int |  `8087`  |
-| tpa_single_node_collectorist_api_port | Collectorist api api port | int |  `8088`  |
+| tpa_single_node_spog_api_port | Spog api port | int |  `8084`  |
+| tpa_single_node_v11y_api_port | V11y api port | int |  `8087`  |
+| tpa_single_node_collectorist_api_port | Collectorist api port | int |  `8088`  |
+| tpa_single_node_guac_graphql_port | Guac GraphQl port | int |  `8089`  |
 | tpa_single_node_bombastic_walker_suspended | Bombastic walker suspended flag | bool |  `true`  |
 | tpa_single_node_dataset_job_suspended | Dataset job suspended flag | bool |  `true`  |
 | tpa_single_node_vexination_walker_suspended | Vexination walker job suspended flag | bool |  `true`  |
@@ -102,24 +104,25 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
     tpa_single_node_storage_secret_key: # TODO: required, type: str
     tpa_single_node_event_access_key_id: # TODO: required, type: str
     tpa_single_node_event_secret_access_key: # TODO: required, type: str
-    tpa_single_node_guac_csub_tls_cert_pem_path: # TODO: required, type: str
-    tpa_single_node_guac_csub_tls_cert_key_path: # TODO: required, type: str
-    tpa_single_node_guac_graphql_tls_cert_pem_path: # TODO: required, type: str
-    tpa_single_node_guac_graphql_tls_cert_key_path: # TODO: required, type: str
-    tpa_single_node_collector_osv_tls_cert_pem_path: # TODO: required, type: str
-    tpa_single_node_collector_osv_tls_cert_key_path: # TODO: required, type: str
-    tpa_single_node_collector_osv_tls_client_cert_crt_path: # TODO: required, type: str
-    tpa_single_node_collectorist_api_tls_cert_pem_path: # TODO: required, type: str
-    tpa_single_node_collectorist_api_tls_cert_key_path: # TODO: required, type: str
-    tpa_single_node_collectorist_api_tls_csub_cert_crt_path: # TODO: required, type: str
-    tpa_single_node_bombastic_api_tls_cert_pem_path: # TODO: required, type: str
-    tpa_single_node_bombastic_api_tls_cert_key_path: # TODO: required, type: str
-    tpa_single_node_vexination_api_tls_cert_pem_path: # TODO: required, type: str
-    tpa_single_node_vexination_api_tls_cert_key_path: # TODO: required, type: str
-    tpa_single_node_spog_api_tls_cert_pem_path: # TODO: required, type: str
-    tpa_single_node_spog_api_tls_cert_key_path: # TODO: required, type: str
-    tpa_single_node_nginx_tls_cert_pem_path: # TODO: required, type: str
-    tpa_single_node_nginx_tls_cert_key_path: # TODO: required, type: str
+    tpa_single_node_root_ca: # TODO: required, type: str
+    tpa_single_node_guac_csub_tls_crt_path: # TODO: required, type: str
+    tpa_single_node_guac_csub_tls_key_path: # TODO: required, type: str
+    tpa_single_node_guac_graphql_tls_crt_path: # TODO: required, type: str
+    tpa_single_node_guac_graphql_tls_key_path: # TODO: required, type: str
+    tpa_single_node_collector_osv_tls_crt_path: # TODO: required, type: str
+    tpa_single_node_collector_osv_tls_key_path: # TODO: required, type: str
+    tpa_single_node_collector_osv_tls_client_crt_path: # TODO: required, type: str
+    tpa_single_node_collectorist_api_tls_crt_path: # TODO: required, type: str
+    tpa_single_node_collectorist_api_tls_key_path: # TODO: required, type: str
+    tpa_single_node_collectorist_api_tls_csub_crt_path: # TODO: required, type: str
+    tpa_single_node_bombastic_api_tls_crt_path: # TODO: required, type: str
+    tpa_single_node_bombastic_api_tls_key_path: # TODO: required, type: str
+    tpa_single_node_vexination_api_tls_crt_path: # TODO: required, type: str
+    tpa_single_node_vexination_api_tls_key_path: # TODO: required, type: str
+    tpa_single_node_spog_api_tls_crt_path: # TODO: required, type: str
+    tpa_single_node_spog_api_tls_key_path: # TODO: required, type: str
+    tpa_single_node_nginx_tls_crt_path: # TODO: required, type: str
+    tpa_single_node_nginx_tls_key_path: # TODO: required, type: str
     
   tasks:
     - name: Include TPA single node role
