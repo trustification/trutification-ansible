@@ -24,7 +24,6 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 | tpa_single_node_collector_osv_tls_client_crt_path | collector-osv-tls-client.crt path on the controller machine | str |  |
 | tpa_single_node_collectorist_api_tls_crt_path | collectorist-api-tls.crt path on the controller machine | str |  |
 | tpa_single_node_collectorist_api_tls_key_path | collectorist-api-tls.key path on the controller machine | str |  |
-| tpa_single_node_collectorist_api_tls_cert_key_path | collectorist-api-tls-certificate.key path on the controller machine | str |  |
 | tpa_single_node_collectorist_api_tls_csub_crt_path | collectorist-api-tls-csub.crt path on the controller machine | str |  |
 | tpa_single_node_bombastic_api_tls_crt_path | bombastic-api-tls.crt path on the controller machine | str |  |
 | tpa_single_node_bombastic_api_tls_key_path | bombastic-api-tls.key path on the controller machine | str |  |
@@ -115,7 +114,6 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
     tpa_single_node_collector_osv_tls_client_crt_path: # TODO: required, type: str
     tpa_single_node_collectorist_api_tls_crt_path: # TODO: required, type: str
     tpa_single_node_collectorist_api_tls_key_path: # TODO: required, type: str
-    tpa_single_node_collectorist_api_tls_cert_key_path: # TODO: required, type: str
     tpa_single_node_collectorist_api_tls_csub_crt_path: # TODO: required, type: str
     tpa_single_node_bombastic_api_tls_crt_path: # TODO: required, type: str
     tpa_single_node_bombastic_api_tls_key_path: # TODO: required, type: str

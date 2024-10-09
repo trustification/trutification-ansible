@@ -290,11 +290,6 @@ argument_specs:
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_collectorist_api_tls_cert_key_path:
-        description: "collectorist-api-tls-certificate.key path on the controller machine"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
       tpa_single_node_collectorist_api_tls_csub_crt_path:
         description: "collectorist-api-tls-csub.crt path on the controller machine"
         type: "str"
