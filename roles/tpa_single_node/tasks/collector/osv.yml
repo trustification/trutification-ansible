@@ -10,7 +10,7 @@
     dest: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api.yaml"
     mode: "0600"
   register: collectorist_api_configmap_result
-  
+
 - name: Generate collector-osv secret manifest
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/collector/osv/Secret.yaml.j2"
