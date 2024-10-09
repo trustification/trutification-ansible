@@ -4,13 +4,13 @@
     path: "{{ tpa_single_node_collector_osv_tls_client_crt_path }}"
   register: tpa_single_node_collector_osv_tls_client_cert_crt
 
-- name: Create configmap for collectorist-api
+- name: Create configmap for collectorist api
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/collectorist/api/Configmap.yaml.j2"
     dest: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api.yaml"
     mode: "0600"
-  register: configmap2_result
-
+  register: collectorist_api_configmap_result
+  
 - name: Generate collector-osv secret manifest
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/collector/osv/Secret.yaml.j2"
@@ -42,5 +42,4 @@
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/collector/osv/Deployment.yaml.j2') | from_yaml }}"
       configmaps:
         - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api.yaml"
-        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collector-osv.yaml"
-      configmap_changed: "{{ oidc_configmap_result.changed or configmap2_result.changed }}"
+      configmap_changed: "{{ oidc_configmap_result.changed or collectorist_api_configmap_result.changed }}"
