@@ -32,7 +32,7 @@ for certname in "${CERTS[@]}"; do
     openssl genpkey -algorithm RSA -out "${CERT_DIR}/${certname}.key" -outform PEM -pkeyopt rsa_keygen_bits:2048
 
     # # Create the CSR
-    openssl req -new -key "${CERT_DIR}/${certname}.key" -out "${CERT_DIR}/${certname}.csr" -passin pass:passwd123 -subj "${SUBJ}/CN=${certname}"
+    openssl req -new -key "${CERT_DIR}/${certname}.key" -out "${CERT_DIR}/${certname}.csr" -subj "${SUBJ}/CN=${certname}"
 
     # # Sign the CSR with the CA
     openssl x509 -req -in "${CERT_DIR}/${certname}.csr" -CA "${CERT_DIR}/${TRUST_ANCHOR}.crt" -CAkey "${CERT_DIR}/${TRUST_ANCHOR}.key" -CAcreateserial -out "${CERT_DIR}/${certname}.crt" -days 825 -sha256
