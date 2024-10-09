@@ -42,5 +42,5 @@
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/collector/osv/Deployment.yaml.j2') | from_yaml }}"
       configmaps:
         - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api.yaml"
-        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collector-osv-configmap.yml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collector-osv.yaml"
       configmap_changed: "{{ oidc_configmap_result.changed or configmap2_result.changed }}"
