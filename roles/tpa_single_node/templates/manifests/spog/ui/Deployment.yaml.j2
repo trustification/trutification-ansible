@@ -64,6 +64,8 @@ spec:
               value: {{ tpa_single_node_oidc_issuer_url }}
             - name: CLIENT_ID
               value: {{ tpa_single_node_oidc_frontend_id }}
+            - name: CLIENT_TLS_CA_CERTIFICATES
+              value: /etc/trust-anchor/tls.crt
             - name: BACKEND_JSON_FILE
               value: /etc/config/backend.json
             - name: OIDC_PROVIDER_INSECURE_TLS

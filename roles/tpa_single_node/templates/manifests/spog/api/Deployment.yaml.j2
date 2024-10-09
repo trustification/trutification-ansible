@@ -67,6 +67,8 @@ spec:
               value: /etc/tls/tls.key
             - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
               value: /etc/tls/tls.crt
+            - name: CLIENT_TLS_CA_CERTIFICATES
+              value: /etc/trust-anchor/tls.crt
             - name: OIDC_PROVIDER_CLIENT_ID
               valueFrom:
                 secretKeyRef:
