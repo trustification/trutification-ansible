@@ -30,4 +30,5 @@
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/bombastic/api/Deployment.yaml.j2') | from_yaml }}"
       configmaps:
         - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/bombastic-api.yaml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/custom-trust-anchor.yaml"
       configmap_changed: oidc_configmap_result.changed

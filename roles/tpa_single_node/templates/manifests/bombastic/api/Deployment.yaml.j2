@@ -35,6 +35,9 @@ spec:
         - name: bombastic-api-storage-secret
           secret:
             secretName: storage_secret
+        - name: trust-anchor
+          configMap:
+            name: custom-trust-anchor
         - name: bombastic-api-oidc-secret
           secret:
             secretName: oidc_secret
@@ -118,6 +121,9 @@ spec:
               readOnly: true
             - name: bombastic-api-storage-secret
               mountPath: /etc/bombasticapistorage
+            - name: trust-anchor
+              mountPath: /etc/trust-anchor
+              readOnly: true
             - name: bombastic-api-oidc-secret
               mountPath: /etc/bombasticapioidc
             - name: config-auth
