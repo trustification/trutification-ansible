@@ -54,9 +54,9 @@ spec:
             - --auth-configuration
             - /etc/config/auth.yaml
             - --v11y-url
-            - http://v11y-api-pod:{{ tpa_single_node_v11y_api_port }}
+            - https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_v11y_api_port }}
             - --guac-url
-            - http://guac-graphql-pod:8080/query
+            - https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_guac_graphql_port }}/query
           env:
 # TODO
 #            - name: NAMESPACE
