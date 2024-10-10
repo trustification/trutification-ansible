@@ -15,24 +15,13 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 | tpa_single_node_event_access_key_id | Kafka Username or AWS SQS Access Key ID, readed from TPA_EVENT_ACCESS_KEY_ID env var | str |  |
 | tpa_single_node_event_secret_access_key | Kafka password or AWS SQS Secret Access Key, readed from TPA_EVENT_SECRET_ACCESS_KEY env var | str |  |
 | tpa_single_node_root_ca | rootCA path on the controller machine | str |  |
-| tpa_single_node_guac_csub_tls_crt_path | guac-collectsub-tls.crt path on the controller machine | str |  |
-| tpa_single_node_guac_csub_tls_key_path | guac-collectsub-tls.key path on the controller machine | str |  |
-| tpa_single_node_guac_graphql_tls_crt_path | guac-graphql-tls.crt path on the controller machine | str |  |
-| tpa_single_node_guac_graphql_tls_key_path | guac-graphql-tls-certificate.key path on the controller machine | str |  |
-| tpa_single_node_collector_osv_tls_crt_path | collector-osv-tls.crt path on the controller machine | str |  |
-| tpa_single_node_collector_osv_tls_key_path | collector-osv-tls.key path on the controller machine | str |  |
-| tpa_single_node_collector_osv_tls_client_crt_path | collector-osv-tls-client.crt path on the controller machine | str |  |
-| tpa_single_node_collectorist_api_tls_crt_path | collectorist-api-tls.crt path on the controller machine | str |  |
-| tpa_single_node_collectorist_api_tls_key_path | collectorist-api-tls.key path on the controller machine | str |  |
-| tpa_single_node_collectorist_api_tls_csub_crt_path | collectorist-api-tls-csub.crt path on the controller machine | str |  |
-| tpa_single_node_bombastic_api_tls_crt_path | bombastic-api-tls.crt path on the controller machine | str |  |
-| tpa_single_node_bombastic_api_tls_key_path | bombastic-api-tls.key path on the controller machine | str |  |
-| tpa_single_node_vexination_api_tls_crt_path | vexination-api-tls.crt path on the controller machine | str |  |
-| tpa_single_node_vexination_api_tls_key_path | vexination-api-tls.key path on the controller machine | str |  |
-| tpa_single_node_spog_api_tls_crt_path | spog-api-tls.crt path on the controller machine | str |  |
-| tpa_single_node_spog_api_tls_key_path | spog-api-tls.key path on the controller machine | str |  |
-| tpa_single_node_nginx_tls_crt_path | nginx-tls.crt path on the controller machine | str |  |
-| tpa_single_node_nginx_tls_key_path | nginx-tls.key path on the controller machine | str |  |
+| tpa_single_node_trust_cert_tls_crt_path | pem path on the controller machine | str |  |
+| tpa_single_node_trust_cert_tls_key_path | key path on the controller machine | str |  |
+| tpa_single_node_collector_osv_tls_client_crt_path | collector-osv-tls-client-certificate.crt path on the controller machine | str |  |
+| tpa_single_node_collectorist_api_tls_csub_crt_path | collectorist-api-tls-csub-certificate.crt path on the controller machine | str |  |
+| tpa_single_node_nginx_tls_crt_path | nginx-tls-certificate.pem path on the controller machine | str |  |
+| tpa_single_node_nginx_tls_key_path | nginx-tls-certificate.key path on the controller machine | str |  |
+
 
 ### Optional
 |Option|Description|Type|Default|
@@ -105,22 +94,10 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
     tpa_single_node_event_access_key_id: # TODO: required, type: str
     tpa_single_node_event_secret_access_key: # TODO: required, type: str
     tpa_single_node_root_ca: # TODO: required, type: str
-    tpa_single_node_guac_csub_tls_crt_path: # TODO: required, type: str
-    tpa_single_node_guac_csub_tls_key_path: # TODO: required, type: str
-    tpa_single_node_guac_graphql_tls_crt_path: # TODO: required, type: str
-    tpa_single_node_guac_graphql_tls_key_path: # TODO: required, type: str
-    tpa_single_node_collector_osv_tls_crt_path: # TODO: required, type: str
-    tpa_single_node_collector_osv_tls_key_path: # TODO: required, type: str
+    tpa_single_node_trust_cert_tls_crt_path: # TODO: required, type: str
+    tpa_single_node_trust_cert_tls_key_path: # TODO: required, type: str
     tpa_single_node_collector_osv_tls_client_crt_path: # TODO: required, type: str
-    tpa_single_node_collectorist_api_tls_crt_path: # TODO: required, type: str
-    tpa_single_node_collectorist_api_tls_key_path: # TODO: required, type: str
     tpa_single_node_collectorist_api_tls_csub_crt_path: # TODO: required, type: str
-    tpa_single_node_bombastic_api_tls_crt_path: # TODO: required, type: str
-    tpa_single_node_bombastic_api_tls_key_path: # TODO: required, type: str
-    tpa_single_node_vexination_api_tls_crt_path: # TODO: required, type: str
-    tpa_single_node_vexination_api_tls_key_path: # TODO: required, type: str
-    tpa_single_node_spog_api_tls_crt_path: # TODO: required, type: str
-    tpa_single_node_spog_api_tls_key_path: # TODO: required, type: str
     tpa_single_node_nginx_tls_crt_path: # TODO: required, type: str
     tpa_single_node_nginx_tls_key_path: # TODO: required, type: str
     

@@ -16,3 +16,6 @@
 
 - name: Configure Trust Anchor
   ansible.builtin.include_tasks: infra/trust_anchor.yml
+
+- name: Configure TLS certs
+  ansible.builtin.include_tasks: infra/tls_cert.yml

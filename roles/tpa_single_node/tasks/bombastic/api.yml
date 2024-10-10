@@ -1,18 +1,4 @@
 ---
-- name: Generate bombastic-api secret manifest
-  ansible.builtin.template:
-    src: "{{ role_path }}/templates/manifests/bombastic/api/Secret.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/bombastic-api.yaml"
-    mode: "0600"
-  vars:
-    tpa_single_node_bombastic_api_tls_cert_pem: "{{ lookup('file', tpa_single_node_bombastic_api_tls_crt_path) }}"
-    tpa_single_node_bombastic_api_tls_cert_key: "{{ lookup('file', tpa_single_node_bombastic_api_tls_key_path) }}"
-
-- name: Play bombastic-api secret manifest
-  ansible.builtin.command:
-    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/Secrets/bombastic-api.yaml"
-  changed_when: true
-
 - name: Create configmap auth for bombastic-api
   ansible.builtin.include_tasks: infra/component_auth.yml
   vars:

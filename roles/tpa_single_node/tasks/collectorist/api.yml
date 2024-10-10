@@ -2,7 +2,7 @@
 - name: Create configmap for collectorist api
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/collectorist/api/Configmap.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api.yaml"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api-guac.yaml"
     mode: "0600"
   register: collectorist_api_configmap_result
 
@@ -12,8 +12,6 @@
     dest: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/collectorist-api.yaml"
     mode: "0600"
   vars:
-    tpa_single_node_collectorist_api_tls_cert_pem: "{{ lookup('file', tpa_single_node_collectorist_api_tls_crt_path) }}"
-    tpa_single_node_collectorist_api_tls_cert_key: "{{ lookup('file', tpa_single_node_collectorist_api_tls_key_path) }}"
     tpa_single_node_collectorist_api_tls_csub_cert_crt: "{{ lookup('file', tpa_single_node_collectorist_api_tls_csub_crt_path) }}"
 
 - name: Play collectorist-api secret manifest
@@ -49,4 +47,5 @@
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/collectorist/api/Deployment.yaml.j2') | from_yaml }}"
       configmaps:
         - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api.yaml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api-guac.yaml"
       configmap_changed: "{{ oidc_configmap_result.changed or collectorist_api_configmap_result.changed }}"

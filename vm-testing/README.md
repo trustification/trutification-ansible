@@ -90,3 +90,23 @@ vagrant list-commands
 ## Ansible
 
 From the root of the project
+
+## TLS Certs
+
+For development purpose, the TLS certs can be generated with the script located on `./bin/gencerts.sh` 
+
+Run this script from the parent directory with command
+```
+sh ./bin/gencerts.sh
+```
+
+This will create self-signed certs under `/tmp/rhtpa/certs/` directory which is default value for `tpa_single_node_certificates_dir` variable
+
+Once the file is generated, copy the file to client machine from where the application is accessed.
+
+Linux:
+
+```
+sudo cp rootCA.crt /etc/pki/ca-trust/source/anchors/
+sudo update-ca-trust
+```

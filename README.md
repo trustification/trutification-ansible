@@ -88,21 +88,20 @@ Alternatively vagrant will prompt you to provide the registration username and p
 
 4. Path for TLS certificates files:
 
-Copy your certificate files in `./certs` directory using following names:
+Copy your certificate files in `/tmp/rhtpa/certs/` directory using following names:
 
-- guac-collectsub-tls-certificate.pem
-- guac-collectsub-tls-certificate.key
-- guac-graphql-tls-certificate.pem
-- guac-graphql-tls-certificate.key
-- collector-osv-tls-certificate.pem
-- collector-osv-tls-certificate.key
-- collectorist-api-tls-certificate.pem
-- collectorist-api-tls-certificate.key
-- collectorist-api-tls-csub-certificate.crt
+- trust-cert.crt
+- trust-cert.key
+- rootCA.crt
 
-Optionally, you can also copy `collector-osv-tls-client-certificate.crt`
-certificate to the same directory if you have OSV client that needs secure
-access to the collector.
+Optionally, the certs directory variable `tpa_single_node_certificates_dir` under `roles/tpa_single_node/vars/main.yml` file can also be updated with a directory certs for below variables:
+- tpa_single_node_root_ca
+- tpa_single_node_trust_cert_tls_crt_path
+- tpa_single_node_trust_cert_tls_key_path
+- tpa_single_node_collector_osv_tls_client_crt_path
+- tpa_single_node_collectorist_api_tls_csub_crt_path
+- tpa_single_node_nginx_tls_crt_path
+- tpa_single_node_nginx_tls_key_path
 
 5. Create Environment Variables for Storage, Events and OIDC 
 

@@ -69,7 +69,9 @@ spec:
             - containerPort: {{ tpa_single_node_guac_graphql_port }}
               protocol: TCP
               name: endpoint
+              hostPort: {{ tpa_single_node_guac_graphql_port }}
+              hostIP: {{ tpa_single_node_rhel_host }}
       volumes:
         - name: tls
           secret:
-            secretName: guac-graphql-tls
+            secretName: tls_cert

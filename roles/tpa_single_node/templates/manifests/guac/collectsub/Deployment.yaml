@@ -29,7 +29,7 @@ spec:
       volumes:
         - name: tls-cert
           secret:
-            secretName: guac-collectsub-tls
+            secretName: tls_cert
       containers:
         - name: service
           image: {{ tpa_single_node_guac_image }}
