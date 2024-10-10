@@ -93,20 +93,24 @@ From the root of the project
 
 ## TLS Certs
 
-For development purpose, the TLS certs can be generated with the script located on `./bin/gencerts.sh` 
+For development purposes, TLS certificates can be generated using the script located at `./bin/gencerts.sh`. This script utilizes OpenSSL to create the necessary certificates for secure communication.
 
-Run this script from the parent directory with command
+Steps to Generate TLS Certificates:
+
+ 1. **Update IP Address**: If you are generating TLS certificates for virtual machines other than Vagrant, ensure to update the IP address within ./bin/gencerts.sh accordingly.
+
+ 2. **Run the Script**: Execute the script from the parent directory with the following command:
 ```
 sh ./bin/gencerts.sh
 ```
+ 3. **Certificates to Client Machine**: After the certificate files are generated, you need to copy rootCA.crt to the client machine from which the application will be accessed. This step is crucial for establishing a trusted connection. This is needed for,
+     - *Trust Establishment*: The client recognizes and trusts the server's TLS certificate, allowing for secure communication without warnings or errors about untrusted certificates.
+     - *Secure Communication*: By adding rootCA.crt to the trusted certificate store, you mitigate potential man-in-the-middle attacks and ensure data integrity during transmission
 
-This will create self-signed certs under `/tmp/rhtpa/certs/` directory which is default value for `tpa_single_node_certificates_dir` variable
-
-Once the file is generated, copy the file to client machine from where the application is accessed.
-
-Linux:
-
+For Linux Systems:
+To install the `rootCA.crt`, execute the following commands:
 ```
 sudo cp rootCA.crt /etc/pki/ca-trust/source/anchors/
 sudo update-ca-trust
 ```
+This will update the system's certificate store, enabling your applications to recognize the newly trusted root certificate

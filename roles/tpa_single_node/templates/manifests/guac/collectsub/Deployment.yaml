@@ -51,8 +51,10 @@ spec:
               readOnly: true
           livenessProbe:
             tcpSocket:
-              port: 2782
+              port: {{ tpa_single_node_guac_collectsub_port }}
           ports:
-            - containerPort: 2782
+            - containerPort: {{ tpa_single_node_guac_collectsub_port }}
               protocol: TCP
               name: endpoint
+              hostPort: {{ tpa_single_node_guac_collectsub_port }}
+              hostIP: {{ tpa_single_node_rhel_host }} 
