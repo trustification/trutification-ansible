@@ -53,9 +53,16 @@ spec:
           env:
             - name: GUAC_PROMETHEUS_ADDR
               value: '9010'
+            - name: GUAC_GQL_TLS_CERT_FILE
+              value: /etc/tls/tls.crt
+            - name: GUAC_GQL_TLS_KEY_FILE
+              value: /etc/tls/tls.key
           volumeMounts:
             - mountPath: /etc/tls
               name: tls
+              readOnly: true
+            - name: trust-anchor
+              mountPath: /etc/trust-anchor
               readOnly: true
           readinessProbe:
             httpGet:
@@ -75,3 +82,6 @@ spec:
         - name: tls
           secret:
             secretName: tls_cert
+        - name: trust-anchor
+          configMap:
+            name: custom-trust-anchor

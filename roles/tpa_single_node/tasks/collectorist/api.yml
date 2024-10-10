@@ -1,23 +1,15 @@
 ---
+# TODO - 
+#-name: Copy all the files CA certificates to the collectorist-api pod
+# For every file path in tpa_single_node_client_tls_ca_certificates
+# copy the file to the pod
+
 - name: Create configmap for collectorist api
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/collectorist/api/Configmap.yaml.j2"
     dest: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api-guac.yaml"
     mode: "0600"
   register: collectorist_api_configmap_result
-
-- name: Generate collectorist-api secret manifest
-  ansible.builtin.template:
-    src: "{{ role_path }}/templates/manifests/collectorist/api/Secret.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/collectorist-api.yaml"
-    mode: "0600"
-  vars:
-    tpa_single_node_collectorist_api_tls_csub_cert_crt: "{{ lookup('file', tpa_single_node_collectorist_api_tls_csub_crt_path) }}"
-
-- name: Play collectorist-api secret manifest
-  ansible.builtin.command:
-    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/Secrets/collectorist-api.yaml"
-  changed_when: true
 
 - name: Create configmap auth for collectorist-api
   ansible.builtin.include_tasks: infra/component_auth.yml
