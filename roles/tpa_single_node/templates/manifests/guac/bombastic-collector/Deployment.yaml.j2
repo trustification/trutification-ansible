@@ -103,7 +103,7 @@ spec:
             - name: GUAC_GQL_ADDR
               value: {{ tpa_single_node_rhel_host }}:{{  tpa_single_node_guac_graphql_port }}/query
             - name: GUAC_CSUB_ADDR
-              value: {{ tpa_single_node_rhel_host }}:{{ tpa_single_node_guac_collectsub_port }}
+              value: {{ tpa_single_node_rhel_host }}:2782
             - name: GUAC_CSUB_TLS_ROOT_CA
               value: {{  tpa_single_node_root_ca  }}
             - name: GUAC_GQL_TLS_ROOT_CA

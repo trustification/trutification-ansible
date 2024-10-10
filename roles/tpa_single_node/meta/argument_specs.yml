@@ -325,11 +325,6 @@ argument_specs:
         type: "int"
         version_added: "1.2.0"
         default: 8089
-      tpa_single_node_guac_collectsub_port:
-        description: "Guac Collector sub api port"
-        type: "int"
-        version_added: "1.2.0"
-        default: 2782
       tpa_single_node_bombastic_walker_suspended:
         description: "Bombastic walker suspended flag"
         type: "bool"

@@ -49,7 +49,7 @@ spec:
             - --crda-url
             - https://rhda.rhcloud.com/api/v4/analysis
             - --guac
-            - http://guac-graphql-pod:{{ tpa_single_node_guac_graphql_port }}/query
+            - http://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_guac_graphql_port }}/query
             - --auth-configuration
             - /etc/config/auth.yaml
           env:
