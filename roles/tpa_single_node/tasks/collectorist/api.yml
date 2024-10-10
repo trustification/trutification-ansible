@@ -1,9 +1,4 @@
 ---
-# TODO - 
-#-name: Copy all the files CA certificates to the collectorist-api pod
-# For every file path in tpa_single_node_client_tls_ca_certificates
-# copy the file to the pod
-
 - name: Create configmap for collectorist api
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/collectorist/api/Configmap.yaml.j2"
