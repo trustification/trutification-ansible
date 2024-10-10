@@ -50,7 +50,7 @@ spec:
             - collector
             - osv
             - -p
-            - "8080"
+            - {{ tpa_single_node_collector_osv_port }}
             - --auth-configuration
             - /etc/config/auth.yaml
             - --v11y-url
@@ -97,9 +97,11 @@ spec:
             - containerPort: 9010
               protocol: TCP
               name: infra
-            - containerPort: 8080
+            - containerPort: {{ tpa_single_node_collector_osv_port }}
               name: endpoint
               protocol: TCP
+              hostPort: {{ tpa_single_node_collector_osv_port }}
+              hostIP: {{ tpa_single_node_rhel_host }}    
           volumeMounts:
             - name: guac-config
               mountPath: /guac

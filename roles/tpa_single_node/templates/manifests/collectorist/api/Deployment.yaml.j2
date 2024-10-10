@@ -54,7 +54,7 @@ spec:
             - -p
             - {{ tpa_single_node_collectorist_api_port }}
             - --csub-url
-            - http://guac-collectsub-pod:2782
+            - https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_guac_collectsub_port }}
             - --auth-configuration
             - /etc/config/auth.yaml
             - --storage-base
