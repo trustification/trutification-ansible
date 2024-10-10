@@ -148,7 +148,7 @@ Refer `roles/tpa_single_node/vars/main_example_aws.yml` and `roles/tpa_single_no
 9. Execute the following command (NOTE: you will have to provide credentials to authenticate to registry.redhat.io: https://access.redhat.com/RegistryAuthentication):
 
 ```shell
-ANSIBLE_ROLES_PATH="roles/" ansible-playbook -i inventory.ini play.yml -vvvv -e registry_username='REGISTRY.REDHAT.IO_USERNAME' -e registry_password='REGISTRY.REDHAT.IO_PASSWORD'
+ANSIBLE_ROLES_PATH="roles/" ansible-playbook -i inventory.ini play.yml 
 ```
 
 ## Contributing
