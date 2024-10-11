@@ -9,4 +9,3 @@
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/guac/bombastic-collector/Deployment.yaml.j2') | from_yaml }}"
       configmaps:
         - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/custom-trust-anchor.yaml"
-     
