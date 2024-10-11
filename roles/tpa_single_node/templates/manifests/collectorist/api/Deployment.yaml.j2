@@ -31,9 +31,6 @@ spec:
         - name: tls
           secret:
             secretName: tls_cert
-        - name: collectorist-tls
-          secret:
-            secretName: collectorist-api-tls
         - name: config-auth
           configMap:
             name: collectorist-api-auth
@@ -109,9 +106,6 @@ spec:
             - name: config-auth
               mountPath: /etc/config/auth.yaml
               subPath: auth.yaml
-            - mountPath: /etc/collectoristtls
-              name: collectorist-tls
-              readOnly: true
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:
