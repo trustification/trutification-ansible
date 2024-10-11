@@ -14,8 +14,8 @@ ExecStart=/usr/bin/podman kube play --replace --service-container=true "{{ kube_
 {%- if podman_spec.configmaps is defined %}
   {%- for configmap in podman_spec.configmaps %}
  --configmap "{{ configmap | default(omit) }}" 
-  {%- endfor -%}
-{%- endif -%} 
+  {%- endfor %}
+{%- endif %} 
 
 [Install]
 WantedBy=default.target
