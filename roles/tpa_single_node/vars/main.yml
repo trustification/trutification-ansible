@@ -28,7 +28,7 @@ tpa_single_node_storage_vexination_bucket: vexination-default # <vexination stor
 tpa_single_node_storage_region: eu-west-1 # <AWS S3 Storage region> # For Minio just keep eu-west-1
 
 ## Storage Service - Minio fields
-tpa_single_node_storage_endpoint: "{{ lookup('env', 'TPA_EVENT_STORAGE_ENDPOINT') }}" # Minio storage URL pointing to API 9000
+tpa_single_node_storage_endpoint: "{{ lookup('env', 'TPA_STORAGE_ENDPOINT') }}" # Minio storage URL pointing to API 9000
 
 # SQS_SERVICE
 tpa_single_node_event_bus_type: kafka # Either kafka or sqs
