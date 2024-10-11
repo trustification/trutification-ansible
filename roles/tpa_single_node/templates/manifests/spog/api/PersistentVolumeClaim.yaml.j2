@@ -1,0 +1,15 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: user-preferences-db-path
+  namespace: "{{ tpa_single_node_namespace }}"
+  labels:
+    name: user-preferences-db-path
+    app: spog
+    component: spog-api
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "10Mi"

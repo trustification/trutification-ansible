@@ -18,6 +18,17 @@
       name: "spog"
       type: "api"
 
+- name: Generate Persistent Volume Claim for spog-api
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/manifests/spog/api/PersistentVolumeClaim.yaml.j2"
+    dest: "{{ tpa_single_node_kube_manifest_dir }}/PVCs/spog-api.yaml"
+    mode: "0600"
+
+- name: Create persistent volume for spog-api
+  ansible.builtin.command:
+    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/PVCs/spog-api.yaml"
+  changed_when: true
+
 - name: Deploy spog-api
   ansible.builtin.include_tasks: install_manifest.yml
   vars:
