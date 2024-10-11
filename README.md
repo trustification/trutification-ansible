@@ -118,6 +118,7 @@ export TPA_OIDC_PROVIDER_CLIENT_ID=<OIDC Walker Id>
 export TPA_OIDC_PROVIDER_CLIENT_SECRET=<OIDC Walker Secret>
 export TPA_EVENT_ACCESS_KEY_ID=<Kafka Username or AWS SQS Access Key>
 export TPA_EVENT_SECRET_ACCESS_KEY=<Kafka User Password or AWS SQS Secret Key>
+export TPA_STORAGE_ENDPOINT = <Minio storage URL >
 ```
 
 6. In case of Kafka Events, create environmental variable for bootstrap server
@@ -152,7 +153,7 @@ Refer `roles/tpa_single_node/vars/main_example_aws.yml` and `roles/tpa_single_no
 9. Execute the following command (NOTE: you will have to provide credentials to authenticate to registry.redhat.io: https://access.redhat.com/RegistryAuthentication):
 
 ```shell
-ANSIBLE_ROLES_PATH="roles/" ansible-playbook -i inventory.ini play.yml 
+ANSIBLE_ROLES_PATH="roles/" ansible-playbook -i inventory.ini play.yml
 ```
 
 ## Contributing
