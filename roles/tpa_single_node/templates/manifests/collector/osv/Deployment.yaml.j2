@@ -55,10 +55,6 @@ spec:
             - --guac-url
             - https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_guac_graphql_port }}/query
           env:
-            - name: NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
             - name: RUST_LOG
               value: info
             - name: INFRASTRUCTURE_ENABLED
