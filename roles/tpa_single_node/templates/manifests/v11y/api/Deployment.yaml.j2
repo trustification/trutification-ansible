@@ -34,7 +34,7 @@ spec:
         - name: v11y-api-storage-secret
           secret:
             secretName: storage_secret
-        - name: v11y-api-oidc-secret
+        - name: oidc-secret
           secret:
             secretName: oidc_secret
         - name: tls
@@ -75,8 +75,8 @@ spec:
               subPath: auth.yaml
             - mountPath: /etc/v11yapistoragesecret
               name: v11y-api-storage-secret
-            - mountPath: /etc/v11yapioidcsecret
-              name: v11y-api-oidc-secret
+            - mountPath: /etc/oidc-secret
+              name: oidc-secret
             - name: trust-anchor
               mountPath: /etc/trust-anchor
               readOnly: true

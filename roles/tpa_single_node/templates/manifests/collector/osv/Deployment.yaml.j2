@@ -35,7 +35,7 @@ spec:
         - name: config-auth
           configMap:
             name: collector-osv-auth
-        - name: collector-oidc-secret
+        - name: oidc-secret
           secret:
             secretName: oidc_secret
         - name: trust-anchor
@@ -104,8 +104,8 @@ spec:
             - mountPath: /etc/tls
               name: tls
               readOnly: true
-            - mountPath: /etc/colloidcsecret
-              name: collector-oidc-secret
+            - mountPath: /etc/oidc-secret
+              name: oidc-secret
             - name: config-auth
               mountPath: /etc/config/auth.yaml
               subPath: auth.yaml

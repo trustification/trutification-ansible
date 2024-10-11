@@ -107,8 +107,8 @@ spec:
             - name: trust-anchor
               mountPath: /etc/trust-anchor
               readOnly: true
-            - mountPath: /etc/spogapioidcsecret
-              name: spog-api-oidc-secret
+            - mountPath: /etc/oidc-secret
+              name: oidc-secret
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:
@@ -132,6 +132,6 @@ spec:
         - name: trust-anchor
           configMap:
             name: custom-trust-anchor
-        - name: spog-api-oidc-secret
+        - name: oidc-secret
           secret:
             secretName: oidc_secret

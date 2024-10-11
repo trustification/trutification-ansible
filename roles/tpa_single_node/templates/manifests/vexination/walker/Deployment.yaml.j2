@@ -17,7 +17,7 @@ spec:
         - name: walker-state
           persistentVolumeClaim:
             claimName: vexination-walker-state
-        - name: vexination-walker-oidc-secret
+        - name: oidc-secret
           secret:
             secretName: oidc_secret
         - name: trust-anchor
@@ -63,8 +63,8 @@ spec:
           volumeMounts:
             - mountPath: /walker-state
               name: walker-state
-            - mountPath: /etc/vexwalkeroidcsecret
-              name: vexination-walker-oidc-secret
+            - mountPath: /etc/oidc-secret
+              name: oidc-secret
             - name: trust-anchor
               mountPath: /etc/trust-anchor
               readOnly: true              
