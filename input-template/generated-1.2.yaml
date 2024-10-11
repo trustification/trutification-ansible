@@ -1,6 +1,6 @@
 NAME: redhat-trusted-profile-analyzer
-LAST DEPLOYED: Thu Aug  1 14:23:10 2024
-NAMESPACE: trustificcation
+LAST DEPLOYED: Fri Oct 11 13:48:54 2024
+NAMESPACE: trustification
 STATUS: pending-install
 REVISION: 1
 USER-SUPPLIED VALUES:
@@ -100,7 +100,7 @@ guac:
     sslMode: disable
     username: guac
   image:
-    fullName: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:1472d5acb56cb72d49cd0d25186e6a02af53cd14c84c1a22357d115958921e52
+    fullName: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:d5b83ecd6f59807eb40faabfc60b4d452971ba18c1a0e5fbd7f49d82a9361529
     pullPolicy: IfNotPresent
   initDatabase:
     host:
@@ -117,7 +117,7 @@ guac:
     sslMode: disable
     username: postgres
 image:
-  fullName: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+  fullName: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:e8c6b0b1d42cf780a827a91ecf4ac04f8b95c973062073c2a31ae1d38c59bb0c
   pullPolicy: IfNotPresent
 index:
   mode: file
@@ -210,6 +210,7 @@ modules:
         haproxy.router.openshift.io/timeout: 180s
     metrics: {}
     rust: {}
+    storageSize: 10Mi
     tracing: {}
     uiConfiguration:
       configMapRef:
@@ -335,7 +336,8 @@ metadata:
     app.kubernetes.io/name: init-guac-db
     app.kubernetes.io/component: guac
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
+    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
   annotations:
@@ -398,7 +400,7 @@ metadata:
     app.kubernetes.io/name: test
     app.kubernetes.io/component: testing
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -422,7 +424,7 @@ metadata:
     app.kubernetes.io/name: init-dataset
     app.kubernetes.io/component: init
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -456,7 +458,7 @@ spec:
         - name: run
           
           
-          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:e8c6b0b1d42cf780a827a91ecf4ac04f8b95c973062073c2a31ae1d38c59bb0c
           imagePullPolicy: IfNotPresent
 
           command: ["/usr/bin/bash"]
@@ -467,9 +469,9 @@ spec:
               if [[ -f /run/secrets/kubernetes.io/serviceaccount/service-ca.crt ]]; then
                 ARGS="--sender-root-certificates /run/secrets/kubernetes.io/serviceaccount/service-ca.crt"
               fi
-              /trust bombastic walker $ARGS --sink https://bombastic-api.trustificcation.svc.cluster.local --source file:/data/sbom
+              /trust bombastic walker $ARGS --sink http://bombastic-api.trustification.svc.cluster.local --source file:/data/sbom
               echo SBOM import done
-              /trust vexination walker $ARGS --sink https://vexination-api.trustificcation.svc.cluster.local/api/v1/vex --source file:/data/csaf
+              /trust vexination walker $ARGS --sink http://vexination-api.trustification.svc.cluster.local/api/v1/vex --source file:/data/csaf
               echo CSAF import done
 
           env:
@@ -481,7 +483,7 @@ spec:
               value: 5460cc91-4e20-4edd-881c-b15b169f8a79
             
             - name: OIDC_PROVIDER_ISSUER_URL
-              value: https://sso$APP_DOMAIN_URL/realms/chicken
+              value: http://sso$APP_DOMAIN_URL/realms/chicken
             
             - name: RUST_LOG
               value: "info"
@@ -501,7 +503,7 @@ metadata:
     app.kubernetes.io/name: init-guac-db
     app.kubernetes.io/component: guac
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -543,7 +545,7 @@ spec:
       containers:
         - name: setup
           
-          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:e8c6b0b1d42cf780a827a91ecf4ac04f8b95c973062073c2a31ae1d38c59bb0c
           imagePullPolicy: IfNotPresent
       
 
@@ -607,7 +609,7 @@ metadata:
     app.kubernetes.io/name: guac-collectsub
     app.kubernetes.io/component: guac
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -623,7 +625,7 @@ spec:
     - from:
         - namespaceSelector:
             matchLabels:
-              "kubernetes.io/metadata.name": trustificcation
+              "kubernetes.io/metadata.name": trustification
       ports:
         - protocol: TCP
           port: 2782
@@ -637,7 +639,7 @@ metadata:
     app.kubernetes.io/name: guac-graphql
     app.kubernetes.io/component: guac
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -653,7 +655,7 @@ spec:
     - from:
         - namespaceSelector:
             matchLabels:
-              "kubernetes.io/metadata.name": trustificcation
+              "kubernetes.io/metadata.name": trustification
       ports:
         - protocol: TCP
           port: 8080
@@ -672,7 +674,7 @@ metadata:
     app.kubernetes.io/name: spog-ui-config
     app.kubernetes.io/component: branding
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -1291,7 +1293,7 @@ metadata:
     app.kubernetes.io/name: spog-ui-branding
     app.kubernetes.io/component: branding
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -1320,7 +1322,7 @@ metadata:
     app.kubernetes.io/name: bombastic-api-auth
     app.kubernetes.io/component: bombastic
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -1334,7 +1336,7 @@ data:
       clients:
     
         - clientId: frontend
-          issuerUrl: https://sso$APP_DOMAIN_URL/realms/chicken
+          issuerUrl: http://sso$APP_DOMAIN_URL/realms/chicken
           scopeMappings: &keycloakScopeMappings
             "create:document": [ "create.sbom", "create.vex" ]
             "read:document": [ "read.sbom", "read.vex" ]
@@ -1342,7 +1344,7 @@ data:
             "delete:document": [ "delete.sbom", "delete.vex" ]
     
         - clientId: walker
-          issuerUrl: https://sso$APP_DOMAIN_URL/realms/chicken
+          issuerUrl: http://sso$APP_DOMAIN_URL/realms/chicken
           scopeMappings: *keycloakScopeMappings
 ---
 # Source: redhat-trusted-profile-analyzer/templates/services/collector/osv/020-ConfigMap-auth.yaml
@@ -1354,7 +1356,7 @@ metadata:
     app.kubernetes.io/name: collector-osv-auth
     app.kubernetes.io/component: collector
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -1368,7 +1370,7 @@ data:
       clients:
     
         - clientId: frontend
-          issuerUrl: https://sso$APP_DOMAIN_URL/realms/chicken
+          issuerUrl: http://sso$APP_DOMAIN_URL/realms/chicken
           scopeMappings: &keycloakScopeMappings
             "create:document": [ "create.sbom", "create.vex" ]
             "read:document": [ "read.sbom", "read.vex" ]
@@ -1376,7 +1378,7 @@ data:
             "delete:document": [ "delete.sbom", "delete.vex" ]
     
         - clientId: walker
-          issuerUrl: https://sso$APP_DOMAIN_URL/realms/chicken
+          issuerUrl: http://sso$APP_DOMAIN_URL/realms/chicken
           scopeMappings: *keycloakScopeMappings
 ---
 # Source: redhat-trusted-profile-analyzer/templates/services/collectorist/api/010-ConfigMap-auth.yaml
@@ -1388,7 +1390,7 @@ metadata:
     app.kubernetes.io/name: collectorist-api-auth
     app.kubernetes.io/component: collectorist
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -1402,7 +1404,7 @@ data:
       clients:
     
         - clientId: frontend
-          issuerUrl: https://sso$APP_DOMAIN_URL/realms/chicken
+          issuerUrl: http://sso$APP_DOMAIN_URL/realms/chicken
           scopeMappings: &keycloakScopeMappings
             "create:document": [ "create.sbom", "create.vex" ]
             "read:document": [ "read.sbom", "read.vex" ]
@@ -1410,7 +1412,7 @@ data:
             "delete:document": [ "delete.sbom", "delete.vex" ]
     
         - clientId: walker
-          issuerUrl: https://sso$APP_DOMAIN_URL/realms/chicken
+          issuerUrl: http://sso$APP_DOMAIN_URL/realms/chicken
           scopeMappings: *keycloakScopeMappings
 ---
 # Source: redhat-trusted-profile-analyzer/templates/services/collectorist/api/010-ConfigMap.yaml
@@ -1422,7 +1424,7 @@ metadata:
     app.kubernetes.io/name: collectorist-api
     app.kubernetes.io/component: collectorist
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -1434,7 +1436,7 @@ data:
     collectors:
       osv:
         cadence: 1d
-        url: https://collector-osv.trustificcation.svc.cluster.local/api/v1/
+        url: http://collector-osv.trustification.svc.cluster.local/api/v1/
         interests:
           - package
           - vulnerability
@@ -1448,7 +1450,7 @@ metadata:
     app.kubernetes.io/name: spog-api-auth
     app.kubernetes.io/component: spog
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -1462,7 +1464,7 @@ data:
       clients:
     
         - clientId: frontend
-          issuerUrl: https://sso$APP_DOMAIN_URL/realms/chicken
+          issuerUrl: http://sso$APP_DOMAIN_URL/realms/chicken
           scopeMappings: &keycloakScopeMappings
             "create:document": [ "create.sbom", "create.vex" ]
             "read:document": [ "read.sbom", "read.vex" ]
@@ -1470,7 +1472,7 @@ data:
             "delete:document": [ "delete.sbom", "delete.vex" ]
     
         - clientId: walker
-          issuerUrl: https://sso$APP_DOMAIN_URL/realms/chicken
+          issuerUrl: http://sso$APP_DOMAIN_URL/realms/chicken
           scopeMappings: *keycloakScopeMappings
 ---
 # Source: redhat-trusted-profile-analyzer/templates/services/spog/ui/020-ConfigMap-backend.yaml
@@ -1482,7 +1484,7 @@ metadata:
     app.kubernetes.io/name: spog-ui-backend
     app.kubernetes.io/component: spog
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -1498,7 +1500,7 @@ metadata:
     app.kubernetes.io/name: v11y-api-auth
     app.kubernetes.io/component: v11y
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -1512,7 +1514,7 @@ data:
       clients:
     
         - clientId: frontend
-          issuerUrl: https://sso$APP_DOMAIN_URL/realms/chicken
+          issuerUrl: http://sso$APP_DOMAIN_URL/realms/chicken
           scopeMappings: &keycloakScopeMappings
             "create:document": [ "create.sbom", "create.vex" ]
             "read:document": [ "read.sbom", "read.vex" ]
@@ -1520,7 +1522,7 @@ data:
             "delete:document": [ "delete.sbom", "delete.vex" ]
     
         - clientId: walker
-          issuerUrl: https://sso$APP_DOMAIN_URL/realms/chicken
+          issuerUrl: http://sso$APP_DOMAIN_URL/realms/chicken
           scopeMappings: *keycloakScopeMappings
 ---
 # Source: redhat-trusted-profile-analyzer/templates/services/vexination/api/020-ConfigMap-auth.yaml
@@ -1532,7 +1534,7 @@ metadata:
     app.kubernetes.io/name: vexination-api-auth
     app.kubernetes.io/component: vexination
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -1546,7 +1548,7 @@ data:
       clients:
     
         - clientId: frontend
-          issuerUrl: https://sso$APP_DOMAIN_URL/realms/chicken
+          issuerUrl: http://sso$APP_DOMAIN_URL/realms/chicken
           scopeMappings: &keycloakScopeMappings
             "create:document": [ "create.sbom", "create.vex" ]
             "read:document": [ "read.sbom", "read.vex" ]
@@ -1554,7 +1556,7 @@ data:
             "delete:document": [ "delete.sbom", "delete.vex" ]
     
         - clientId: walker
-          issuerUrl: https://sso$APP_DOMAIN_URL/realms/chicken
+          issuerUrl: http://sso$APP_DOMAIN_URL/realms/chicken
           scopeMappings: *keycloakScopeMappings
 ---
 # Source: redhat-trusted-profile-analyzer/templates/services/collectorist/api/020-PersistentVolumeClaim.yaml
@@ -1566,7 +1568,7 @@ metadata:
     app.kubernetes.io/name: collectorist-api
     app.kubernetes.io/component: collectorist
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -1577,6 +1579,26 @@ spec:
     requests:
       storage: "1Gi"
 ---
+# Source: redhat-trusted-profile-analyzer/templates/services/spog/api/010-PersistentVolumeClaim.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: user-preferences-db-path
+  labels:
+    app.kubernetes.io/name: user-preferences-db-path
+    app.kubernetes.io/component: spog
+    app.kubernetes.io/instance: redhat-trusted-profile-analyzer
+    app.kubernetes.io/version: "1.2.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "trusted-profile-analyzer"
+    
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "10Mi"
+---
 # Source: redhat-trusted-profile-analyzer/templates/services/v11y/walker/020-PersistentVolumeClaim.yaml
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -1586,7 +1608,7 @@ metadata:
     app.kubernetes.io/name: v11y-walker
     app.kubernetes.io/component: v11y
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -1606,16 +1628,15 @@ metadata:
     app.kubernetes.io/name: bombastic-api
     app.kubernetes.io/component: bombastic
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
   annotations:
-    service.beta.openshift.io/serving-cert-secret-name: bombastic-api-tls
 spec:
   ports:
   - name: endpoint
-    port: 443
+    port: 80
     protocol: TCP
     targetPort: endpoint
   selector:
@@ -1633,16 +1654,15 @@ metadata:
     app.kubernetes.io/name: collector-osv
     app.kubernetes.io/component: collector
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
   annotations:
-    service.beta.openshift.io/serving-cert-secret-name: collector-osv-tls
 spec:
   ports:
   - name: endpoint
-    port: 443
+    port: 80
     protocol: TCP
     targetPort: endpoint
   selector:
@@ -1660,16 +1680,15 @@ metadata:
     app.kubernetes.io/name: collectorist-api
     app.kubernetes.io/component: collectorist
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
   annotations:
-    service.beta.openshift.io/serving-cert-secret-name: collectorist-api-tls
 spec:
   ports:
   - name: endpoint
-    port: 443
+    port: 80
     protocol: TCP
     targetPort: endpoint
   selector:
@@ -1687,12 +1706,11 @@ metadata:
     app.kubernetes.io/name: guac-collectsub
     app.kubernetes.io/component: guac
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
   annotations:
-    service.beta.openshift.io/serving-cert-secret-name: guac-collectsub-tls
 spec:
   ports:
     - name: endpoint
@@ -1714,16 +1732,15 @@ metadata:
     app.kubernetes.io/name: guac-graphql
     app.kubernetes.io/component: guac
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
   annotations:
-    service.beta.openshift.io/serving-cert-secret-name: guac-graphql-tls
 spec:
   ports:
   - name: endpoint
-    port: 443
+    port: 80
     protocol: TCP
     targetPort: endpoint
   selector:
@@ -1741,16 +1758,15 @@ metadata:
     app.kubernetes.io/name: spog-api
     app.kubernetes.io/component: spog
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
   annotations:
-    service.beta.openshift.io/serving-cert-secret-name: spog-api-tls
 spec:
   ports:
   - name: endpoint
-    port: 443
+    port: 80
     protocol: TCP
     targetPort: endpoint
   selector:
@@ -1768,16 +1784,15 @@ metadata:
     app.kubernetes.io/name: spog-ui
     app.kubernetes.io/component: spog
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
   annotations:
-    service.beta.openshift.io/serving-cert-secret-name: spog-ui-tls
 spec:
   ports:
   - name: endpoint
-    port: 443
+    port: 80
     protocol: TCP
     targetPort: endpoint
   selector:
@@ -1795,16 +1810,15 @@ metadata:
     app.kubernetes.io/name: v11y-api
     app.kubernetes.io/component: v11y
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
   annotations:
-    service.beta.openshift.io/serving-cert-secret-name: v11y-api-tls
 spec:
   ports:
   - name: endpoint
-    port: 443
+    port: 80
     protocol: TCP
     targetPort: endpoint
   selector:
@@ -1822,16 +1836,15 @@ metadata:
     app.kubernetes.io/name: vexination-api
     app.kubernetes.io/component: vexination
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
   annotations:
-    service.beta.openshift.io/serving-cert-secret-name: vexination-api-tls
 spec:
   ports:
   - name: endpoint
-    port: 443
+    port: 80
     protocol: TCP
     targetPort: endpoint
   selector:
@@ -1849,7 +1862,7 @@ metadata:
     app.kubernetes.io/name: bombastic-api
     app.kubernetes.io/component: bombastic
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -1872,7 +1885,7 @@ spec:
         app.kubernetes.io/instance: redhat-trusted-profile-analyzer
         
       annotations:
-        configHash/auth: f1603b2e10b24822d2b2ae28973e973fb20d68559f0caff8327d5a9a7326b106
+        configHash/auth: 772648c41c99afac20631c8f827cde6f9d9e3a7b828c8b754fba03c3fbdd1391
 
     spec:
       
@@ -1880,7 +1893,7 @@ spec:
       containers:
         - name: service
           
-          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:e8c6b0b1d42cf780a827a91ecf4ac04f8b95c973062073c2a31ae1d38c59bb0c
           imagePullPolicy: IfNotPresent
           
           
@@ -1929,13 +1942,6 @@ spec:
               value: "::"
             
             
-            - name: HTTP_SERVER_TLS_ENABLED
-              value: "true"
-            - name: HTTP_SERVER_TLS_KEY_FILE
-              value: "/etc/tls/tls.key"
-            - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
-              value: "/etc/tls/tls.crt"
-            
             
             
             - name: OIDC_PROVIDER_CLIENT_ID
@@ -1944,7 +1950,7 @@ spec:
               value: 5460cc91-4e20-4edd-881c-b15b169f8a79
             
             - name: OIDC_PROVIDER_ISSUER_URL
-              value: https://sso$APP_DOMAIN_URL/realms/chicken
+              value: http://sso$APP_DOMAIN_URL/realms/chicken
             - name: STORAGE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
@@ -1968,7 +1974,7 @@ spec:
               value: "bombastic-default"
             
             - name: SWAGGER_UI_OIDC_ISSUER_URL
-              value: "https://sso$APP_DOMAIN_URL/realms/chicken"
+              value: "http://sso$APP_DOMAIN_URL/realms/chicken"
 
             - name: INDEX_SYNC_INTERVAL
               value: 1m
@@ -1984,10 +1990,6 @@ spec:
 
           volumeMounts:
             
-            - mountPath: /etc/tls
-              name: tls
-              readOnly: true
-            
             
             - name: config-auth
               mountPath: /etc/config/auth.yaml
@@ -1997,9 +1999,6 @@ spec:
 
       volumes:
         
-        - name: tls
-          secret:
-            secretName: bombastic-api-tls
         
         - name: config-auth
           configMap:
@@ -2014,7 +2013,7 @@ metadata:
     app.kubernetes.io/name: bombastic-indexer
     app.kubernetes.io/component: bombastic
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -2054,7 +2053,7 @@ spec:
         - name: service
           
           
-          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:e8c6b0b1d42cf780a827a91ecf4ac04f8b95c973062073c2a31ae1d38c59bb0c
           imagePullPolicy: IfNotPresent
           
           
@@ -2168,7 +2167,7 @@ metadata:
     app.kubernetes.io/name: collector-osv
     app.kubernetes.io/component: collector
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -2191,7 +2190,7 @@ spec:
         app.kubernetes.io/instance: redhat-trusted-profile-analyzer
         
       annotations:
-        configHash/auth: dac9d88322da8b671d9fc4f81500698ea05f108df8784b66db80d4242c9dee06
+        configHash/auth: 77d2d9a3c93e6821ed652357ff679a70c433ad06c22ecc2ab1c4b89f4b683bbb
 
     spec:
       
@@ -2199,7 +2198,7 @@ spec:
       containers:
         - name: service
           
-          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:e8c6b0b1d42cf780a827a91ecf4ac04f8b95c973062073c2a31ae1d38c59bb0c
           imagePullPolicy: IfNotPresent
           
           
@@ -2224,9 +2223,9 @@ spec:
             - "--auth-configuration"
             - "/etc/config/auth.yaml"
             - "--v11y-url"
-            - "https://v11y-api.trustificcation.svc.cluster.local"
+            - "http://v11y-api.trustification.svc.cluster.local"
             - "--guac-url"
-            - "https://guac-graphql.trustificcation.svc.cluster.local/query"
+            - "http://guac-graphql.trustification.svc.cluster.local/query"
           env:
 
             - name: NAMESPACE
@@ -2245,13 +2244,6 @@ spec:
               value: "::"
             
             
-            - name: HTTP_SERVER_TLS_ENABLED
-              value: "true"
-            - name: HTTP_SERVER_TLS_KEY_FILE
-              value: "/etc/tls/tls.key"
-            - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
-              value: "/etc/tls/tls.crt"
-            
             
             
             - name: OIDC_PROVIDER_CLIENT_ID
@@ -2260,17 +2252,11 @@ spec:
               value: 5460cc91-4e20-4edd-881c-b15b169f8a79
             
             - name: OIDC_PROVIDER_ISSUER_URL
-              value: https://sso$APP_DOMAIN_URL/realms/chicken
-            - name: CLIENT_TLS_CA_CERTIFICATES
-              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+              value: http://sso$APP_DOMAIN_URL/realms/chicken
 
           volumeMounts:
             - name: guac-config
               mountPath: /guac
-              readOnly: true
-            
-            - mountPath: /etc/tls
-              name: tls
               readOnly: true
             
             
@@ -2293,9 +2279,6 @@ spec:
           configMap:
             name: "collectorist-api"
         
-        - name: tls
-          secret:
-            secretName: collector-osv-tls
         
         - name: config-auth
           configMap:
@@ -2310,7 +2293,7 @@ metadata:
     app.kubernetes.io/name: collectorist-api
     app.kubernetes.io/component: collectorist
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -2333,15 +2316,15 @@ spec:
         app.kubernetes.io/instance: redhat-trusted-profile-analyzer
         
       annotations:
-        configHash/api: dac9d88322da8b671d9fc4f81500698ea05f108df8784b66db80d4242c9dee06
-        configHash/auth: d0dbc7f46adf81df142f3171f2234c47b7864a450fd1e404be4210c22caf81ea
+        configHash/api: 77d2d9a3c93e6821ed652357ff679a70c433ad06c22ecc2ab1c4b89f4b683bbb
+        configHash/auth: 6e31efd0ce835b8172b2991d4c80e8596a051e4a198dfeebb3fb1d22abae133a
     spec:
       
 
       containers:
         - name: service
           
-          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:e8c6b0b1d42cf780a827a91ecf4ac04f8b95c973062073c2a31ae1d38c59bb0c
           imagePullPolicy: IfNotPresent
           
           
@@ -2364,7 +2347,7 @@ spec:
             - "-p"
             - "8080"
             - "--csub-url"
-            - "https://guac-collectsub.trustificcation.svc.cluster.local:2782"
+            - "http://guac-collectsub.trustification.svc.cluster.local:2782"
             - "--auth-configuration"
             - "/etc/config/auth.yaml"
             - "--storage-base"
@@ -2389,13 +2372,6 @@ spec:
               value: "::"
             
             
-            - name: HTTP_SERVER_TLS_ENABLED
-              value: "true"
-            - name: HTTP_SERVER_TLS_KEY_FILE
-              value: "/etc/tls/tls.key"
-            - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
-              value: "/etc/tls/tls.crt"
-            
             
             
             - name: OIDC_PROVIDER_CLIENT_ID
@@ -2404,9 +2380,7 @@ spec:
               value: 5460cc91-4e20-4edd-881c-b15b169f8a79
             
             - name: OIDC_PROVIDER_ISSUER_URL
-              value: https://sso$APP_DOMAIN_URL/realms/chicken
-            - name: CSUB_CA_CERTIFICATE_PEM_PATH
-              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+              value: http://sso$APP_DOMAIN_URL/realms/chicken
 
           ports:
             
@@ -2424,10 +2398,6 @@ spec:
               mountPath: /config
               readOnly: true
             
-            - mountPath: /etc/tls
-              name: tls
-              readOnly: true
-            
             
             - name: config-auth
               mountPath: /etc/config/auth.yaml
@@ -2437,9 +2407,6 @@ spec:
 
       volumes:
         
-        - name: tls
-          secret:
-            secretName: collectorist-api-tls
         
         - name: config-auth
           configMap:
@@ -2461,7 +2428,7 @@ metadata:
     app.kubernetes.io/name: bombastic-collector
     app.kubernetes.io/component: guac
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -2494,7 +2461,7 @@ spec:
       containers:
         - name: service
           
-          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:1472d5acb56cb72d49cd0d25186e6a02af53cd14c84c1a22357d115958921e52
+          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:d5b83ecd6f59807eb40faabfc60b4d452971ba18c1a0e5fbd7f49d82a9361529
           imagePullPolicy: IfNotPresent
           
 
@@ -2553,14 +2520,10 @@ spec:
               value: "bombastic-indexed-default"
 
             - name: GUAC_GQL_ADDR
-              value: https://guac-graphql.trustificcation.svc.cluster.local/query
+              value: http://guac-graphql.trustification.svc.cluster.local/query
             - name: GUAC_CSUB_ADDR
-              value: guac-collectsub.trustificcation.svc.cluster.local:2782
+              value: guac-collectsub.trustification.svc.cluster.local:2782
             
-            - name: GUAC_CSUB_TLS_ROOT_CA
-              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
-            - name: GUAC_GQL_TLS_ROOT_CA
-              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
 
           volumeMounts:
             
@@ -2576,7 +2539,7 @@ metadata:
     app.kubernetes.io/name: guac-collectsub
     app.kubernetes.io/component: guac
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -2607,15 +2570,12 @@ spec:
     spec:
       volumes:
         
-        - name: tls
-          secret:
-            secretName: guac-collectsub-tls
         
 
       containers:
         - name: service
           
-          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:1472d5acb56cb72d49cd0d25186e6a02af53cd14c84c1a22357d115958921e52
+          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:d5b83ecd6f59807eb40faabfc60b4d452971ba18c1a0e5fbd7f49d82a9361529
           imagePullPolicy: IfNotPresent
           
 
@@ -2624,16 +2584,8 @@ spec:
 
           env:
             
-            - name: GUAC_CSUB_TLS_CERT_FILE
-              value: /etc/tls/tls.crt
-            - name: GUAC_CSUB_TLS_KEY_FILE
-              value: /etc/tls/tls.key
 
           volumeMounts:
-            
-            - mountPath: /etc/tls
-              name: tls
-              readOnly: true
             
             
 
@@ -2655,7 +2607,7 @@ metadata:
     app.kubernetes.io/name: guac-graphql
     app.kubernetes.io/component: guac
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -2685,7 +2637,7 @@ spec:
       initContainers:
         - name: migrate
           
-          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:1472d5acb56cb72d49cd0d25186e6a02af53cd14c84c1a22357d115958921e52
+          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:d5b83ecd6f59807eb40faabfc60b4d452971ba18c1a0e5fbd7f49d82a9361529
           imagePullPolicy: IfNotPresent
           
 
@@ -2723,7 +2675,7 @@ spec:
       containers:
         - name: service
           
-          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:1472d5acb56cb72d49cd0d25186e6a02af53cd14c84c1a22357d115958921e52
+          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:d5b83ecd6f59807eb40faabfc60b4d452971ba18c1a0e5fbd7f49d82a9361529
           imagePullPolicy: IfNotPresent
           
 
@@ -2755,18 +2707,10 @@ spec:
             - name: TC_PGSSLMODE
               value: disable
             
-            - name: GUAC_GQL_TLS_CERT_FILE
-              value: /etc/tls/tls.crt
-            - name: GUAC_GQL_TLS_KEY_FILE
-              value: /etc/tls/tls.key
             - name: GUAC_PROMETHEUS_ADDR
               value: "9010"
 
           volumeMounts:
-            
-            - mountPath: /etc/tls
-              name: tls
-              readOnly: true
             
             
 
@@ -2774,7 +2718,7 @@ spec:
             httpGet:
               path: /healthz
               port: 8080
-              scheme: HTTPS
+              scheme: HTTP
 
           ports:
             
@@ -2786,10 +2730,6 @@ spec:
               name: endpoint
 
       volumes:
-        
-        - name: tls
-          secret:
-            secretName: guac-graphql-tls
 ---
 # Source: redhat-trusted-profile-analyzer/templates/services/guac/vexination-collector/030-Deployment.yaml
 apiVersion: apps/v1
@@ -2800,7 +2740,7 @@ metadata:
     app.kubernetes.io/name: vexination-collector
     app.kubernetes.io/component: guac
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -2833,7 +2773,7 @@ spec:
       containers:
         - name: service
           
-          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:1472d5acb56cb72d49cd0d25186e6a02af53cd14c84c1a22357d115958921e52
+          image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9@sha256:d5b83ecd6f59807eb40faabfc60b4d452971ba18c1a0e5fbd7f49d82a9361529
           imagePullPolicy: IfNotPresent
           
 
@@ -2892,14 +2832,10 @@ spec:
               value: "vexination-indexed-default"
 
             - name: GUAC_GQL_ADDR
-              value: https://guac-graphql.trustificcation.svc.cluster.local/query
+              value: http://guac-graphql.trustification.svc.cluster.local/query
             - name: GUAC_CSUB_ADDR
-              value: guac-collectsub.trustificcation.svc.cluster.local:2782
+              value: guac-collectsub.trustification.svc.cluster.local:2782
             
-            - name: GUAC_CSUB_TLS_ROOT_CA
-              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
-            - name: GUAC_GQL_TLS_ROOT_CA
-              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
 
           volumeMounts:
             
@@ -2915,7 +2851,7 @@ metadata:
     app.kubernetes.io/name: spog-api
     app.kubernetes.io/component: spog
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -2938,7 +2874,7 @@ spec:
         app.kubernetes.io/instance: redhat-trusted-profile-analyzer
         
       annotations:
-        configHash/auth: f1603b2e10b24822d2b2ae28973e973fb20d68559f0caff8327d5a9a7326b106
+        configHash/auth: 772648c41c99afac20631c8f827cde6f9d9e3a7b828c8b754fba03c3fbdd1391
         configHash/ui: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
 
     spec:
@@ -2948,7 +2884,7 @@ spec:
         - name: service
           
           
-          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:e8c6b0b1d42cf780a827a91ecf4ac04f8b95c973062073c2a31ae1d38c59bb0c
           imagePullPolicy: IfNotPresent
           
           
@@ -2970,20 +2906,22 @@ spec:
             - "api"
             - "-p"
             - "8080"
+            - "--db-storage-base"
+            - "/data/db/"
             - "--bombastic-url"
-            - "https://bombastic-api.trustificcation.svc.cluster.local"
+            - "http://bombastic-api.trustification.svc.cluster.local"
             - "--vexination-url"
-            - "https://vexination-api.trustificcation.svc.cluster.local"
+            - "http://vexination-api.trustification.svc.cluster.local"
             - "--collectorist-url"
-            - "https://collectorist-api.trustificcation.svc.cluster.local"
+            - "http://collectorist-api.trustification.svc.cluster.local"
             - "--v11y-url"
-            - "https://v11y-api.trustificcation.svc.cluster.local"
+            - "http://v11y-api.trustification.svc.cluster.local"
             - "--exhort-url"
-            - "https://exhort-api.trustificcation.svc.cluster.local"
+            - "http://exhort-api.trustification.svc.cluster.local"
             - "--crda-url"
             - "https://rhda.rhcloud.com/api/v4/analysis"
             - "--guac"
-            - "https://guac-graphql.trustificcation.svc.cluster.local/query"
+            - "http://guac-graphql.trustification.svc.cluster.local/query"
             - "--auth-configuration"
             - "/etc/config/auth.yaml"
           env:
@@ -3004,13 +2942,6 @@ spec:
               value: "::"
             
             
-            - name: HTTP_SERVER_TLS_ENABLED
-              value: "true"
-            - name: HTTP_SERVER_TLS_KEY_FILE
-              value: "/etc/tls/tls.key"
-            - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
-              value: "/etc/tls/tls.crt"
-            
             
             
             - name: OIDC_PROVIDER_CLIENT_ID
@@ -3019,10 +2950,10 @@ spec:
               value: 5460cc91-4e20-4edd-881c-b15b169f8a79
             
             - name: OIDC_PROVIDER_ISSUER_URL
-              value: https://sso$APP_DOMAIN_URL/realms/chicken
+              value: http://sso$APP_DOMAIN_URL/realms/chicken
             
             - name: SWAGGER_UI_OIDC_ISSUER_URL
-              value: "https://sso$APP_DOMAIN_URL/realms/chicken"
+              value: "http://sso$APP_DOMAIN_URL/realms/chicken"
             - name: SPOG_UI_CONFIG
               value: /etc/config/spog-ui.yaml
 
@@ -3037,15 +2968,14 @@ spec:
 
           volumeMounts:
             
-            - mountPath: /etc/tls
-              name: tls
-              readOnly: true
-            
             
             - name: config-auth
               mountPath: /etc/config/auth.yaml
               subPath: auth.yaml
             
+            
+            - name: user-preferences-db-path
+              mountPath: /data/db/
             - name: config-ui
               mountPath: /etc/config/spog-ui.yaml
               subPath: spog-ui.yaml
@@ -3053,9 +2983,6 @@ spec:
 
       volumes:
         
-        - name: tls
-          secret:
-            secretName: spog-api-tls
         
         - name: config-auth
           configMap:
@@ -3063,6 +2990,11 @@ spec:
         - name: config-ui
           configMap:
             name: spog-ui-config
+        
+        
+        - name: user-preferences-db-path
+          persistentVolumeClaim:
+            claimName: user-preferences-db-path
 ---
 # Source: redhat-trusted-profile-analyzer/templates/services/spog/ui/030-Deployment.yaml
 apiVersion: apps/v1
@@ -3073,7 +3005,7 @@ metadata:
     app.kubernetes.io/name: spog-ui
     app.kubernetes.io/component: spog
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -3092,7 +3024,7 @@ spec:
   template:
     metadata:
       annotations:
-        configHash/backend: 32d13708bccca5fa5a63c7365cda80b7db43eabf7efd8521ab5201b1c354aa19
+        configHash/backend: b0c2a2042c705c5a39c3901b8eb5d02c498a1035b24e922113341a8e7ce25b13
 
       labels:
         app.kubernetes.io/name: spog-ui
@@ -3120,7 +3052,7 @@ spec:
       containers:
         - name: service
           
-          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:e8c6b0b1d42cf780a827a91ecf4ac04f8b95c973062073c2a31ae1d38c59bb0c
           imagePullPolicy: IfNotPresent
           
           resources:
@@ -3133,13 +3065,13 @@ spec:
           command: ["/nginx.sh"]
           env:
             - name: API_URL
-              value: https://api$APP_DOMAIN_URL
+              value: http://api$APP_DOMAIN_URL
             - name: BOMBASTIC_URL
-              value: https://sbom$APP_DOMAIN_URL
+              value: http://sbom$APP_DOMAIN_URL
             - name: VEXINATION_URL
-              value: https://vex$APP_DOMAIN_URL
+              value: http://vex$APP_DOMAIN_URL
             - name: ISSUER_URL
-              value: https://sso$APP_DOMAIN_URL/realms/chicken
+              value: http://sso$APP_DOMAIN_URL/realms/chicken
             - name: CLIENT_ID
               value: frontend
 
@@ -3184,7 +3116,7 @@ metadata:
     app.kubernetes.io/name: v11y-api
     app.kubernetes.io/component: v11y
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -3207,7 +3139,7 @@ spec:
         app.kubernetes.io/instance: redhat-trusted-profile-analyzer
         
       annotations:
-        configHash/auth: f1603b2e10b24822d2b2ae28973e973fb20d68559f0caff8327d5a9a7326b106
+        configHash/auth: 772648c41c99afac20631c8f827cde6f9d9e3a7b828c8b754fba03c3fbdd1391
 
     spec:
       
@@ -3216,7 +3148,7 @@ spec:
         - name: service
           
           
-          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:e8c6b0b1d42cf780a827a91ecf4ac04f8b95c973062073c2a31ae1d38c59bb0c
           imagePullPolicy: IfNotPresent
           
           
@@ -3263,13 +3195,6 @@ spec:
               value: "::"
             
             
-            - name: HTTP_SERVER_TLS_ENABLED
-              value: "true"
-            - name: HTTP_SERVER_TLS_KEY_FILE
-              value: "/etc/tls/tls.key"
-            - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
-              value: "/etc/tls/tls.crt"
-            
             
             
             - name: OIDC_PROVIDER_CLIENT_ID
@@ -3278,7 +3203,7 @@ spec:
               value: 5460cc91-4e20-4edd-881c-b15b169f8a79
             
             - name: OIDC_PROVIDER_ISSUER_URL
-              value: https://sso$APP_DOMAIN_URL/realms/chicken
+              value: http://sso$APP_DOMAIN_URL/realms/chicken
             - name: STORAGE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
@@ -3315,10 +3240,6 @@ spec:
 
           volumeMounts:
             
-            - mountPath: /etc/tls
-              name: tls
-              readOnly: true
-            
             
             - name: config-auth
               mountPath: /etc/config/auth.yaml
@@ -3328,9 +3249,6 @@ spec:
 
       volumes:
         
-        - name: tls
-          secret:
-            secretName: v11y-api-tls
         
         - name: config-auth
           configMap:
@@ -3345,7 +3263,7 @@ metadata:
     app.kubernetes.io/name: v11y-indexer
     app.kubernetes.io/component: v11y
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -3384,7 +3302,7 @@ spec:
         - name: service
           
           
-          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:e8c6b0b1d42cf780a827a91ecf4ac04f8b95c973062073c2a31ae1d38c59bb0c
           imagePullPolicy: IfNotPresent
           
           
@@ -3498,7 +3416,7 @@ metadata:
     app.kubernetes.io/name: vexination-api
     app.kubernetes.io/component: vexination
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -3521,7 +3439,7 @@ spec:
         app.kubernetes.io/instance: redhat-trusted-profile-analyzer
         
       annotations:
-        configHash/auth: f1603b2e10b24822d2b2ae28973e973fb20d68559f0caff8327d5a9a7326b106
+        configHash/auth: 772648c41c99afac20631c8f827cde6f9d9e3a7b828c8b754fba03c3fbdd1391
 
     spec:
       
@@ -3530,7 +3448,7 @@ spec:
         - name: service
           
           
-          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:e8c6b0b1d42cf780a827a91ecf4ac04f8b95c973062073c2a31ae1d38c59bb0c
           imagePullPolicy: IfNotPresent
           command: ["/trust"]
           args:
@@ -3563,13 +3481,6 @@ spec:
               value: "::"
             
             
-            - name: HTTP_SERVER_TLS_ENABLED
-              value: "true"
-            - name: HTTP_SERVER_TLS_KEY_FILE
-              value: "/etc/tls/tls.key"
-            - name: HTTP_SERVER_TLS_CERTIFICATE_FILE
-              value: "/etc/tls/tls.crt"
-            
             
             
             - name: OIDC_PROVIDER_CLIENT_ID
@@ -3578,7 +3489,7 @@ spec:
               value: 5460cc91-4e20-4edd-881c-b15b169f8a79
             
             - name: OIDC_PROVIDER_ISSUER_URL
-              value: https://sso$APP_DOMAIN_URL/realms/chicken
+              value: http://sso$APP_DOMAIN_URL/realms/chicken
             - name: STORAGE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
@@ -3602,7 +3513,7 @@ spec:
               value: "vexination-default"
             
             - name: SWAGGER_UI_OIDC_ISSUER_URL
-              value: "https://sso$APP_DOMAIN_URL/realms/chicken"
+              value: "http://sso$APP_DOMAIN_URL/realms/chicken"
 
             - name: INDEX_SYNC_INTERVAL
               value: 1m
@@ -3631,10 +3542,6 @@ spec:
 
           volumeMounts:
             
-            - mountPath: /etc/tls
-              name: tls
-              readOnly: true
-            
             
             - name: config-auth
               mountPath: /etc/config/auth.yaml
@@ -3644,9 +3551,6 @@ spec:
 
       volumes:
         
-        - name: tls
-          secret:
-            secretName: vexination-api-tls
         
         - name: config-auth
           configMap:
@@ -3661,7 +3565,7 @@ metadata:
     app.kubernetes.io/name: vexination-indexer
     app.kubernetes.io/component: vexination
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -3698,7 +3602,7 @@ spec:
       containers:
         - name: service
           
-          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+          image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:e8c6b0b1d42cf780a827a91ecf4ac04f8b95c973062073c2a31ae1d38c59bb0c
           imagePullPolicy: IfNotPresent
           command: ["/trust"]
           args:
@@ -3811,7 +3715,7 @@ metadata:
     app.kubernetes.io/name: v11y-walker
     app.kubernetes.io/component: v11y
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
@@ -3842,7 +3746,7 @@ spec:
           initContainers:
             - name: git-fetch
               
-              image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+              image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:e8c6b0b1d42cf780a827a91ecf4ac04f8b95c973062073c2a31ae1d38c59bb0c
               imagePullPolicy: IfNotPresent
               
 
@@ -3865,7 +3769,7 @@ spec:
           containers:
             - name: walker
               
-              image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:60f676f8c7611d08827f5e1cad332d7ebc5d6660392618c29d1966c1825cff5b
+              image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:e8c6b0b1d42cf780a827a91ecf4ac04f8b95c973062073c2a31ae1d38c59bb0c
               imagePullPolicy: IfNotPresent
               
               livenessProbe:
@@ -3944,12 +3848,11 @@ metadata:
     app.kubernetes.io/name: bombastic-api
     app.kubernetes.io/component: bombastic
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
   annotations:
-    route.openshift.io/termination: reencrypt
 
 spec:
   
@@ -3975,13 +3878,12 @@ metadata:
     app.kubernetes.io/name: spog-api
     app.kubernetes.io/component: spog
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
   annotations:
     haproxy.router.openshift.io/timeout: 180s
-    route.openshift.io/termination: reencrypt
 
 spec:
   
@@ -4007,13 +3909,12 @@ metadata:
     app.kubernetes.io/name: spog-ui
     app.kubernetes.io/component: spog
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
   annotations:
     haproxy.router.openshift.io/timeout: 180s
-    route.openshift.io/termination: edge
 
 spec:
   
@@ -4039,12 +3940,11 @@ metadata:
     app.kubernetes.io/name: vexination-api
     app.kubernetes.io/component: vexination
     app.kubernetes.io/instance: redhat-trusted-profile-analyzer
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.2.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "trusted-profile-analyzer"
     
   annotations:
-    route.openshift.io/termination: reencrypt
 
 spec:
   
@@ -4063,5 +3963,5 @@ spec:
 
 NOTES:
 OpenShift:
-  Detected:       true
-  Use Service CA: true
+  Detected:       false
+  Use Service CA: false
