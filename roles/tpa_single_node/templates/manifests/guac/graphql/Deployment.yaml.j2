@@ -34,7 +34,6 @@ spec:
             - --db-address=postgres://{{ tpa_single_node_pg_user }}:{{ tpa_single_node_pg_user_passwd }}@{{ tpa_single_node_pg_host }}:{{ tpa_single_node_pg_port }}/{{ tpa_single_node_pg_db }}?sslmode={{ tpa_single_node_pg_ssl_mode }}
             - --db-driver=postgres
             - --db-debug=true
-          workingDir: /opt/guac
           volumeMounts: null
       containers:
         - name: service
@@ -46,19 +45,34 @@ spec:
             - --gql-backend=ent
             - --db-address=postgres://{{ tpa_single_node_pg_user }}:{{ tpa_single_node_pg_user_passwd }}@{{ tpa_single_node_pg_host }}:{{ tpa_single_node_pg_port }}/{{ tpa_single_node_pg_db }}?sslmode={{ tpa_single_node_pg_ssl_mode }}
             - --db-driver=postgres
-          workingDir: /opt/guac
+            - --db-migrate=false
+            - --db-debug=true
+          workingDir: "/opt/guac"
           env:
+            - name: GUAC_GQL_TLS_CERT_FILE
+              value: /etc/tls/tls.crt
+            - name: GUAC_GQL_TLS_KEY_FILE
+              value: /etc/tls/tls.key
             - name: GUAC_PROMETHEUS_ADDR
-              value: '9010'
+              value: "9010"
           volumeMounts:
+            - mountPath: /etc/tls
+              name: tls
+              readOnly: true
             - name: trust-anchor
               mountPath: /etc/trust-anchor
               readOnly: true
           readinessProbe:
             httpGet:
               path: /healthz
-              port: {{ tpa_single_node_guac_graphql_port }}
-              scheme: HTTP
+              port: 9010
+              scheme: HTTPS
+          livenessProbe:
+            initialDelaySeconds: 2
+            httpGet:
+              path: /healthz
+              port: 9010
+              scheme: HTTPS
           ports:
             - containerPort: 9010
               protocol: TCP
@@ -66,6 +80,8 @@ spec:
             - containerPort: {{ tpa_single_node_guac_graphql_port }}
               protocol: TCP
               name: endpoint
+              hostPort: {{ tpa_single_node_guac_graphql_port }}
+              hostIP: {{ tpa_single_node_rhel_host }}
       volumes:
         - name: tls
           secret:
@@ -73,3 +89,4 @@ spec:
         - name: trust-anchor
           configMap:
             name: custom-trust-anchor
+
