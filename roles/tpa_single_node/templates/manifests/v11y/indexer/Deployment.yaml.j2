@@ -39,7 +39,9 @@ spec:
         - name: v11y-indexer-event-secret
           secret:
             secretName: event_secret
-
+        - name: trust-anchor
+          configMap:
+            name: custom-trust-anchor
       containers:
         - name: service
 
@@ -157,5 +159,6 @@ spec:
               name: v11y-indexer-storage-secret
             - mountPath: /etc/v11yapieventsecret
               name: v11y-indexer-event-secret
-
-
+            - name: trust-anchor
+              mountPath: /etc/trust-anchor
+              readOnly: true

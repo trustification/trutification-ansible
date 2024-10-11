@@ -33,6 +33,9 @@ spec:
         - name: bombastic-collector-event-secret
           secret:
             secretName: event_secret
+        - name: trust-anchor
+          configMap:
+            name: custom-trust-anchor
       containers:
         - name: service
           image: {{ tpa_single_node_guac_image }}
@@ -113,3 +116,6 @@ spec:
               name: bombastic-collector-storage-secret
             - mountPath: /etc/bombastic-collector-event-secret
               name: bombastic-collector-event-secret
+            - name: trust-anchor
+              mountPath: /etc/trust-anchor
+              readOnly: true

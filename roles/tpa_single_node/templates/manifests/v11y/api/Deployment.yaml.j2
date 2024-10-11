@@ -40,6 +40,9 @@ spec:
         - name: tls
           secret:
             secretName: tls_cert
+        - name: trust-anchor
+          configMap:
+            name: custom-trust-anchor
       containers:
         - image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: IfNotPresent
@@ -74,6 +77,9 @@ spec:
               name: v11y-api-storage-secret
             - mountPath: /etc/v11yapioidcsecret
               name: v11y-api-oidc-secret
+            - name: trust-anchor
+              mountPath: /etc/trust-anchor
+              readOnly: true
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:

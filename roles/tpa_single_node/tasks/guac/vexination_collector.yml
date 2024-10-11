@@ -7,3 +7,5 @@
       systemd_file: guac-collector-vexination
       network: "{{ tpa_single_node_podman_network }}"
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/guac/vexination-collector/Deployment.yaml.j2') | from_yaml }}"
+      configmaps:
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/custom-trust-anchor.yaml"

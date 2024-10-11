@@ -21,6 +21,9 @@ spec:
         - name: oidc-secret
           secret:
             secretName: oidc_secret
+        - name: trust-anchor
+          configMap:
+            name: custom-trust-anchor
       containers:  
         - image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: Always
@@ -69,6 +72,9 @@ spec:
               name: walker-state
             - mountPath: /etc/oidc-secret
               name: oidc-secret
+            - name: trust-anchor
+              mountPath: /etc/trust-anchor
+              readOnly: true
           livenessProbe:
             httpGet:
               path: /health/live

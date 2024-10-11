@@ -35,6 +35,9 @@ spec:
         - name: vexination-indexer-event-secret
           secret:
             secretName: event_secret
+        - name: trust-anchor
+          configMap:
+            name: custom-trust-anchor
       containers:
         - name: service
           image: "{{ tpa_single_node_trustification_image }}"
@@ -138,3 +141,6 @@ spec:
               name: vexination-indexer-storage-secret
             - mountPath: /etc/vexination-indexer-event-secret
               name: vexination-indexer-event-secret
+            - name: trust-anchor
+              mountPath: /etc/trust-anchor
+              readOnly: true

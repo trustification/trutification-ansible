@@ -94,19 +94,21 @@ spec:
             - name: GUAC_S3_QUEUES
               value: "{{ tpa_single_node_vexination_topic_indexed }}"
             - name: GUAC_GQL_ADDR
-              value: 127.0.0.1:8080/query
+              value: {{ tpa_single_node_rhel_host }}:{{  tpa_single_node_guac_graphql_port }}/query
             - name: GUAC_CSUB_ADDR
-              value: 127.0.0.1:2782
-# TODO
-#            - name: GUAC_CSUB_TLS_ROOT_CA
-#              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
-#            - name: GUAC_GQL_TLS_ROOT_CA
-#              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+              value: {{ tpa_single_node_rhel_host }}:2782
+            - name: GUAC_CSUB_TLS_ROOT_CA
+              value: {{  tpa_single_node_root_ca  }}
+            - name: GUAC_GQL_TLS_ROOT_CA
+              value: {{  tpa_single_node_root_ca  }}
           volumeMounts:
-            - mountPath: /etc/vexcolstoragesecret
-              name: vex-collector-storage-secret
-            - mountPath: /etc/vexcoloidcsecret
-              name: vex-collector-oidc-secret
+            - name: vex-collector-storage-secret
+              mountPath: /etc/vexcolstoragesecret
+            - name: vex-collector-oidc-secret
+              mountPath: /etc/vexcoloidcsecret
+            - name: trust-anchor
+              mountPath: /etc/trust-anchor
+              readOnly: true
       volumes:
         - name: vex-collector-storage-secret
           secret:
@@ -114,3 +116,6 @@ spec:
         - name: vex-collector-oidc-secret
           secret:
             secretName: oidc_secret
+        - name: trust-anchor
+          configMap:
+            name: custom-trust-anchor

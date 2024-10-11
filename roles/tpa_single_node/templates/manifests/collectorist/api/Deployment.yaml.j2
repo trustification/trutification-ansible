@@ -40,6 +40,9 @@ spec:
         - name: config
           configMap:
             name: collectorist-api
+        - name: trust-anchor
+          configMap:
+            name: custom-trust-anchor
       containers:
         - name: service
           image: "{{ tpa_single_node_trustification_image }}"
@@ -106,6 +109,9 @@ spec:
             - name: config-auth
               mountPath: /etc/config/auth.yaml
               subPath: auth.yaml
+            - name: trust-anchor
+              mountPath: /etc/trust-anchor
+              readOnly: true
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:

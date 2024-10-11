@@ -43,24 +43,14 @@ spec:
           command:
             - /opt/guac/guacgql 
           args:
-            - --gql-listen-port={{ tpa_single_node_guac_graphql_port }}
             - --gql-backend=ent
             - --db-address=postgres://{{ tpa_single_node_pg_user }}:{{ tpa_single_node_pg_user_passwd }}@{{ tpa_single_node_pg_host }}:{{ tpa_single_node_pg_port }}/{{ tpa_single_node_pg_db }}?sslmode={{ tpa_single_node_pg_ssl_mode }}
             - --db-driver=postgres
-            - --db-debug=true
-            - --gql-debug=true
           workingDir: /opt/guac
           env:
             - name: GUAC_PROMETHEUS_ADDR
               value: '9010'
-            - name: GUAC_GQL_TLS_CERT_FILE
-              value: /etc/tls/tls.crt
-            - name: GUAC_GQL_TLS_KEY_FILE
-              value: /etc/tls/tls.key
           volumeMounts:
-            - mountPath: /etc/tls
-              name: tls
-              readOnly: true
             - name: trust-anchor
               mountPath: /etc/trust-anchor
               readOnly: true
@@ -68,7 +58,7 @@ spec:
             httpGet:
               path: /healthz
               port: {{ tpa_single_node_guac_graphql_port }}
-              scheme: HTTPS
+              scheme: HTTP
           ports:
             - containerPort: 9010
               protocol: TCP
@@ -76,8 +66,6 @@ spec:
             - containerPort: {{ tpa_single_node_guac_graphql_port }}
               protocol: TCP
               name: endpoint
-              hostPort: {{ tpa_single_node_guac_graphql_port }}
-              hostIP: {{ tpa_single_node_rhel_host }}
       volumes:
         - name: tls
           secret:
