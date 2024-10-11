@@ -10,8 +10,8 @@ authors:
   - Rajan Ravi <rravi@redhat.com>
   - Jiri Kucera <jkucera@redhat.com>
 description: Install and configure RHTPA, a downstream redistribution of the Trustification project.
-license_file: Apache-2.0
-tags: [rhtpa, tpa, trusted profile analyzer, security, application, tools]
+license_file: LICENSE
+tags: [rhtpa, tpa, trusted, profile, analyzer, security, application, tools]
 # NOTE: when updating, also update dependencies in requirements.yml
 dependencies: {}
 repository: https://github.com/trustification/trustification-ansible
