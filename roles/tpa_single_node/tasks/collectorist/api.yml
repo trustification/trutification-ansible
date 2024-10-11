@@ -35,4 +35,5 @@
       configmaps:
         - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api.yaml"
         - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api-guac.yaml"
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/custom-trust-anchor.yaml"
       configmap_changed: "{{ oidc_configmap_result.changed or collectorist_api_configmap_result.changed }}"

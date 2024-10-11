@@ -10,3 +10,6 @@
       timer_type: monotonic # realtime
       time_pattern: 1h # *:0/10 for realtime instead of monotonic
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/bombastic/walker/Deployment.yaml.j2') | from_yaml }}"
+      configmaps:
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/custom-trust-anchor.yaml"
+     
