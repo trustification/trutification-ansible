@@ -15,11 +15,18 @@ spec:
         app: init-dataset
     spec:
       restartPolicy: OnFailure
+      volumes:
+        - name: oidc-secret
+          secret:
+            secretName: oidc_secret
+        - name: trust-anchor
+          configMap:
+            name: custom-trust-anchor
       containers:
         - name: run
           image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: IfNotPresent
-          command: [ "/usr/bin/bash" ]
+          command: [ "/bin/bash" ]
           args:
             - "-ce"
             - |
@@ -38,3 +45,9 @@ spec:
               value: "{{ tpa_single_node_oidc_issuer_url }}"
             - name: RUST_LOG
               value: "info"
+          volumeMounts:
+            - mountPath: /etc/oidc-secret
+              name: oidc-secret
+            - name: trust-anchor
+              mountPath: /etc/trust-anchor
+              readOnly: true
