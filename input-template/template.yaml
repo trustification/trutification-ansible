@@ -272,7 +272,6 @@ objects:
         app.kubernetes.io/component: guac
         app.kubernetes.io/instance: redhat-trusted-profile-analyzer
         app.kubernetes.io/version: 1.1.1
-        app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/part-of: trusted-profile-analyzer
       annotations:
         argocd.argoproj.io/hook: Sync
