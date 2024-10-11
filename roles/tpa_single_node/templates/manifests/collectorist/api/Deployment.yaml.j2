@@ -31,9 +31,6 @@ spec:
         - name: tls
           secret:
             secretName: tls_cert
-        - name: collectorist-tls
-          secret:
-            secretName: collectorist-api-tls
         - name: config-auth
           configMap:
             name: collectorist-api-auth
@@ -54,7 +51,7 @@ spec:
             - -p
             - {{ tpa_single_node_collectorist_api_port }}
             - --csub-url
-            - https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_guac_collectsub_port }}
+            - https://{{ tpa_single_node_rhel_host }}:2782
             - --auth-configuration
             - /etc/config/auth.yaml
             - --storage-base
@@ -62,10 +59,6 @@ spec:
             - --collector-config
             - /config/collectorist.yaml
           env:
-#            - name: NAMESPACE
-#              valueFrom:
-#                fieldRef:
-#                  fieldPath: metadata.namespace
             - name: RUST_LOG
               value: info
             - name: INFRASTRUCTURE_ENABLED
@@ -93,7 +86,7 @@ spec:
             - name: OIDC_PROVIDER_ISSUER_URL
               value: "{{ tpa_single_node_oidc_issuer_url }}"
             - name: CSUB_CA_CERTIFICATE_PEM_PATH
-              value: /etc/collectoristtls/service-ca.crt
+              value: {{ tpa_single_node_client_tls_ca_certificates }}
           ports:
             - containerPort: 9010
               protocol: TCP
@@ -113,9 +106,6 @@ spec:
             - name: config-auth
               mountPath: /etc/config/auth.yaml
               subPath: auth.yaml
-            - mountPath: /etc/collectoristtls
-              name: collectorist-tls
-              readOnly: true
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:

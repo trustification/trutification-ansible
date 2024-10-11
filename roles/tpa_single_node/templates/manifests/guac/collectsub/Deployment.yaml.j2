@@ -36,10 +36,6 @@ spec:
           imagePullPolicy: IfNotPresent
           command:
             - /opt/guac/guaccsub
-          # TODO - We get an error with following args so we could use a variable for configuration purposes
-          # The default port is 2782 so that's no blocker for now
-          # args: 
-          #  - --csub-listen-port 2782
           env:
             - name: GUAC_CSUB_TLS_CERT_FILE
               value: /etc/tls/tls.crt
@@ -51,10 +47,10 @@ spec:
               readOnly: true
           livenessProbe:
             tcpSocket:
-              port: {{ tpa_single_node_guac_collectsub_port }}
+              port: 2782
           ports:
-            - containerPort: {{ tpa_single_node_guac_collectsub_port }}
+            - containerPort: 2782
               protocol: TCP
               name: endpoint
-              hostPort: {{ tpa_single_node_guac_collectsub_port }}
+              hostPort: 2782
               hostIP: {{ tpa_single_node_rhel_host }} 

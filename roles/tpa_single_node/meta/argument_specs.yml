@@ -245,6 +245,11 @@ argument_specs:
         type: "str"
         required: true
         version_added: "1.2.0"
+      tpa_single_node_client_tls_ca_certificates:
+        description: "Comma separated list of client CA certificates"
+        type: "str"
+        required: true
+        version_added: "1.2.0"
       tpa_single_node_trust_cert_tls_crt_path:
         description: "pem path on the controller machine"
         type: "str"
@@ -252,16 +257,6 @@ argument_specs:
         version_added: "1.2.0"
       tpa_single_node_trust_cert_tls_key_path:
         description: "key path on the controller machine"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
-      tpa_single_node_collector_osv_tls_client_crt_path:
-        description: "collector-osv-tls-client-certificate.crt path on the controller machine"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
-      tpa_single_node_collectorist_api_tls_csub_crt_path:
-        description: "collectorist-api-tls-csub-certificate.crt path on the controller machine"
         type: "str"
         required: true
         version_added: "1.2.0"
@@ -330,11 +325,6 @@ argument_specs:
         type: "int"
         version_added: "1.2.0"
         default: 8089
-      tpa_single_node_guac_collectsub_port:
-        description: "Guac Collector sub api port"
-        type: "int"
-        version_added: "1.2.0"
-        default: 2782
       tpa_single_node_bombastic_walker_suspended:
         description: "Bombastic walker suspended flag"
         type: "bool"

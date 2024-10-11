@@ -5,5 +5,7 @@
     podman_spec:
       state: started
       systemd_file: guac-graphql
-      network: "{{ tpa_single_node_podman_network }}"
       kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/guac/graphql/Deployment.yaml.j2') | from_yaml }}"
+      network: "{{ tpa_single_node_podman_network }}"
+      configmaps:
+        - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/custom-trust-anchor.yaml"

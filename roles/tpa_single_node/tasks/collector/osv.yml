@@ -1,28 +1,10 @@
 ---
-- name: Check whether client TLS CA certificate file exists
-  ansible.builtin.stat:
-    path: "{{ tpa_single_node_collector_osv_tls_client_crt_path }}"
-  register: tpa_single_node_collector_osv_tls_client_cert_crt
-
 - name: Create configmap for collectorist api
   ansible.builtin.template:
     src: "{{ role_path }}/templates/manifests/collectorist/api/Configmap.yaml.j2"
     dest: "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/collectorist-api-guac.yaml"
     mode: "0600"
   register: collectorist_api_configmap_result
-
-- name: Generate collector-osv secret manifest
-  ansible.builtin.template:
-    src: "{{ role_path }}/templates/manifests/collector/osv/Secret.yaml.j2"
-    dest: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/collector-osv.yaml"
-    mode: "0600"
-  vars:
-    tpa_single_node_collector_osv_tls_client_cert: "{{ lookup('file', tpa_single_node_collector_osv_tls_client_crt_path) }}"
-
-- name: Play collector-osv secret manifest
-  ansible.builtin.command:
-    cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/Secrets/collector-osv.yaml"
-  changed_when: true
 
 - name: Create configmap auth for collector-osv
   ansible.builtin.include_tasks: infra/component_auth.yml

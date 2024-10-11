@@ -95,15 +95,16 @@ Copy your certificate files in `/tmp/rhtpa/certs/` directory using following nam
 - rootCA.crt
 
 Optionally, the certs directory variable `tpa_single_node_certificates_dir` under `roles/tpa_single_node/vars/main.yml` file can also be updated with a directory certs for below variables:
+
 - tpa_single_node_root_ca
+- tpa_single_node_client_tls_ca_certificates
+
 - tpa_single_node_trust_cert_tls_crt_path
 - tpa_single_node_trust_cert_tls_key_path
-- tpa_single_node_collector_osv_tls_client_crt_path
-- tpa_single_node_collectorist_api_tls_csub_crt_path
 - tpa_single_node_nginx_tls_crt_path
 - tpa_single_node_nginx_tls_key_path
 
-5. Create Environment Variables for Storage, Events and OIDC 
+5. Create Environment Variables for Storage, Events and OIDC
 
 ```
 export TPA_PG_HOST=<POSTGRES_HOST_IP>
@@ -117,14 +118,17 @@ export TPA_OIDC_PROVIDER_CLIENT_ID=<OIDC Walker Id>
 export TPA_OIDC_PROVIDER_CLIENT_SECRET=<OIDC Walker Secret>
 export TPA_EVENT_ACCESS_KEY_ID=<Kafka Username or AWS SQS Access Key>
 export TPA_EVENT_SECRET_ACCESS_KEY=<Kafka User Password or AWS SQS Secret Key>
+export TPA_STORAGE_ENDPOINT = <Minio storage URL >
 ```
 
 6. In case of Kafka Events, create environmental variable for bootstrap server
+
 ```
 export TPA_EVENT_BOOTSTRAP_SERVER=<Kafka Bootstrap Server>
 ```
 
 7. In case of AWS Cognito as OIDC, create environmental variable for Cognito Domain
+
 ```
 export TPA_OIDC_COGNITO_DOMAIN=<AWS Cognito Domain>
 ```
@@ -132,6 +136,7 @@ export TPA_OIDC_COGNITO_DOMAIN=<AWS Cognito Domain>
 8. Update `roles/tpa_single_node/vars/main.yml` file with the below values,
 
 - Storage Service:
+
   1. Update the Storage type, eithe `s3` or `minio`
   2. Update the S3/Minio bucket names
   3. Update the AWS region for AWS S3 or keep `us-west-1` for minio
@@ -140,7 +145,7 @@ export TPA_OIDC_COGNITO_DOMAIN=<AWS Cognito Domain>
 - SQS Service:
   1. Update the Event bus type, either `kafka` or `sqs`
   2. Update the topics for each events
-  3. In case of Kafka, update the fields `tpa_single_node_kafka_security_protocol` and  `tpa_single_node_kafka_auth_mechanism`
+  3. In case of Kafka, update the fields `tpa_single_node_kafka_security_protocol` and `tpa_single_node_kafka_auth_mechanism`
   4. In case of AWS SQS, update the AWS SQS region `tpa_single_node_sqs_region`
 
 Refer `roles/tpa_single_node/vars/main_example_aws.yml` and `roles/tpa_single_node/vars/main_example_nonaws.yml`
@@ -148,7 +153,7 @@ Refer `roles/tpa_single_node/vars/main_example_aws.yml` and `roles/tpa_single_no
 9. Execute the following command (NOTE: you will have to provide credentials to authenticate to registry.redhat.io: https://access.redhat.com/RegistryAuthentication):
 
 ```shell
-ANSIBLE_ROLES_PATH="roles/" ansible-playbook -i inventory.ini play.yml 
+ANSIBLE_ROLES_PATH="roles/" ansible-playbook -i inventory.ini play.yml
 ```
 
 ## Contributing

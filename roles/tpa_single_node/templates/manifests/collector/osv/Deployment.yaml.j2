@@ -38,9 +38,6 @@ spec:
         - name: collector-oidc-secret
           secret:
             secretName: oidc_secret
-        - name: collector-tls
-          secret:
-            secretName: collector-osv-tls
       containers:
         - name: service
           image: "{{ tpa_single_node_trustification_image }}"
@@ -58,11 +55,6 @@ spec:
             - --guac-url
             - https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_guac_graphql_port }}/query
           env:
-# TODO
-#            - name: NAMESPACE
-#              valueFrom:
-#                fieldRef:
-#                  fieldPath: metadata.namespace
             - name: RUST_LOG
               value: info
             - name: INFRASTRUCTURE_ENABLED
@@ -89,9 +81,9 @@ spec:
                   name: oidc_secret
             - name: OIDC_PROVIDER_ISSUER_URL
               value: "{{ tpa_single_node_oidc_issuer_url }}"
-{% if tpa_single_node_collector_osv_tls_client_cert_crt %}
+{% if tpa_single_node_client_tls_ca_certificates %}
             - name: CLIENT_TLS_CA_CERTIFICATES
-              value: /etc/collectortls/service-ca.crt
+              value: "{{ tpa_single_node_client_tls_ca_certificates }}"
 {% endif %}
           ports:
             - containerPort: 9010
@@ -114,9 +106,6 @@ spec:
             - name: config-auth
               mountPath: /etc/config/auth.yaml
               subPath: auth.yaml
-            - mountPath: /etc/collectortls
-              name: collector-tls
-              readOnly: true
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:

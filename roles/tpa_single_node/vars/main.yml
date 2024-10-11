@@ -22,13 +22,13 @@ tpa_single_node_pg_ssl_mode: disable
 tpa_single_node_storage_type: minio # Either s3 or minio or other s3 compatible
 tpa_single_node_storage_access_key: "{{ lookup('env', 'TPA_STORAGE_ACCESS_KEY') }}" # S3/minio root username
 tpa_single_node_storage_secret_key: "{{ lookup('env', 'TPA_STORAGE_SECRET_KEY') }}" # S3/minio root password
-tpa_single_node_storage_bombastic_bucket: bombastic-default  # <bombastic storage bucket name>
+tpa_single_node_storage_bombastic_bucket: bombastic-default # <bombastic storage bucket name>
 tpa_single_node_storage_v11y_bucket: v11y-default # <v11y storage bucket name>
 tpa_single_node_storage_vexination_bucket: vexination-default # <vexination storage bucket name>
 tpa_single_node_storage_region: eu-west-1 # <AWS S3 Storage region> # For Minio just keep eu-west-1
 
 ## Storage Service - Minio fields
-tpa_single_node_storage_endpoint: http://<minio-host> # <Enter minio storage URL pointing to API endpoint 9000>
+tpa_single_node_storage_endpoint: "{{ lookup('env', 'TPA_STORAGE_ENDPOINT') }}" # Minio storage URL pointing to API 9000
 
 # SQS_SERVICE
 tpa_single_node_event_bus_type: kafka # Either kafka or sqs
@@ -64,12 +64,13 @@ tpa_single_node_oidc_provider_client_secret: "{{ lookup('env', 'TPA_OIDC_PROVIDE
 ## AWS OIDC fields
 tpa_single_node_aws_cognito_domain: "{{ lookup('env', 'TPA_OIDC_COGNITO_DOMAIN') | default('tpa_single_node_default_empty', true) }}"
 
-# TSL Certificates
+# TSL CA Certificates
 tpa_single_node_root_ca: "{{ tpa_single_node_certificates_dir }}/rootCA.crt"
+tpa_single_node_client_tls_ca_certificates: "{{ tpa_single_node_certificates_dir }}/server-ca.crt"
+
+# TSL Certificates
 tpa_single_node_trust_cert_tls_crt_path: "{{ tpa_single_node_certificates_dir }}/trust-cert.crt"
 tpa_single_node_trust_cert_tls_key_path: "{{ tpa_single_node_certificates_dir }}/trust-cert.key"
-tpa_single_node_collector_osv_tls_client_crt_path: "{{ tpa_single_node_certificates_dir }}/trust-cert.crt"
-tpa_single_node_collectorist_api_tls_csub_crt_path: "{{ tpa_single_node_certificates_dir }}/trust-cert.crt"
 tpa_single_node_nginx_tls_crt_path: "{{ tpa_single_node_certificates_dir }}/trust-cert.crt"
 tpa_single_node_nginx_tls_key_path: "{{ tpa_single_node_certificates_dir }}/trust-cert.key"
 
@@ -87,7 +88,6 @@ tpa_single_node_collector_osv_port: 8085
 tpa_single_node_v11y_api_port: 8087
 tpa_single_node_collectorist_api_port: 8088
 tpa_single_node_guac_graphql_port: 8089
-tpa_single_node_guac_collectsub_port: 2782
 
 # Services suspended
 tpa_single_node_bombastic_walker_suspended: true

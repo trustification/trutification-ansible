@@ -101,14 +101,13 @@ spec:
             - name: GUAC_S3_QUEUES
               value: "{{ tpa_single_node_bombastic_topic_indexed }}"
             - name: GUAC_GQL_ADDR
-              value: 127.0.0.1:8080/query
+              value: {{ tpa_single_node_rhel_host }}:{{  tpa_single_node_guac_graphql_port }}/query
             - name: GUAC_CSUB_ADDR
-              value: 127.0.0.1:2782
-# TODO
-#            - name: GUAC_CSUB_TLS_ROOT_CA
-#              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
-#            - name: GUAC_GQL_TLS_ROOT_CA
-#              value: /run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+              value: {{ tpa_single_node_rhel_host }}:2782
+            - name: GUAC_CSUB_TLS_ROOT_CA
+              value: {{  tpa_single_node_root_ca  }}
+            - name: GUAC_GQL_TLS_ROOT_CA
+              value: {{  tpa_single_node_root_ca  }}
           volumeMounts:
             - mountPath: /etc/bombastic-collector-storage-secret
               name: bombastic-collector-storage-secret
