@@ -104,9 +104,9 @@ spec:
             - name: GUAC_S3_QUEUES
               value: "{{ tpa_single_node_bombastic_topic_indexed }}"
             - name: GUAC_GQL_ADDR
-              value: {{ tpa_single_node_rhel_host }}:{{  tpa_single_node_guac_graphql_port }}/query
+              value: https://{{ tpa_single_node_rhel_host }}:{{  tpa_single_node_guac_graphql_port }}/query
             - name: GUAC_CSUB_ADDR
-              value: {{ tpa_single_node_rhel_host }}:2782
+              value: https://{{ tpa_single_node_rhel_host }}:2782
             - name: GUAC_CSUB_TLS_ROOT_CA
               value: /etc/trust-anchor/tls.crt
             - name: GUAC_GQL_TLS_ROOT_CA
