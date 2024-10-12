@@ -89,7 +89,7 @@ spec:
             - name: OIDC_PROVIDER_ISSUER_URL
               value: "{{ tpa_single_node_oidc_issuer_url }}"
             - name: CSUB_CA_CERTIFICATE_PEM_PATH
-              value: {{ tpa_single_node_client_tls_ca_certificates }}
+              value: /etc/trust-anchor/tls.crt
           ports:
             - containerPort: 9010
               protocol: TCP

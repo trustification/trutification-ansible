@@ -84,10 +84,8 @@ spec:
                   name: oidc_secret
             - name: OIDC_PROVIDER_ISSUER_URL
               value: "{{ tpa_single_node_oidc_issuer_url }}"
-{% if tpa_single_node_client_tls_ca_certificates %}
             - name: CLIENT_TLS_CA_CERTIFICATES
-              value: "{{ tpa_single_node_client_tls_ca_certificates }}"
-{% endif %}
+              value: /etc/trust-anchor/tls.crt
           ports:
             - containerPort: 9010
               protocol: TCP

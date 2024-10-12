@@ -97,7 +97,6 @@ Copy your certificate files in `/tmp/rhtpa/certs/` directory using following nam
 Optionally, the certs directory variable `tpa_single_node_certificates_dir` under `roles/tpa_single_node/vars/main.yml` file can also be updated with a directory certs for below variables:
 
 - tpa_single_node_root_ca
-- tpa_single_node_client_tls_ca_certificates
 
 - tpa_single_node_trust_cert_tls_crt_path
 - tpa_single_node_trust_cert_tls_key_path

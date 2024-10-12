@@ -11,19 +11,18 @@ Requires RHEL 9.2 or later.
 
 ### Required
 
-| Option                                     | Description                                                                                  | Type | Default |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------- | ---- | ------- |
-| tpa_single_node_rhel_host                  | Ip of the instance.                                                                          | str  |         |
-| tpa_single_node_storage_access_key         | Storage access key, readed form the env var TPA_STORAGE_ACCESS_KEY.                          | str  |         |
-| tpa_single_node_storage_secret_key         | Storage access key, readed form the env var TPA_STORAGE_SECRET_KEY.                          | str  |         |
-| tpa_single_node_event_access_key_id        | Kafka Username or AWS SQS Access Key ID, readed from TPA_EVENT_ACCESS_KEY_ID env var         | str  |         |
-| tpa_single_node_event_secret_access_key    | Kafka password or AWS SQS Secret Access Key, readed from TPA_EVENT_SECRET_ACCESS_KEY env var | str  |         |
-| tpa_single_node_root_ca                    | rootCA path on the controller machine                                                        | str  |         |
-| tpa_single_node_client_tls_ca_certificates | Comma separated list of CA file paths on the controller machine                              | str  |         |
-| tpa_single_node_trust_cert_tls_crt_path    | cert path on the controller machine                                                          | str  |         |
-| tpa_single_node_trust_cert_tls_key_path    | key path on the controller machine                                                           | str  |         |
-| tpa_single_node_nginx_tls_crt_path         | nginx-tls-certificate.pem path on the controller machine                                     | str  |         |
-| tpa_single_node_nginx_tls_key_path         | nginx-tls-certificate.key path on the controller machine                                     | str  |         |
+| Option                                  | Description                                                                                  | Type | Default |
+| --------------------------------------- | -------------------------------------------------------------------------------------------- | ---- | ------- |
+| tpa_single_node_rhel_host               | Ip of the instance.                                                                          | str  |         |
+| tpa_single_node_storage_access_key      | Storage access key, readed form the env var TPA_STORAGE_ACCESS_KEY.                          | str  |         |
+| tpa_single_node_storage_secret_key      | Storage access key, readed form the env var TPA_STORAGE_SECRET_KEY.                          | str  |         |
+| tpa_single_node_event_access_key_id     | Kafka Username or AWS SQS Access Key ID, readed from TPA_EVENT_ACCESS_KEY_ID env var         | str  |         |
+| tpa_single_node_event_secret_access_key | Kafka password or AWS SQS Secret Access Key, readed from TPA_EVENT_SECRET_ACCESS_KEY env var | str  |         |
+| tpa_single_node_root_ca                 | rootCA path on the controller machine                                                        | str  |         |
+| tpa_single_node_trust_cert_tls_crt_path | cert path on the controller machine                                                          | str  |         |
+| tpa_single_node_trust_cert_tls_key_path | key path on the controller machine                                                           | str  |         |
+| tpa_single_node_nginx_tls_crt_path      | nginx-tls-certificate.pem path on the controller machine                                     | str  |         |
+| tpa_single_node_nginx_tls_key_path      | nginx-tls-certificate.key path on the controller machine                                     | str  |         |
 
 ### Optional
 
