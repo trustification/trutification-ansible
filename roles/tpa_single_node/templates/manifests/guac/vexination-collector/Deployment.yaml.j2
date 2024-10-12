@@ -104,8 +104,8 @@ spec:
           volumeMounts:
             - name: vex-collector-storage-secret
               mountPath: /etc/vexcolstoragesecret
-            - name: vex-collector-oidc-secret
-              mountPath: /etc/vexcoloidcsecret
+            - name: oidc-secret
+              mountPath: /etc/oidc-secret
             - name: trust-anchor
               mountPath: /etc/trust-anchor
               readOnly: true
@@ -113,7 +113,7 @@ spec:
         - name: vex-collector-storage-secret
           secret:
             secretName: storage_secret
-        - name: vex-collector-oidc-secret
+        - name: oidc-secret
           secret:
             secretName: oidc_secret
         - name: trust-anchor

@@ -40,7 +40,7 @@ spec:
         - name: trust-anchor
           configMap:
             name: custom-trust-anchor
-        - name: vexination-api-oidc-secret
+        - name: oidc-secret
           secret:
             secretName: oidc_secret
       containers:
@@ -78,8 +78,8 @@ spec:
             - name: trust-anchor
               mountPath: /etc/trust-anchor
               readOnly: true
-            - mountPath: /etc/vexapioidcsecret
-              name: vexination-api-oidc-secret
+            - mountPath: /etc/oidc-secret
+              name: oidc-secret
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:

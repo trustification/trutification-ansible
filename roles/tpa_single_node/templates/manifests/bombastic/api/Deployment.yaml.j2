@@ -38,7 +38,7 @@ spec:
         - name: trust-anchor
           configMap:
             name: custom-trust-anchor
-        - name: bombastic-api-oidc-secret
+        - name: oidc-secret
           secret:
             secretName: oidc_secret
       containers:
@@ -124,8 +124,8 @@ spec:
             - name: trust-anchor
               mountPath: /etc/trust-anchor
               readOnly: true
-            - name: bombastic-api-oidc-secret
-              mountPath: /etc/bombasticapioidc
+            - name: oidc-secret
+              mountPath: /etc/oidc-secret
             - name: config-auth
               mountPath: /etc/config/auth.yaml
               subPath: auth.yaml

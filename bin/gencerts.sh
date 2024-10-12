@@ -1,10 +1,11 @@
 #!/bin/bash
 TRUST_ANCHOR='rootCA'
+CERTS=('trust-cert')
+CERT_DIR='./certs'
 
-CERT_DIR='/tmp/rhtpa/certs'
 mkdir -p "$CERT_DIR"
 
-cat > /tmp/rhtpa/certs/rootCA.cnf <<EOF
+cat > ${CERT_DIR}/rootCA.cnf <<EOF
 [ req ]
 default_bits       = 2048
 prompt             = no
@@ -24,7 +25,7 @@ basicConstraints = CA:TRUE
 keyUsage = digitalSignature, keyCertSign
 EOF
 
-cat > /tmp/rhtpa/certs/server.cnf <<EOF
+cat > ${CERT_DIR}/server.cnf <<EOF
 [ req ]
 default_bits       = 2048
 prompt             = no
@@ -46,16 +47,10 @@ subjectAltName = @alt_names
 IP.1 = 192.168.121.60  # Replace with your IP address
 EOF
 
-CERT_DIR='/tmp/rhtpa/certs'
-mkdir -p "$CERT_DIR"
-
-CERTS=(
-    'trust-cert'
-)
 
 # Root Cert - Trust Anchor
 openssl genpkey -algorithm RSA -out "${CERT_DIR}/${TRUST_ANCHOR}.key" -pkeyopt rsa_keygen_bits:2048
-openssl req -x509 -new -nodes -key "${CERT_DIR}/${TRUST_ANCHOR}.key" -sha256 -days 3650 -out "${CERT_DIR}/${TRUST_ANCHOR}.crt" -config /tmp/rhtpa/certs/rootCA.cnf
+openssl req -x509 -new -nodes -key "${CERT_DIR}/${TRUST_ANCHOR}.key" -sha256 -days 3650 -out "${CERT_DIR}/${TRUST_ANCHOR}.crt" -config ${CERT_DIR}/rootCA.cnf
 
 for certname in "${CERTS[@]}"; do
     rm -f "${CERT_DIR}/${certname}.key" "${CERT_DIR}/${certname}.crt"
@@ -64,10 +59,11 @@ for certname in "${CERTS[@]}"; do
     openssl genpkey -algorithm RSA -out "${CERT_DIR}/${certname}.key" -pkeyopt rsa_keygen_bits:2048
 
     # Create the CSR
-    openssl req -new -key "${CERT_DIR}/${certname}.key" -out "${CERT_DIR}/${certname}.csr" -config /tmp/rhtpa/certs/server.cnf
+    openssl req -new -key "${CERT_DIR}/${certname}.key" -out "${CERT_DIR}/${certname}.csr" -config ${CERT_DIR}/server.cnf
 
     # # Sign the CSR with the CA
-    openssl x509 -req -in "${CERT_DIR}/${certname}.csr" -CA "${CERT_DIR}/${TRUST_ANCHOR}.crt" -CAkey "${CERT_DIR}/${TRUST_ANCHOR}.key" -CAcreateserial -out "${CERT_DIR}/${certname}.crt" -days 365 -extfile /tmp/rhtpa/certs/server.cnf -extensions req_ext
+    openssl x509 -req -in "${CERT_DIR}/${certname}.csr" -CA "${CERT_DIR}/${TRUST_ANCHOR}.crt" -CAkey "${CERT_DIR}/${TRUST_ANCHOR}.key" -CAcreateserial \
+    -out "${CERT_DIR}/${certname}.crt" -days 365 -extfile ${CERT_DIR}/server.cnf -extensions req_ext
 
     # Remove the CSR file
     rm "${CERT_DIR}/${certname}.csr"
