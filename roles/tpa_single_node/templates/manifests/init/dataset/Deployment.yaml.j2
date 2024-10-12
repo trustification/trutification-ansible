@@ -31,8 +31,8 @@ spec:
             - "-ce"
             - |
               set -e
-              /trust bombastic walker --sink https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_bombastic_api_port }} --source file:/data/sbom
-              /trust vexination walker --sink https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_vexination_api_port }}/api/v1/vex --source file:/data/csaf
+              /trust bombastic walker --sink https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_bombastic_api_port }} --source file:/data/sbom --sender-root-certificates /etc/trust-anchor/tls.crt
+              /trust vexination walker --sink https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_vexination_api_port }}/api/v1/vex --source file:/data/csaf --sender-root-certificates /etc/trust-anchor/tls.crt
           env:
             - name: OIDC_PROVIDER_CLIENT_ID
               value: "{{ tpa_single_node_oidc_provider_client_id }}"

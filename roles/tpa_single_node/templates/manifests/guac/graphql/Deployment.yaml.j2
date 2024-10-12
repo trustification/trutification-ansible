@@ -42,11 +42,13 @@ spec:
           command:
             - /opt/guac/guacgql 
           args:
-            - --gql-backend=ent
+            - --gql-listen-port={{ tpa_single_node_guac_graphql_port }}
+            - --gql-backend=ent 
             - --db-address=postgres://{{ tpa_single_node_pg_user }}:{{ tpa_single_node_pg_user_passwd }}@{{ tpa_single_node_pg_host }}:{{ tpa_single_node_pg_port }}/{{ tpa_single_node_pg_db }}?sslmode={{ tpa_single_node_pg_ssl_mode }}
             - --db-driver=postgres
             - --db-migrate=false
             - --db-debug=true
+            - --gql-debug=true
           workingDir: "/opt/guac"
           env:
             - name: GUAC_GQL_TLS_CERT_FILE
@@ -89,4 +91,3 @@ spec:
         - name: trust-anchor
           configMap:
             name: custom-trust-anchor
-
