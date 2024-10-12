@@ -98,9 +98,9 @@ spec:
             - name: GUAC_CSUB_ADDR
               value: {{ tpa_single_node_rhel_host }}:2782
             - name: GUAC_CSUB_TLS_ROOT_CA
-              value: {{  tpa_single_node_root_ca  }}
+              value: /etc/trust-anchor/tls.crt
             - name: GUAC_GQL_TLS_ROOT_CA
-              value: {{  tpa_single_node_root_ca  }}
+              value: /etc/trust-anchor/tls.crt
           volumeMounts:
             - name: vex-collector-storage-secret
               mountPath: /etc/vexcolstoragesecret
