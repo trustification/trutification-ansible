@@ -245,11 +245,6 @@ argument_specs:
         type: "str"
         required: true
         version_added: "1.2.0"
-      tpa_single_node_client_tls_ca_certificates:
-        description: "Comma separated list of client CA certificates"
-        type: "str"
-        required: true
-        version_added: "1.2.0"
       tpa_single_node_trust_cert_tls_crt_path:
         description: "pem path on the controller machine"
         type: "str"
