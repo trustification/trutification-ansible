@@ -1,9 +1,9 @@
 - name: Trustification
   hosts: trustification
   vars:
-    # V1.1.z
-    tpa_single_node_trustification_image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:2943d20c8ac831f4ae4f209c8ca6807619404062
-    tpa_single_node_guac_image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9:f0688194637cc759052e02c350c38dbabc19484e
+    # V1.2.0
+    tpa_single_node_trustification_image: quay.io/redhat-user-workloads/trusted-content-tenant/trustification-1-2-z/trustification-product-1-2-z:2c0babfe85618f358f371e8753950609639d7561
+    tpa_single_node_guac_image: quay.io/redhat-user-workloads/trusted-content-tenant/guac-0-7-x/guac:44ca3c7bc0bce6137acae0e7b5025d41ead11af7
   vars_files:
     - vars/main.yml
   tasks:
