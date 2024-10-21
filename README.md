@@ -30,7 +30,7 @@ The ingress host name is follow, where `<base_hostname>` is your deployment's ba
 
 * Ansible 2.16.0 or greater
 * Python 3.9.0 or greater
-* RHEL x86\_64 9.2 or greater.
+* RHEL x86\_64 9.3 or greater.
 * Installation and configuration of Ansible on a control node to perform the automation.
 * Installation of the Ansible collections on the control node.
   * If installing from the Ansible Automation Hub, then run `ansible-galaxy install redhat.trusted_profile_analyzer`.
@@ -98,6 +98,9 @@ The following components are provided by the customers:
 configured in the main.yml
 
 ### Postgresql
+
+Create a PostgreSQL database and configure your database credentials in the  environment variables, see 'Verifying the deployment section', 
+other database configurations are in the roles/tpa_single_node/vars/main.yml
 
 ### S3 or S3 compatible service like Minio
   Have the following unversioned S3 bucket names created:
