@@ -109,6 +109,8 @@ spec:
               readOnly: true
             - mountPath: /etc/oidc-secret
               name: oidc-secret
+            - name: user-preferences-db-path
+              mountPath: /data/db/
           livenessProbe:
             initialDelaySeconds: 2
             httpGet:
@@ -135,3 +137,6 @@ spec:
         - name: oidc-secret
           secret:
             secretName: oidc_secret
+        - name: user-preferences-db-path
+          persistentVolumeClaim:
+            claimName: user-preferences-db-path
