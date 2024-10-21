@@ -15,7 +15,7 @@ The RHTPA service is the downstream redistribution of the [Trustification](https
 The automation contained within this Git repository installs and configures the components of RHTPA to run on a single RHEL server, which uses a standalone containerized deployment.
 A Kubernetes-based manifest creates containers that uses [`podman kube play`](https://docs.podman.io/en/latest/markdown/podman-kube-play.1.html).
 
-The RHTPA Ansible collection deploys the following RHTAS components:
+The RHTPA Ansible collection deploys the following RHTPA components:
 
 - [Trustification](https://github.com/trustification/trustification)
 - [Guac](https://github.com/trustification/guac)
