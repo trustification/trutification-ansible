@@ -3,7 +3,7 @@ argument_specs:
     short_description: "Configure Red Hat Trusted Profile Analyzer Signer (RHTPA) on a single managed node."
     description: >
       Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_profile_analyzer/) service
-      on a single managed node by using the `tas_single_node` role.
+      on a single managed node by using the `tpa_single_node` role.
     version_added: "1.2.0"
     options:
       tpa_single_node_trustification_image:
