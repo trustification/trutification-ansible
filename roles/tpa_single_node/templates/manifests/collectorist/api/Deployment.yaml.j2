@@ -90,6 +90,8 @@ spec:
               value: "{{ tpa_single_node_oidc_issuer_url }}"
             - name: CSUB_CA_CERTIFICATE_PEM_PATH
               value: /etc/trust-anchor/tls.crt
+            - name: CLIENT_TLS_INSECURE
+              value: 'true'
           ports:
             - containerPort: 9010
               protocol: TCP
