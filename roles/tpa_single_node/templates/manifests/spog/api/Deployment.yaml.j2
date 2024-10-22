@@ -52,6 +52,8 @@ spec:
             - https://{{ tpa_single_node_rhel_host }}:{{ tpa_single_node_guac_graphql_port }}/query
             - --auth-configuration
             - /etc/config/auth.yaml
+            - --db-storage-base
+            - /data/db/
           env:
             - name: RUST_LOG
               value: info
