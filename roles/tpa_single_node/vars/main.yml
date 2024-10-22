@@ -19,30 +19,30 @@ tpa_single_node_pg_user_passwd: "{{ lookup('env', 'TPA_PG_PASSWORD') }}"
 tpa_single_node_pg_ssl_mode: disable
 
 # Storage Service
-tpa_single_node_storage_type: minio # Either s3 or minio or other s3 compatible
+tpa_single_node_storage_type: s3 # Either s3 or minio or other s3 compatible
 tpa_single_node_storage_access_key: "{{ lookup('env', 'TPA_STORAGE_ACCESS_KEY') }}" # S3/minio root username
 tpa_single_node_storage_secret_key: "{{ lookup('env', 'TPA_STORAGE_SECRET_KEY') }}" # S3/minio root password
-tpa_single_node_storage_bombastic_bucket: bombastic-default # <bombastic storage bucket name>
-tpa_single_node_storage_v11y_bucket: v11y-default # <v11y storage bucket name>
-tpa_single_node_storage_vexination_bucket: vexination-default # <vexination storage bucket name>
+tpa_single_node_storage_bombastic_bucket: bombastic-rhtpa # <bombastic storage bucket name>
+tpa_single_node_storage_v11y_bucket: v11y-rhtpa # <v11y storage bucket name>
+tpa_single_node_storage_vexination_bucket: vexination-rhtpa # <vexination storage bucket name>
 tpa_single_node_storage_region: eu-west-1 # <AWS S3 Storage region> # For Minio just keep eu-west-1
 
 ## Storage Service - Minio fields
 tpa_single_node_storage_endpoint: "{{ lookup('env', 'TPA_STORAGE_ENDPOINT') }}" # Minio storage URL pointing to API 9000
 
 # SQS_SERVICE
-tpa_single_node_event_bus_type: kafka # Either kafka or sqs
+tpa_single_node_event_bus_type: sqs # Either kafka or sqs
 tpa_single_node_event_access_key_id: "{{ lookup('env', 'TPA_EVENT_ACCESS_KEY_ID') }}" # Kafka Username or AWS SQS Access Key ID
 tpa_single_node_event_secret_access_key: "{{ lookup('env', 'TPA_EVENT_SECRET_ACCESS_KEY') }}" # Kafka password or AWS SQS Secret Access Key
-tpa_single_node_bombastic_topic_failed: bombastic-failed-default # Bombastic Events topic failed
-tpa_single_node_bombastic_topic_indexed: bombastic-indexed-default # Bombastic Events topic indexed
-tpa_single_node_bombastic_topic_stored: bombastic-stored-default # Bombastic Events topic stored
-tpa_single_node_vexination_topic_failed: vexination-failed-default # Vexination Events topic failed
-tpa_single_node_vexination_topic_indexed: vexination-indexed-default # Vexination Events topic indexed
-tpa_single_node_vexination_topic_stored: vexination-stored-default # Vexination Events topic stored
-tpa_single_node_v11y_topic_failed: v11y-failed-default # v11y Events topic failed
-tpa_single_node_v11y_topic_indexed: v11y-indexed-default # v11y Events topic indexed
-tpa_single_node_v11y_topic_stored: v11y-stored-default # v11y Events topic stored
+tpa_single_node_bombastic_topic_failed: bombastic-failed-rhtpa # Bombastic Events topic failed
+tpa_single_node_bombastic_topic_indexed: bombastic-indexed-rhtpa # Bombastic Events topic indexed
+tpa_single_node_bombastic_topic_stored: bombastic-stored-rhtpa # Bombastic Events topic stored
+tpa_single_node_vexination_topic_failed: vexination-failed-rhtpa # Vexination Events topic failed
+tpa_single_node_vexination_topic_indexed: vexination-indexed-rhtpa # Vexination Events topic indexed
+tpa_single_node_vexination_topic_stored: vexination-stored-rhtpa # Vexination Events topic stored
+tpa_single_node_v11y_topic_failed: v11y-failed-rhtpa # v11y Events topic failed
+tpa_single_node_v11y_topic_indexed: v11y-indexed-rhtpa # v11y Events topic indexed
+tpa_single_node_v11y_topic_stored: v11y-stored-rhtpa # v11y Events topic stored
 
 ## SQS_SERVICE - Kafka fields
 tpa_single_node_kafka_bootstrap_servers: "{{ lookup('env', 'TPA_EVENT_BOOTSTRAP_SERVER') | default('tpa_single_node_default_empty', true) }}"
@@ -55,7 +55,7 @@ tpa_single_node_kafka_auth_mechanism: SCRAM-SHA-512 # Example - SCRAM-SHA-512
 tpa_single_node_sqs_region: eu-west-1 # AWS SQS Region
 
 # SSO_SERVICE
-tpa_single_node_oidc_type: keycloak # Either Keycloak or AWS Cognito
+tpa_single_node_oidc_type: cognito # Either Keycloak or AWS Cognito
 tpa_single_node_oidc_issuer_url: "{{ lookup('env', 'TPA_OIDC_ISSUER_URL') | default('tpa_single_node_default_empty', true) }}"
 tpa_single_node_oidc_frontend_id: "{{ lookup('env', 'TPA_OIDC_FRONTEND_ID') | default('tpa_single_node_default_empty', true) }}"
 tpa_single_node_oidc_provider_client_id: "{{ lookup('env', 'TPA_OIDC_PROVIDER_CLIENT_ID') | default('tpa_single_node_default_empty', true) }}"
