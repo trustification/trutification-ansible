@@ -76,10 +76,10 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 | tpa_single_node_v11y_api_port | V11y api port | int |  `8087`  |
 | tpa_single_node_collectorist_api_port | Collectorist api port | int |  `8088`  |
 | tpa_single_node_guac_graphql_port | Guac GraphQl port | int |  `8089`  |
-| tpa_single_node_bombastic_walker_suspended | Bombastic walker suspended flag | bool |  `true`  |
-| tpa_single_node_dataset_job_suspended | Dataset job suspended flag | bool |  `true`  |
-| tpa_single_node_vexination_walker_suspended | Vexination walker job suspended flag | bool |  `true`  |
-| tpa_single_node_v11y_walker_suspended | V11y walker job suspended flag | bool |  `false`  |
+| tpa_single_node_bombastic_walker_suspended | Bombastic walker suspended flag | bool |  `True`  |
+| tpa_single_node_dataset_job_suspended | Dataset job suspended flag | bool |  `True`  |
+| tpa_single_node_vexination_walker_suspended | Vexination walker job suspended flag | bool |  `True`  |
+| tpa_single_node_v11y_walker_suspended | V11y walker job suspended flag | bool |  `False`  |
 
 ## Example Playbook
 

@@ -14,4 +14,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r testing-requirements.txt
           ansible-galaxy install -r requirements.yml
-          ansible-lint -v
+          make lint
+          make galaxy-importer-test
+          # ensure that the role README was regenerated
+          make role-readme
+          if ! git diff --exit-code roles/tpa_single_node/README.md; then
+            echo "roles/tpa_single_node/README.md not regenerated, please run 'make role-readme'"
+            exit 1
+          fi

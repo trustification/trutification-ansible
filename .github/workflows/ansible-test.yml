@@ -9,7 +9,6 @@ jobs:
     steps:
       - name: Perform testing
         uses: ansible-community/ansible-test-gh-action@release/v1
-        pre-test-cmd: rm -rf input-template
         with:
           testing-type: sanity
           python-version: 3.11
