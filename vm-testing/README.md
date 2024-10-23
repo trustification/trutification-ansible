@@ -114,3 +114,13 @@ sudo cp rootCA.crt /etc/pki/ca-trust/source/anchors/
 sudo update-ca-trust
 ```
 This will update the system's certificate store, enabling your applications to recognize the newly trusted root certificate
+
+
+## Faq
+Error at the vagrant startup
+```
+Name `rhel9-vm_trustification` of domain about to create is already taken. Please try to run
+`vagrant up` command again.
+```
+
+Open the Virtual machine manager, or install if is not on the machine, and delete the image then run again ```vagrant up```
