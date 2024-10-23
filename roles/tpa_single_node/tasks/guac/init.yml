@@ -18,12 +18,8 @@
   become: true
   become_user: postgres
 
-- name: Create psql test command
-  ansible.builtin.template:
-    src: "templates/scripts/psql_test.sh.j2"
-    dest: "/tmp/psql_test.sh"
-    mode: "0755"
-
 - name: Testing DB guac to make sure it is available
-  ansible.builtin.command: "/tmp/psql_test.sh"
+  ansible.builtin.command: "psql postgresql://{{ tpa_single_node_pg_user }}:{{ tpa_single_node_pg_user_passwd }}@\
+      {{ tpa_single_node_pg_host }}:{{ tpa_single_node_pg_port }}/{{ tpa_single_node_pg_db }} -c 'SELECT 1'"
+  register: select_output
   changed_when: false
