@@ -39,8 +39,6 @@ The ingress host name is follow, where `<base_hostname>` is your deployment's ba
 * A PostgreSQL instance
 * SQS like [Kafka](https://console.redhat.com/ansible/automation-hub/repo/published/redhat/amq_streams/)
 * S3 service or S3 compatible service
-* Optional:
-  Installation of the `podman` binaries to verify that the RHTPA service is working as expected.
 
 ## Overview
 The following components are provided by the customers:
@@ -116,12 +114,7 @@ other database configurations are in the roles/tpa_single_node/vars/main.yml
 * [Trustification](https://github.com/trustification/trustification/blob/main/docs/modules/admin/pages/cluster-preparing.adoc)
 
 
-
-
-Utilize the steps below to understand how to setup and execute the provisioning.
-
 ## Installation
-
 
 Before using this collection, you need to install it with the Ansible Galaxy command-line tool:
 
@@ -152,7 +145,7 @@ ansible-galaxy collection install redhat.trusted_profile_analyzer:==1.2.0
 
 ## Verifying the deployment
 
-1. Export the following environment variables, replacing `TODO` with your relevant information:
+1. Export the following environment variables, replacing placeholders with your relevant information:
 
    ```shell
       export TPA_SINGLE_NODE_REGISTRATION_USERNAME=<Your Red Hat subscription username>
@@ -181,43 +174,7 @@ export TPA_EVENT_BOOTSTRAP_SERVER=<Kafka Bootstrap Server>
 export TPA_OIDC_COGNITO_DOMAIN=<AWS Cognito Domain>
 ```
 
-4. Open the browser to call the UI
-   https://`<base_hostname>`
-
-
-
-
-
-
-
-
-
-
-## Prerequisites
-
-A RHEL 9.3+ server should be used to run the Trustification components.
-
-Ansible must be installed and configured on a control node that will be used to perform the automation.
-
-Perform the following steps to prepare the control node for execution.
-
-### Dependencies
-
-Install the required Ansible collections by executing the following
-
-```shell
-ansible-galaxy collection install -r requirements.yml
-```
-
-### OIDC provider
-
-An installation of Red Hat SSO/Keycloak/AWS Cognito must be provided to allow for integration with containerized Trustification.
-
 ## Provision
-
-#### https://developer.hashicorp.com/vagrant/docs/provisioning/ansible
-
-#### https://docs.ansible.com/ansible/2.9/scenario_guides/guide_vagrant.html
 
 In order to deploy Trustification on a RHEL 9.3+ VM:
 
@@ -225,12 +182,12 @@ In order to deploy Trustification on a RHEL 9.3+ VM:
 
 ```
 [trustification]
-192.168.121.60
+<IP_OF_TARGET_MACHINE>
 
 [trustification:vars]
-ansible_user=vagrant
-ansible_ssh_pass=vargrant
-ansible_private_key_file=./vm-testing/images/rhel9-vm/.vagrant/machines/trustification/libvirt/private_key
+ansible_user=<username>
+ansible_ssh_pass=<password>
+ansible_private_key_file=<path of private_key>
 ```
 
 2. Create `ansible.cfg` file in the project with a single VM in the `trustification` group:

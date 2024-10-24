@@ -90,8 +90,6 @@ tpa_single_node_v11y_walker_suspended: false
 tpa_single_node_system_packages:
   - podman
   - podman-plugins
-  # @postgres-remove
   - postgresql
-  - postgresql-server
   - python3-pip
   - python3-cryptography
