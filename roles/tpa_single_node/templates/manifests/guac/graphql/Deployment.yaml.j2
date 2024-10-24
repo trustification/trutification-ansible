@@ -31,7 +31,7 @@ spec:
           command:
             - /opt/guac/guacmigrate
           args:
-            - --db-address=postgres://{{ tpa_single_node_pg_user }}:{{ tpa_single_node_pg_user_passwd }}@{{ tpa_single_node_pg_host }}:{{ tpa_single_node_pg_port }}/{{ tpa_single_node_pg_db }}?sslmode={{ tpa_single_node_pg_ssl_mode }}
+            - --db-address=postgres://{{ tpa_single_node_pg_admin }}:{{ tpa_single_node_pg_admin_passwd }}@{{ tpa_single_node_pg_host }}:{{ tpa_single_node_pg_port }}/{{ tpa_single_node_pg_db }}?sslmode={{ tpa_single_node_pg_ssl_mode }}
             - --db-driver=postgres
             - --db-debug=true
           volumeMounts: null
