@@ -11,6 +11,12 @@
   ansible.builtin.command: podman login registry.redhat.io -u {{ tpa_single_node_registry_username }} -p {{ tpa_single_node_registry_password }}
   register: podman_login_result
   changed_when: '"Already logged in" not in podman_login_result'
+  no_log: true
+
+- name: Check if Podman login succeeded
+  ansible.builtin.fail:
+    msg: "Podman login failed!"
+  when: podman_login_result.rc != 0
 
 - name: Create Manifests/Configs Directory
   ansible.builtin.file:
