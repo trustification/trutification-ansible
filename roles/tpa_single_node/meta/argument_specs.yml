@@ -24,7 +24,6 @@ argument_specs:
       tpa_single_node_rhel_host:
         description: "Ip of the instance."
         type: "str"
-        required: true
         version_added: "1.2.0"
       tpa_single_node_certificates_dir:
         description: "Folder where to place the certificates to deploy on the instance."
