@@ -1,4 +1,3 @@
-certs/
 venv/
 vm-testing/inventory
 vm-testing/vars.yml
@@ -8,6 +7,11 @@ vm-testing/**/terraform.tfstate*
 env/
 .venv/
 venv/
+.pem
+.key
+.crt
+.cnf
+.srl
 .env/
 .vagrant
 # artifacts/ directory produced by ansible-runner

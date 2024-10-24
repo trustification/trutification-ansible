@@ -258,7 +258,7 @@ Alternatively vagrant will prompt you to provide the registration username and p
 
 4. Path for TLS certificates files:
 
-Copy your certificate files in `/tmp/rhtpa/certs/` directory using following names:
+Copy your certificate files in `certs/` directory using following names:
 
 - trust-cert.crt
 - trust-cert.key
