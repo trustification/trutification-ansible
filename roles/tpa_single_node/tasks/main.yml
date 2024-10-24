@@ -1,4 +1,8 @@
 ---
+- name: Get IP of the current node
+  ansible.builtin.set_fact:
+    tpa_single_node_rhel_host: "{{ ansible_ssh_host }}"
+
 - name: Set a variable about Rhel
   ansible.builtin.set_fact:
     rhel: false

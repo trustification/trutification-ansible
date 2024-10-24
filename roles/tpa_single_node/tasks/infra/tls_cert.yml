@@ -11,4 +11,4 @@
 - name: Play Guac csub secret manifest
   ansible.builtin.command:
     cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/Secrets/tls-cert.yaml"
-  changed_when: true
+  changed_when: false
