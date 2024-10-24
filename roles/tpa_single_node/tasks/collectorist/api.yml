@@ -22,7 +22,7 @@
 - name: Create persistent volume for collectorist-api
   ansible.builtin.command:
     cmd: "podman kube play {{ tpa_single_node_kube_manifest_dir }}/PVCs/collectorist-api.yaml"
-  changed_when: true
+  changed_when: false
 
 - name: Deploy collectorist-api
   ansible.builtin.include_tasks: install_manifest.yml

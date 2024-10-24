@@ -225,7 +225,7 @@ In order to deploy Trustification on a RHEL 9.3+ VM:
 
 ```
 [trustification]
-192.168.121.60 become=true
+192.168.121.60
 
 [trustification:vars]
 ansible_user=vagrant

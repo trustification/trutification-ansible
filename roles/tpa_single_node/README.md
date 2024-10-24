@@ -9,7 +9,6 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 ### Required
 |Option|Description|Type|Default|
 |---|---|---|---|
-| tpa_single_node_rhel_host | Ip of the instance. | str |  |
 | tpa_single_node_storage_access_key | Storage access key, readed form the env var TPA_STORAGE_ACCESS_KEY. | str |  |
 | tpa_single_node_storage_secret_key | Storage access key, readed form the env var TPA_STORAGE_SECRET_KEY. | str |  |
 | tpa_single_node_event_access_key_id | Kafka Username or AWS SQS Access Key ID, readed from TPA_EVENT_ACCESS_KEY_ID env var | str |  |
@@ -26,6 +25,7 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 | tpa_single_node_trustification_image | Trustification image. | str |  `registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:2943d20c8ac831f4ae4f209c8ca6807619404062`  |
 | tpa_single_node_guac_image | Guac image. | str |  `registry.redhat.io/rhtpa/rhtpa-guac-rhel9:f0688194637cc759052e02c350c38dbabc19484e`  |
 | tpa_single_node_base_hostname | The user name logging in to the registry to pull images. | str |  `trustification`  |
+| tpa_single_node_rhel_host | Ip of the instance. | str |  |
 | tpa_single_node_certificates_dir | Folder where to place the certificates to deploy on the instance. | str |  `certs`  |
 | tpa_single_node_config_dir | Configuration directory on the instance. | str |  `/etc/rhtpa`  |
 | tpa_single_node_kube_manifest_dir | Configuration directory on the instance containing the manifests. | str |  `/etc/rhtpa/manifests`  |
@@ -86,7 +86,6 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 ```
 - hosts: rhtpa
   vars:
-    tpa_single_node_rhel_host: # TODO: required, type: str
     tpa_single_node_storage_access_key: # TODO: required, type: str
     tpa_single_node_storage_secret_key: # TODO: required, type: str
     tpa_single_node_event_access_key_id: # TODO: required, type: str
