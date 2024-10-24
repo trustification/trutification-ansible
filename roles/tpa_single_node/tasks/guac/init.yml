@@ -2,9 +2,9 @@
 - name: Copy init-db.sql to Server
   ansible.builtin.copy:
     content: "{{ lookup('ansible.builtin.template', 'configs/init-db.sql') }}"
-    dest: "/tmp/init-db.sql"
+    dest: "{{ tpa_single_node_config_dir }}/init-db.sql"
     remote_src: true
-    mode: "0666"
+    mode: "0600"
 
 - name: Run init-db.sql
   ansible.builtin.command: "psql postgresql://{{ tpa_single_node_pg_admin }}:{{ tpa_single_node_pg_admin_passwd }}@\
@@ -13,7 +13,7 @@
       -v db_name={{ tpa_single_node_pg_db }} \
       -v db_user={{ tpa_single_node_pg_user }} \
       -v db_password={{ tpa_single_node_pg_user_passwd }} \
-      -f /tmp/init-db.sql"
+      -f {{ tpa_single_node_config_dir }}/init-db.sql"
   changed_when: false
 
 - name: Testing DB guac to make sure it is available
