@@ -10,6 +10,7 @@ tpa_single_node_systemd_directory: /etc/systemd/system
 tpa_single_node_default_empty: ""
 
 # DB_SERVICE
+tpa_single_node_pg_install_enabled: false
 tpa_single_node_pg_host: "{{ lookup('env', 'TPA_PG_HOST') | default('192.168.121.60', true) }}"
 tpa_single_node_pg_port: 5432
 tpa_single_node_pg_db: guac
