@@ -1,0 +1,5 @@
+Copy your certificate files here
+
+- trust-cert.crt
+- trust-cert.key
+- rootCA.crt
