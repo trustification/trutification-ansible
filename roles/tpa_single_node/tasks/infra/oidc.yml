@@ -28,4 +28,4 @@
 - name: Apply storage secret manifest
   ansible.builtin.command:
     cmd: "podman kube play {{ tpa_single_node_oidc_secret }}"
-  changed_when: true
+  changed_when: false

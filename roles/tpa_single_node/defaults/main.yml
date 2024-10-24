@@ -1,10 +1,10 @@
 ---
-# defaults file for tpa_single_node
-tpa_single_node_system_packages:
-  - podman
-  - podman-plugins
-  # @postgres-remove
-  - postgresql
-  - postgresql-server
-  - python3-pip
-  - python3-cryptography
+# Storage Service
+tpa_single_node_storage_type: minio # Either s3 or minio or other s3 compatible
+tpa_single_node_storage_region: eu-west-1 # <AWS S3 Storage region> # For Minio just keep eu-west-1
+# SQS_SERVICE
+tpa_single_node_event_bus_type: kafka # Either kafka or sqs
+### AWS SQS fields
+tpa_single_node_sqs_region: eu-west-1 # AWS SQS Region
+# SSO_SERVICE
+tpa_single_node_oidc_type: keycloak # Either Keycloak or AWS Cognito
