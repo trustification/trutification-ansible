@@ -325,6 +325,54 @@ Refer `roles/tpa_single_node/vars/main_example_aws.yml` and `roles/tpa_single_no
 ANSIBLE_ROLES_PATH="roles/" ansible-playbook -i inventory.ini play.yml
 ```
 
+
+## Use Cases
+
+See [using Ansible collections](https://docs.ansible.com/ansible/devel/user_guide/collections_using.html) for more details.
+
+
+
+1. Create an `inventory` file with a single node under the `trustification` group:
+
+   ```
+   [trustification]
+   <IP of the target machine>
+   ```
+
+2. Create an Ansible Playbook named `play.yml`, and configure with your relevant information:
+
+   ```yaml
+   - name: Trustification
+     hosts: trustification
+     vars:
+         vars:
+            tpa_single_node_trustification_image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:<sha>
+            tpa_single_node_guac_image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9:<sha>
+     vars_files:
+       - vars/main.yml
+     tasks:
+       - name: Include TPA single node
+         ansible.builtin.include_role:
+           name: tpa_single_node # Use if deploying from Ansible Automation Hub.
+   ```
+   > [!NOTE]
+   If running this Playbook from a locally-cloned Git repository, then replace the `redhat.trusted_profile_analyzer.tpa_single_node` value with `tpa_single_node`.
+
+3. Install the RHTPA Ansible collection.
+
+    - If installing from Ansible Automation Hub, then run the following command:
+
+      ```shell
+      ansible-playbook -i inventory play.yml
+      ```
+
+    - If running from a locally-cloned Git repository, then run the following command:
+
+      ```shell
+      export ANSIBLE_ROLES_PATH="roles/" ; ansible-playbook -i inventory play.yml
+      ```
+
+
 ## Contributing
 
 ### Testing Deployment on a VM
