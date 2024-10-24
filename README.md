@@ -99,8 +99,10 @@ configured in the main.yml
 
 ### Postgresql
 
-Create a PostgreSQL database and configure your database credentials in the  environment variables, see 'Verifying the deployment section', 
-other database configurations are in the roles/tpa_single_node/vars/main.yml
+Create a PostgreSQL database, run as administrator the script placed in
+```roles/tpa_single_node/templates/configs/init-db.sql```
+using the dbname, dbuser and dbpassword configured in the  environment variables to prepare the db used by the application, see 'Verifying the deployment section',
+other database configurations are in the ```roles/tpa_single_node/vars/main.yml```
 
 ### S3 or S3 compatible service like Minio
   Have the following unversioned S3 bucket names created:
