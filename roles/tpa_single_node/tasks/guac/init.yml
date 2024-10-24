@@ -11,7 +11,7 @@
       {{ tpa_single_node_pg_host }}:{{ tpa_single_node_pg_port }}/{{ tpa_single_node_pg_db }} \
       -v ON_ERROR_STOP=1 \
       -v db_name={{ tpa_single_node_pg_db }} \
-      -v db_user={{ tpa_single_node_pg_user }} \ 
+      -v db_user={{ tpa_single_node_pg_user }} \
       -v db_password={{ tpa_single_node_pg_user_passwd }} \
       -f /tmp/init-db.sql"
   changed_when: false
