@@ -84,7 +84,7 @@ argument_specs:
         description: "DB admin password."
         type: "str"
         version_added: "1.2.0"
-        default: "posgres1234" 
+        default: "posgres1234"
       tpa_single_node_pg_user:
         description: "DB user."
         type: "str"
