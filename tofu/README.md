@@ -57,3 +57,6 @@ Add missing security groups to RDS instance.
 aws cognito-idp admin-set-user-password --user-pool-id eu-west-1_xd6z5R2I6 --username admin --password Passwd1234! --permanent
 
 ## How to install trustification in the cluster https://docs.staging.trustification.dev/trustification/admin/cluster-prereq.html
+
+# Reset RDS Postgres main password
+aws rds modify-db-instance --db-instance-identifier <your-db-instance-id> --master-user-password <new-password>  --apply-immediately

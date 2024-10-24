@@ -14,7 +14,7 @@ variable "availability-zone" {
 
 variable "environment" {
   type        = string
-  default     = "standalone1"
+  default     = "rhtpa"
   description = "An environment, using for tagging and creating a suffix for AWS resources"
 }
 
@@ -41,13 +41,12 @@ variable "admin-email" {
 
 module "trustification" {
   source = "./trustification"
-
-  cluster-vpc-id = "vpc-0bafde0c6649878c5"
-
+  
+  cluster-vpc-id = "vpc-0035505e4eebde7eb" 
   availability-zone = "eu-west-1a"
 
   admin-email = var.admin-email
   environment = var.environment
   sso-domain = var.sso-domain
-  console-url = "https://console${var.app-domain}"
+  console-url = "https://192.168.121.60"
 }

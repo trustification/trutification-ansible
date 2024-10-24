@@ -12,15 +12,16 @@ data "aws_subnets" "cluster-private" {
     name   = "vpc-id"
     values = [data.aws_vpc.cluster.id]
   }
-  tags = {
-    "kubernetes.io/role/internal-elb" = ""
+  filter {
+    name   = "tag:Tier"
+    values = ["Private"]
   }
 }
 
 resource "aws_db_subnet_group" "database" {
   name       = "database-${var.environment}"
-#  subnet_ids = data.aws_subnets.cluster-private.ids
-  subnet_ids = ["subnet-0d7681137281158ec", "subnet-076a5a2ec15a3327b"]
+  #subnet_ids = data.aws_subnets.cluster-private.ids
+  subnet_ids = ["subnet-068f642ae12854fb6", "subnet-019d58d879c0fc1a4"]
 }
 
 resource "aws_security_group" "database" {
@@ -34,8 +35,10 @@ resource "aws_security_group_rule" "allow-postgres" {
   from_port         = 5432
   to_port           = 5432
   type              = "ingress"
-  cidr_blocks       = data.aws_vpc.cluster.cidr_block != "" ? [data.aws_vpc.cluster.cidr_block] : []
-  ipv6_cidr_blocks  = data.aws_vpc.cluster.ipv6_cidr_block != "" ? [data.aws_vpc.cluster.ipv6_cidr_block] : []
+  cidr_blocks       = ["0.0.0.0/0"]
+  ipv6_cidr_blocks  = ["::/0"]
+#  cidr_blocks       = data.aws_vpc.cluster.cidr_block != "" ? [data.aws_vpc.cluster.cidr_block] : []
+#  ipv6_cidr_blocks  = data.aws_vpc.cluster.ipv6_cidr_block != "" ? [data.aws_vpc.cluster.ipv6_cidr_block] : []
 }
 
 variable "db-master-user" {
@@ -44,10 +47,9 @@ variable "db-master-user" {
   description = "Username of the master user of the database"
 }
 
-variable "db-user" {
-  type        = string
-  default     = "guac"
-  description = "Username of the guac user of the database"
+variable "guac-db-admin-password" {
+  type = string
+  default = "postgres1234"
 }
 
 locals {
@@ -58,16 +60,6 @@ locals {
   db-name = "guac_${var.environment}"
 }
 
-variable "guac-db-admin-password" {
-  type = string
-  default = "db-admin-passwd1"
-}
-
-variable "guac-db-user-password" {  
-  type = string
-  default = "db-user-passwd1"
-}
-
 resource "aws_db_instance" "guac" {
   db_subnet_group_name = aws_db_subnet_group.database.name
 
@@ -76,7 +68,7 @@ resource "aws_db_instance" "guac" {
   allocated_storage     = 10
   max_allocated_storage = 100
 
-  db_name             = "postgres"
+  db_name             = "guac"
   engine              = "postgres"
   engine_version      = "15.5"
   instance_class      = "db.m7g.large"
@@ -86,4 +78,5 @@ resource "aws_db_instance" "guac" {
   skip_final_snapshot = true
 
   availability_zone = var.availability-zone
+  publicly_accessible = true
 }
