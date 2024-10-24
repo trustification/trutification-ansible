@@ -7,11 +7,11 @@ vm-testing/**/terraform.tfstate*
 env/
 .venv/
 venv/
-.pem
-.key
-.crt
-.cnf
-.srl
+certs/*.pem
+certs/*.key
+certs/*.crt
+certs/*.cnf
+certs/*.srl
 .env/
 .vagrant
 # artifacts/ directory produced by ansible-runner
