@@ -3,12 +3,16 @@
 Version: 0.2.0
 
 Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_profile_analyzer/) service on a single managed node by using the `tpa_single_node` role.
- Requires RHEL 9.2 or later.
+ Requires RHEL 9.3 or later.
 
 ## Role Arguments
 ### Required
 |Option|Description|Type|Default|
 |---|---|---|---|
+| tpa_single_node_pg_admin | DB admin user. | str |  `postgres`  |
+| tpa_single_node_pg_admin_passwd | DB admin password. | str |  `posgres1234`  |
+| tpa_single_node_pg_user | DB user. | str |  `guac`  |
+| tpa_single_node_pg_user_passwd | DB user password. | str |  `guac1234`  |
 | tpa_single_node_storage_access_key | Storage access key, readed form the env var TPA_STORAGE_ACCESS_KEY. | str |  |
 | tpa_single_node_storage_secret_key | Storage access key, readed form the env var TPA_STORAGE_SECRET_KEY. | str |  |
 | tpa_single_node_event_access_key_id | Kafka Username or AWS SQS Access Key ID, readed from TPA_EVENT_ACCESS_KEY_ID env var | str |  |
@@ -36,9 +40,7 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 | tpa_single_node_pg_host | Host ip of the postgresql db instance. Readed from the TPA_PG_HOST env | str |  |
 | tpa_single_node_pg_port | Port of the postgresql db instance. | str |  `5432`  |
 | tpa_single_node_pg_db | DB name. | str |  `guac`  |
-| tpa_single_node_pg_user | DB username. | str |  `guac`  |
-| tpa_single_node_pg_user_passwd | DB password. | str |  `guac1234`  |
-| tpa_single_node_pg_ssl_mode | DB SSL mode enabled/disabled. | str |  `disable`  |
+| tpa_single_node_pg_ssl_mode | DB SSL mode require/disabled. | str |  `disable`  |
 | tpa_single_node_storage_type | Storage type s3/minio/other s3 compatible. | str |  `minio`  |
 | tpa_single_node_storage_bombastic_bucket | Bombastic storage bucket name. | str |  `bombastic-default`  |
 | tpa_single_node_storage_v11y_bucket | V11y storage bucket name. | str |  `v11y-default`  |
@@ -86,6 +88,10 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 ```
 - hosts: rhtpa
   vars:
+    tpa_single_node_pg_admin: # TODO: required, type: str
+    tpa_single_node_pg_admin_passwd: # TODO: required, type: str
+    tpa_single_node_pg_user: # TODO: required, type: str
+    tpa_single_node_pg_user_passwd: # TODO: required, type: str
     tpa_single_node_storage_access_key: # TODO: required, type: str
     tpa_single_node_storage_secret_key: # TODO: required, type: str
     tpa_single_node_event_access_key_id: # TODO: required, type: str
