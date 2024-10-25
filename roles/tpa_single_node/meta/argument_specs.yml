@@ -4,338 +4,338 @@ argument_specs:
     description: >
       Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_profile_analyzer/) service
       on a single managed node by using the `tpa_single_node` role.
-    version_added: "1.2.0"
+    version_added: "0.2.0"
     options:
       tpa_single_node_trustification_image:
         description: "Trustification image."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:2943d20c8ac831f4ae4f209c8ca6807619404062"
       tpa_single_node_guac_image:
         description: "Guac image."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "registry.redhat.io/rhtpa/rhtpa-guac-rhel9:f0688194637cc759052e02c350c38dbabc19484e"
       tpa_single_node_base_hostname:
         description: "The user name logging in to the registry to pull images."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "trustification"
       tpa_single_node_rhel_host:
         description: "Ip of the instance."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_certificates_dir:
         description: "Folder where to place the certificates to deploy on the instance."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "certs"
       tpa_single_node_config_dir:
         description: "Configuration directory on the instance."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "/etc/rhtpa"
       tpa_single_node_kube_manifest_dir:
         description: "Configuration directory on the instance containing the manifests."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "/etc/rhtpa/manifests"
       tpa_single_node_namespace:
         description: "Podman network namespace."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "trustification"
       tpa_single_node_podman_network:
         description: "Podman network name."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "tcnet"
       tpa_single_node_systemd_directory:
         description: "Folder where to store the systemd configurations files."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "/etc/systemd/system"
       tpa_single_node_default_empty:
         description: "Default empty value."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: ""
       tpa_single_node_pg_host:
         description: "Host ip of the postgresql db instance. Readed from the TPA_PG_HOST env"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: ""
       tpa_single_node_pg_port:
         description: "Port of the postgresql db instance."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "5432"
       tpa_single_node_pg_db:
         description: "DB name."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "guac"
       tpa_single_node_pg_user:
         description: "DB username."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "guac"
       tpa_single_node_pg_user_passwd:
         description: "DB password."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "guac1234"
       tpa_single_node_pg_ssl_mode:
         description: "DB SSL mode enabled/disabled."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "disable"
       tpa_single_node_storage_type:
         description: "Storage type s3/minio/other s3 compatible."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "minio"
       tpa_single_node_storage_access_key:
         description: "Storage access key, readed form the env var TPA_STORAGE_ACCESS_KEY."
         type: "str"
         required: true
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_storage_secret_key:
         description: "Storage access key, readed form the env var TPA_STORAGE_SECRET_KEY."
         type: "str"
         required: true
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_storage_bombastic_bucket:
         description: "Bombastic storage bucket name."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "bombastic-default"
       tpa_single_node_storage_v11y_bucket:
         description: "V11y storage bucket name."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "v11y-default"
       tpa_single_node_storage_vexination_bucket:
         description: "V11y storage bucket name."
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "vexination-default"
       tpa_single_node_storage_region:
         description: "AWS S3 Storage region"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "eu-west-1"
       tpa_single_node_storage_endpoint:
         description: "Minio storage endpoint if used instead of S3"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "eu-west-1"
       tpa_single_node_event_bus_type:
         description: "Kafka or SQS"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "kafka"
       tpa_single_node_event_access_key_id:
         description: "Kafka Username or AWS SQS Access Key ID, readed from TPA_EVENT_ACCESS_KEY_ID env var"
         type: "str"
         required: true
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_event_secret_access_key:
         description: "Kafka password or AWS SQS Secret Access Key, readed from TPA_EVENT_SECRET_ACCESS_KEY env var"
         type: "str"
         required: true
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_bombastic_topic_failed:
         description: "Bombastic Events topic failed"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "bombastic-failed-default"
       tpa_single_node_bombastic_topic_indexed:
         description: "Bombastic Events topic indexed"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "bombastic-indexed-default"
       tpa_single_node_bombastic_topic_stored:
         description: "Bombastic Events topic stored"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "bombastic-stored-default"
       tpa_single_node_vexination_topic_failed:
         description: "Vexination Events topic failed"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "vexination-failed-default"
       tpa_single_node_vexination_topic_indexed:
         description: "Vexination Events topic indexed"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "vexination-indexed-default"
       tpa_single_node_vexination_topic_stored:
         description: "Vexination Events topic stored"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "vexination-stored-default"
       tpa_single_node_v11y_topic_failed:
         description: "V11y Events topic failed"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "vv1y-failed-default"
       tpa_single_node_v11y_topic_indexed:
         description: "V11y Events topic indexed"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "v11y-indexed-default"
       tpa_single_node_v11y_topic_stored:
         description: "V11y Events topic stored"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "v11y-stored-default"
       tpa_single_node_kafka_bootstrap_servers:
         description: "Kafka bootstrap servers readed from TPA_EVENT_BOOTSTRAP_SERVER env var"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_kafka_security_protocol:
         description: "Kafka security protocol"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "SASL_PLAINTEXT"
       tpa_single_node_kafka_auth_mechanism:
         description: "Kafka auth mechanism"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "SCRAM-SHA-512"
       tpa_single_node_sqs_region:
         description: "AWS SQS Region"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "eu-west-1"
       tpa_single_node_oidc_type:
         description: "Keycloak or AWS Cognito"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "keycloak"
       tpa_single_node_oidc_issuer_url:
         description: "Readed from TPA_OIDC_ISSUER_URL env var"
         type: "str"
         required: false
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_oidc_frontend_id:
         description: "Readed from TPA_OIDC_FRONTEND_ID env var"
         type: "str"
         required: false
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_oidc_provider_client_id:
         description: "Readed from TPA_OIDC_PROVIDER_CLIENT_ID env var"
         type: "str"
         required: false
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_oidc_provider_client_secret:
         description: "Readed from TPA_OIDC_PROVIDER_CLIENT_SECRET env var"
         type: "str"
         required: false
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_aws_cognito_domain:
         description: "Readed from TPA_OIDC_COGNITO_DOMAIN env var"
         type: "str"
         required: false
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_root_ca:
         description: "rootCA path on the controller machine"
         type: "str"
         required: true
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_trust_cert_tls_crt_path:
         description: "pem path on the controller machine"
         type: "str"
         required: true
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_trust_cert_tls_key_path:
         description: "key path on the controller machine"
         type: "str"
         required: true
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_nginx_tls_crt_path:
         description: "nginx-tls-certificate.pem path on the controller machine"
         type: "str"
         required: true
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_nginx_tls_key_path:
         description: "nginx-tls.key path on the controller machine"
         type: "str"
         required: true
-        version_added: "1.2.0"
+        version_added: "0.2.0"
       tpa_single_node_storage_secret:
         description: "storage-secret.yaml path on the target machine"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "/etc/rhtpa/manifests/storage-secret.yaml"
       tpa_single_node_event_secret:
         description: "event-secret.yaml path on the target machine"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "/etc/rhtpa/manifests/event-secret.yaml"
       tpa_single_node_oidc_secret:
         description: "oidc-secret.yaml path on the target machine"
         type: "str"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: "/etc/rhtpa/manifests/oidc-secret.yaml"
       tpa_single_node_spog_ui_port:
         description: "Spog ui port"
         type: "int"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: 8080
       tpa_single_node_vexination_api_port:
         description: "Vexination api port"
         type: "int"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: 8081
       tpa_single_node_bombastic_api_port:
         description: "Bombastic api port"
         type: "int"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: 8082
       tpa_single_node_spog_api_port:
         description: "Spog api port"
         type: "int"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: 8084
       tpa_single_node_collector_osv_port:
         description: "Collector OSV api port"
         type: "int"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: 8085
       tpa_single_node_v11y_api_port:
         description: "V11y api port"
         type: "int"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: 8087
       tpa_single_node_collectorist_api_port:
         description: "Collectorist api port"
         type: "int"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: 8088
       tpa_single_node_guac_graphql_port:
         description: "Guac GraphQl port"
         type: "int"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: 8089
       tpa_single_node_bombastic_walker_suspended:
         description: "Bombastic walker suspended flag"
         type: "bool"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: true
       tpa_single_node_dataset_job_suspended:
         description: "Dataset job suspended flag"
         type: "bool"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: true
       tpa_single_node_vexination_walker_suspended:
         description: "Vexination walker job suspended flag"
         type: "bool"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: true
       tpa_single_node_v11y_walker_suspended:
         description: "V11y walker job suspended flag"
         type: "bool"
-        version_added: "1.2.0"
+        version_added: "0.2.0"
         default: false
