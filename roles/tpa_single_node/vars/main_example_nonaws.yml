@@ -11,11 +11,13 @@ tpa_single_node_systemd_directory: /etc/systemd/system
 tpa_single_node_default_empty: ""
 
 # DB_SERVICE
-tpa_single_node_pg_host: "{{ lookup('env', 'TPA_PG_HOST', default='192.168.121.60') }}"
+tpa_single_node_pg_host: "{{ lookup('env', 'TPA_PG_HOST') | default('192.168.121.60', true) }}"
 tpa_single_node_pg_port: 5432
 tpa_single_node_pg_db: guac
-tpa_single_node_pg_user: guac
-tpa_single_node_pg_user_passwd: guac1234
+tpa_single_node_pg_admin: "{{ lookup('env', 'TPA_PG_ADMIN') }}"
+tpa_single_node_pg_admin_passwd: "{{ lookup('env', 'TPA_PG_ADMIN_PASSWORD') }}"
+tpa_single_node_pg_user: "{{ lookup('env', 'TPA_PG_USER') }}"
+tpa_single_node_pg_user_passwd: "{{ lookup('env', 'TPA_PG_USER_PASSWORD') }}"
 tpa_single_node_pg_ssl_mode: disable
 
 # Storage Service
