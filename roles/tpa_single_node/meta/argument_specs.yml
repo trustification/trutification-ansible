@@ -78,21 +78,25 @@ argument_specs:
       tpa_single_node_pg_admin:
         description: "DB admin user."
         type: "str"
+        required: true
         version_added: "1.2.0"
         default: "postgres"
       tpa_single_node_pg_admin_passwd:
         description: "DB admin password."
         type: "str"
+        required: true
         version_added: "1.2.0"
         default: "posgres1234"
       tpa_single_node_pg_user:
         description: "DB user."
         type: "str"
+        required: true
         version_added: "0.2.0"
         default: "guac"
       tpa_single_node_pg_user_passwd:
         description: "DB user password."
         type: "str"
+        required: true
         version_added: "0.2.0"
         default: "guac1234"
       tpa_single_node_pg_ssl_mode:
