@@ -3,11 +3,10 @@
 The purpose of this Ansible collection is to automate the deployment of the Red Hat Trusted Profile Analyzer (RHTPA) service on Red Hat Enterprise Linux (RHEL).
 
 > [!IMPORTANT]
-Deploying RHTPA by using Ansible is a Technology Preview feature only.
-Technology Preview features are not supported with Red Hat production service level agreements (SLAs), might not be functionally complete, and Red Hat does not recommend to use them for production.
-These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
-See the support scope for [Red Hat Technology Preview](https://access.redhat.com/support/offerings/techpreview/) features for more details.
-
+> Deploying RHTPA by using Ansible is a Technology Preview feature only.
+> Technology Preview features are not supported with Red Hat production service level agreements (SLAs), might not be functionally complete, and Red Hat does not recommend to use them for production.
+> These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+> See the support scope for [Red Hat Technology Preview](https://access.redhat.com/support/offerings/techpreview/) features for more details.
 
 ## Description
 
@@ -24,66 +23,69 @@ An [NGINX](https://www.nginx.com) front end places an entrypoint to the RHTPA UI
 A set of self-signed certificates get generated at runtime to establishing secure communications.
 
 The ingress host name is follow, where `<base_hostname>` is your deployment's base hostname:
-* https://`<base_hostname>`
+
+- https://`<base_hostname>`
 
 ## Requirements
 
-* Ansible 2.16.0 or greater
-* Python 3.9.0 or greater
-* RHEL x86\_64 9.3 or greater.
-* Installation and configuration of Ansible on a control node to perform the automation.
-* Installation of the Ansible collections on the control node.
-  * If installing from the Ansible Automation Hub, then run `ansible-galaxy install redhat.trusted_profile_analyzer`.
-  * If installing from this Git repository, then clone it locally, and run `ansible-galaxy collection install -r requirements.yml`.
-* An OpenID Connect (OIDC) provider, such as [Keycloak](https://console.redhat.com/ansible/automation-hub/repo/published/redhat/sso/).
-* A PostgreSQL instance
-* SQS like [Kafka](https://console.redhat.com/ansible/automation-hub/repo/published/redhat/amq_streams/)
-* S3 service or S3 compatible service
-* Optional:
+- Ansible 2.16.0 or greater
+- Python 3.9.0 or greater
+- RHEL x86_64 9.3 or greater.
+- Installation and configuration of Ansible on a control node to perform the automation.
+- Installation of the Ansible collections on the control node.
+  - If installing from the Ansible Automation Hub, then run `ansible-galaxy install redhat.trusted_profile_analyzer`.
+  - If installing from this Git repository, then clone it locally, and run `ansible-galaxy collection install -r requirements.yml`.
+- An OpenID Connect (OIDC) provider, such as [Keycloak](https://console.redhat.com/ansible/automation-hub/repo/published/redhat/sso/).
+- A PostgreSQL instance
+- SQS like [Kafka](https://console.redhat.com/ansible/automation-hub/repo/published/redhat/amq_streams/)
+- S3 service or S3 compatible service
+- Optional:
   Installation of the `podman` binaries to verify that the RHTPA service is working as expected.
 
 ## Overview
+
 The following components are provided by the customers:
 
 ### RedHat Single Sign On
-  For this, you will need to:
 
-  * Install Keycloak
-  * Create a new realm
-  * Create the following roles for this realm
-   * `chicken-user`
-   * `chicken-manager`
-   * `chicken-admin`
-  * Make the `chicken-user` a default role
-  * Create the following scopes for this realm
-    * `read:document`
-    * `create:document`
-    * `delete:document`
-  * Add the `create:document` and `delete:document` scope to the `chicken-manager` role
-  * Create two clients
-    *  One public client
-        * Set `standardFlowEnabled` to `true`
-        * Set `fullScopedAllowed` to `true`
-        * Set the following `defaultClientScopes`
-          * `read:document`
-          * `create:document`
-          * `delete:document`
-    * One protected client  
-        * Set `publicClient` to `false`
-        * Set `serviecAccountsEnabled` to `true`
-        * Set `fullScopedAllowed` to `true`
-        * Set the following `defaultClientScopes`
-          * `read:document`
-          * `create:document`
-        * Add role `chicken-manager` to the service account of this client
-    * Increase the token timeout for both clients to at least 5 minutes
-    * Create a user, acting as administrator
-    * Add the `chicken-manager` and `chicken-admin` role to this user
+For this, you will need to:
 
+- Install Keycloak
+- Create a new realm
+- Create the following roles for this realm
+- `chicken-user`
+- `chicken-manager`
+- `chicken-admin`
+- Make the `chicken-user` a default role
+- Create the following scopes for this realm
+  - `read:document`
+  - `create:document`
+  - `delete:document`
+- Add the `create:document` and `delete:document` scope to the `chicken-manager` role
+- Create two clients
+  - One public client
+    - Set `standardFlowEnabled` to `true`
+    - Set `fullScopedAllowed` to `true`
+    - Set the following `defaultClientScopes`
+      - `read:document`
+      - `create:document`
+      - `delete:document`
+  - One protected client
+    - Set `publicClient` to `false`
+    - Set `serviecAccountsEnabled` to `true`
+    - Set `fullScopedAllowed` to `true`
+    - Set the following `defaultClientScopes`
+      - `read:document`
+      - `create:document`
+    - Add role `chicken-manager` to the service account of this client
+  - Increase the token timeout for both clients to at least 5 minutes
+  - Create a user, acting as administrator
+  - Add the `chicken-manager` and `chicken-admin` role to this user
 
+### RedHat Kafka streams
 
-### RedHat Kafka streams  
-  With the following topic names created:
+With the following topic names created:
+
 ```
   bombastic-failed-default
   bombastic-indexed-default
@@ -95,33 +97,35 @@ The following components are provided by the customers:
   v11y-indexed-default
   v11y-stored-default
 ```
+
 configured in the main.yml
 
 ### Postgresql
 
-Create a PostgreSQL database and configure your database credentials in the  environment variables, see 'Verifying the deployment section', 
+Create a PostgreSQL database and configure your database credentials in the environment variables, see 'Verifying the deployment section',
 other database configurations are in the roles/tpa_single_node/vars/main.yml
 
+Postgres ssl mode is enabled by default. To disable it please change the following in vars/main.yml file:
+`tpa_single_node_pg_ssl_mode: disable`
+
 ### S3 or S3 compatible service like Minio
-  Have the following unversioned S3 bucket names created:
-  ```
-  bombastic-default
-  vexination-default
-  v11y-default 
-  ```
-  configured in the main.yml
 
+Have the following unversioned S3 bucket names created:
 
-*  Details about how to configure the services can be found here [RHTPA external services deploy](https://docs.redhat.com/en/documentation/red_hat_trusted_profile_analyzer/1/html-single/deployment_guide/index#installing-trusted-profile-analyzer-by-using-helm-with-other-services_deploy)
-* [Trustification](https://github.com/trustification/trustification/blob/main/docs/modules/admin/pages/cluster-preparing.adoc)
+```
+bombastic-default
+vexination-default
+v11y-default
+```
 
+configured in the main.yml
 
-
+- Details about how to configure the services can be found here [RHTPA external services deploy](https://docs.redhat.com/en/documentation/red_hat_trusted_profile_analyzer/1/html-single/deployment_guide/index#installing-trusted-profile-analyzer-by-using-helm-with-other-services_deploy)
+- [Trustification](https://github.com/trustification/trustification/blob/main/docs/modules/admin/pages/cluster-preparing.adoc)
 
 Utilize the steps below to understand how to setup and execute the provisioning.
 
 ## Installation
-
 
 Before using this collection, you need to install it with the Ansible Galaxy command-line tool:
 
@@ -130,7 +134,6 @@ ansible-galaxy collection install redhat.trusted_profile_analyzer
 ```
 
 You can also include it in a `requirements.yml` file and install it with `ansible-galaxy collection install -r requirements.yml`, using the format:
-
 
 ```yaml
 collections:
@@ -171,27 +174,21 @@ ansible-galaxy collection install redhat.trusted_profile_analyzer:==0.2.0
       export TPA_EVENT_ACCESS_KEY_ID=<Kafka Username or AWS SQS Access Key>
       export TPA_EVENT_SECRET_ACCESS_KEY=<Kafka User Password or AWS SQS Secret Key>
    ```
+
 2. In case of Kafka Events, create environmental variable for bootstrap server
+
 ```shell
 export TPA_EVENT_BOOTSTRAP_SERVER=<Kafka Bootstrap Server>
 ```
 
 3. In case of AWS Cognito as OIDC, create environmental variable for Cognito Domain
+
 ```shell
 export TPA_OIDC_COGNITO_DOMAIN=<AWS Cognito Domain>
 ```
 
 4. Open the browser to call the UI
    https://`<base_hostname>`
-
-
-
-
-
-
-
-
-
 
 ## Prerequisites
 

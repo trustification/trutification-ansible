@@ -18,7 +18,7 @@ tpa_single_node_pg_admin: "{{ lookup('env', 'TPA_PG_ADMIN') }}"
 tpa_single_node_pg_admin_passwd: "{{ lookup('env', 'TPA_PG_ADMIN_PASSWORD') }}"
 tpa_single_node_pg_user: "{{ lookup('env', 'TPA_PG_USER') }}"
 tpa_single_node_pg_user_passwd: "{{ lookup('env', 'TPA_PG_USER_PASSWORD') }}"
-tpa_single_node_pg_ssl_mode: disable
+tpa_single_node_pg_ssl_mode: require
 
 # Storage Service
 tpa_single_node_storage_access_key: "{{ lookup('env', 'TPA_STORAGE_ACCESS_KEY') }}" # S3/minio root username
