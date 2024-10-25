@@ -1,7 +1,7 @@
 ---
 namespace: redhat
 name: trusted_profile_analyzer
-version: 1.2.0
+version: 0.2.0
 
 readme: README.md
 authors:
