@@ -2,11 +2,11 @@
 
 The purpose of this Ansible collection is to automate the deployment of the Red Hat Trusted Profile Analyzer (RHTPA) service on Red Hat Enterprise Linux (RHEL).
 
-> [!IMPORTANT]
-> Deploying RHTPA by using Ansible is a Technology Preview feature only.
-> Technology Preview features are not supported with Red Hat production service level agreements (SLAs), might not be functionally complete, and Red Hat does not recommend to use them for production.
-> These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
-> See the support scope for [Red Hat Technology Preview](https://access.redhat.com/support/offerings/techpreview/) features for more details.
+[!IMPORTANT]
+Deploying RHTPA by using Ansible is a Technology Preview feature only.
+Technology Preview features are not supported with Red Hat production service level agreements (SLAs), might not be functionally complete, and Red Hat does not recommend to use them for production.
+These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+See the support scope for [Red Hat Technology Preview](https://access.redhat.com/support/offerings/techpreview/) features for more details.
 
 ## Description
 
