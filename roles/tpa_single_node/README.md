@@ -3,7 +3,7 @@
 Version: 0.2.0
 
 Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_profile_analyzer/) service on a single managed node by using the `tpa_single_node` role.
- Requires RHEL 9.2 or later.
+ Requires RHEL 9.3 or later.
 
 ## Role Arguments
 ### Required
