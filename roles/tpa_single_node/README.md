@@ -9,10 +9,10 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 ### Required
 |Option|Description|Type|Default|
 |---|---|---|---|
-| tpa_single_node_pg_admin | DB admin user. | str |  `postgres`  |
-| tpa_single_node_pg_admin_passwd | DB admin password. | str |  `posgres1234`  |
-| tpa_single_node_pg_user | DB user. | str |  `guac`  |
-| tpa_single_node_pg_user_passwd | DB user password. | str |  `guac1234`  |
+| tpa_single_node_pg_admin | DB admin user. | str |  |
+| tpa_single_node_pg_admin_passwd | DB admin password. | str |  |
+| tpa_single_node_pg_user | DB user. | str |  |
+| tpa_single_node_pg_user_passwd | DB user password. | str |  |
 | tpa_single_node_storage_access_key | Storage access key, readed form the env var TPA_STORAGE_ACCESS_KEY. | str |  |
 | tpa_single_node_storage_secret_key | Storage access key, readed form the env var TPA_STORAGE_SECRET_KEY. | str |  |
 | tpa_single_node_event_access_key_id | Kafka Username or AWS SQS Access Key ID, readed from TPA_EVENT_ACCESS_KEY_ID env var | str |  |
