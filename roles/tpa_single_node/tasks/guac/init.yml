@@ -15,9 +15,11 @@
       -v db_password={{ tpa_single_node_pg_user_passwd }} \
       -f {{ tpa_single_node_config_dir }}/init-db.sql"
   changed_when: false
+  no_log: true
 
 - name: Testing DB guac to make sure it is available
   ansible.builtin.command: "psql postgresql://{{ tpa_single_node_pg_user }}:{{ tpa_single_node_pg_user_passwd }}@\
       {{ tpa_single_node_pg_host }}:{{ tpa_single_node_pg_port }}/{{ tpa_single_node_pg_db }} -c 'SELECT 1'"
   register: select_output
   changed_when: false
+  no_log: true
