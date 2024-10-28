@@ -1,7 +1,6 @@
 ---
 # vars file for tpa_scaffolding
 tpa_single_node_base_hostname: trustification
-tpa_single_node_rhel_host: "{{ lookup('env', 'TPA_RHEL_HOST') | default('192.168.121.60', true) }}"
 tpa_single_node_certificates_dir: ./certs/
 tpa_single_node_config_dir: /etc/rhtpa
 tpa_single_node_kube_manifest_dir: "{{ tpa_single_node_config_dir }}/manifests"
@@ -11,27 +10,27 @@ tpa_single_node_systemd_directory: /etc/systemd/system
 tpa_single_node_default_empty: ""
 
 # DB_SERVICE
+tpa_single_node_pg_install_enabled: false
 tpa_single_node_pg_host: "{{ lookup('env', 'TPA_PG_HOST') | default('192.168.121.60', true) }}"
 tpa_single_node_pg_port: 5432
 tpa_single_node_pg_db: guac
+tpa_single_node_pg_admin: "{{ lookup('env', 'TPA_PG_ADMIN') }}"
+tpa_single_node_pg_admin_passwd: "{{ lookup('env', 'TPA_PG_ADMIN_PASSWORD') }}"
 tpa_single_node_pg_user: "{{ lookup('env', 'TPA_PG_USER') }}"
-tpa_single_node_pg_user_passwd: "{{ lookup('env', 'TPA_PG_PASSWORD') }}"
-tpa_single_node_pg_ssl_mode: disable
+tpa_single_node_pg_user_passwd: "{{ lookup('env', 'TPA_PG_USER_PASSWORD') }}"
+tpa_single_node_pg_ssl_mode: require
 
 # Storage Service
-tpa_single_node_storage_type: minio # Either s3 or minio or other s3 compatible
 tpa_single_node_storage_access_key: "{{ lookup('env', 'TPA_STORAGE_ACCESS_KEY') }}" # S3/minio root username
 tpa_single_node_storage_secret_key: "{{ lookup('env', 'TPA_STORAGE_SECRET_KEY') }}" # S3/minio root password
 tpa_single_node_storage_bombastic_bucket: bombastic-default # <bombastic storage bucket name>
 tpa_single_node_storage_v11y_bucket: v11y-default # <v11y storage bucket name>
 tpa_single_node_storage_vexination_bucket: vexination-default # <vexination storage bucket name>
-tpa_single_node_storage_region: eu-west-1 # <AWS S3 Storage region> # For Minio just keep eu-west-1
 
 ## Storage Service - Minio fields
 tpa_single_node_storage_endpoint: "{{ lookup('env', 'TPA_STORAGE_ENDPOINT') }}" # Minio storage URL pointing to API 9000
 
 # SQS_SERVICE
-tpa_single_node_event_bus_type: kafka # Either kafka or sqs
 tpa_single_node_event_access_key_id: "{{ lookup('env', 'TPA_EVENT_ACCESS_KEY_ID') }}" # Kafka Username or AWS SQS Access Key ID
 tpa_single_node_event_secret_access_key: "{{ lookup('env', 'TPA_EVENT_SECRET_ACCESS_KEY') }}" # Kafka password or AWS SQS Secret Access Key
 tpa_single_node_bombastic_topic_failed: bombastic-failed-default # Bombastic Events topic failed
@@ -51,11 +50,7 @@ tpa_single_node_kafka_security_protocol: SASL_PLAINTEXT # Example - SASL_PLAINTE
 # Kafka Authentication Mechanism which is spec.kafka.listeners.authentication.type in Block letters.
 tpa_single_node_kafka_auth_mechanism: SCRAM-SHA-512 # Example - SCRAM-SHA-512
 
-### AWS SQS fields
-tpa_single_node_sqs_region: eu-west-1 # AWS SQS Region
-
 # SSO_SERVICE
-tpa_single_node_oidc_type: keycloak # Either Keycloak or AWS Cognito
 tpa_single_node_oidc_issuer_url: "{{ lookup('env', 'TPA_OIDC_ISSUER_URL') | default('tpa_single_node_default_empty', true) }}"
 tpa_single_node_oidc_frontend_id: "{{ lookup('env', 'TPA_OIDC_FRONTEND_ID') | default('tpa_single_node_default_empty', true) }}"
 tpa_single_node_oidc_provider_client_id: "{{ lookup('env', 'TPA_OIDC_PROVIDER_CLIENT_ID') | default('tpa_single_node_default_empty', true) }}"
@@ -93,3 +88,13 @@ tpa_single_node_bombastic_walker_suspended: true
 tpa_single_node_dataset_job_suspended: true
 tpa_single_node_vexination_walker_suspended: true
 tpa_single_node_v11y_walker_suspended: false
+
+# defaults file for tpa_single_node
+tpa_single_node_system_packages:
+  - podman
+  - podman-plugins
+  # @postgres-remove
+  - postgresql
+  - postgresql-server
+  - python3-pip
+  - python3-cryptography

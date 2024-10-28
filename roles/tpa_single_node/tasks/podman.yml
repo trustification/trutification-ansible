@@ -41,16 +41,16 @@
   ansible.builtin.command:
     cmd: "podman network create {{ tpa_single_node_podman_network }}"
   when: network_inspect_result.rc != 0
-  changed_when: true
+  changed_when: false
 
 - name: Pull trustification image from registry.redhat.io
   when: rhel
   ansible.builtin.command:
     cmd: "podman pull {{ tpa_single_node_trustification_image }}"
-  changed_when: true
+  changed_when: false
 
 - name: Pull Guac image from registry.redhat.io
   when: rhel
   ansible.builtin.command:
     cmd: "podman pull {{ tpa_single_node_guac_image }}"
-  changed_when: true
+  changed_when: false

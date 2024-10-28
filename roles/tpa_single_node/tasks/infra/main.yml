@@ -4,6 +4,7 @@
   args:
     apply:
       become: true
+  when: tpa_single_node_pg_install_enabled
 
 - name: Configure OIDC
   ansible.builtin.include_tasks: infra/oidc.yml

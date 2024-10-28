@@ -26,4 +26,4 @@
 - name: Apply Event Storage manifest
   ansible.builtin.command:
     cmd: "podman kube play {{ tpa_single_node_event_secret }}"
-  changed_when: true
+  changed_when: false

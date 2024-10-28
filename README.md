@@ -102,6 +102,10 @@ configured in the main.yml
 Create a PostgreSQL database and configure your database credentials in the  environment variables, see 'Verifying the deployment section', 
 other database configurations are in the roles/tpa_single_node/vars/main.yml
 
+Postgres ssl mode is enabled by default. To disable it please change the following in vars/main.yml file:
+`tpa_single_node_pg_ssl_mode: disable`.
+
+
 ### S3 or S3 compatible service like Minio
   Have the following unversioned S3 bucket names created:
   ```
@@ -144,10 +148,10 @@ To upgrade the collection to the latest available version, run the following com
 ansible-galaxy collection install redhat.trusted_profile_analyzer --upgrade
 ```
 
-You can also install a specific version of the collection, for example, if you need to downgrade when something is broken in the latest version (please report an issue in this repository). Use the following syntax to install version 1.2.0:
+You can also install a specific version of the collection, for example, if you need to downgrade when something is broken in the latest version (please report an issue in this repository). Use the following syntax to install version 0.2.0:
 
 ```
-ansible-galaxy collection install redhat.trusted_profile_analyzer:==1.2.0
+ansible-galaxy collection install redhat.trusted_profile_analyzer:==0.2.0
 ```
 
 ## Verifying the deployment
@@ -159,9 +163,11 @@ ansible-galaxy collection install redhat.trusted_profile_analyzer:==1.2.0
       export TPA_SINGLE_NODE_REGISTRATION_PASSWORD=<Your Red Hat subscription password>
       export TPA_SINGLE_NODE_REGISTRY_USERNAME=<Your Red Hat image registry username>
       export TPA_SINGLE_NODE_REGISTRY_PASSWORD=<Your Red Hat image registry password>
-      export TPA_PG_HOST=<POSTGRES_HOST_IP>
-      export TPA_PG_USER=<DB_USER>
-      export TPA_PG_PASSWORD==<DB_PASSWORD>
+      export TPA_PG_HOST=<POSTGRES HOST IP>
+      export TPA_PG_ADMIN=<DB ADMIN>
+      export TPA_PG_ADMIN_PASSWORD==<DB ADMIN PASSWORD>
+      export TPA_PG_USER=<DB USER>
+      export TPA_PG_USER_PASSWORD==<DB PASSWORD>
       export TPA_STORAGE_ACCESS_KEY=<Storage Access Key>
       export TPA_STORAGE_SECRET_KEY=<Storage Secret Key>
       export TPA_OIDC_ISSUER_URL=<AWS Cognito or Keycloak Issuer URL. Incase of Keycloak endpoint auth/realms/chicken is needed>
@@ -225,7 +231,7 @@ In order to deploy Trustification on a RHEL 9.3+ VM:
 
 ```
 [trustification]
-192.168.121.60 become=true
+192.168.121.60
 
 [trustification:vars]
 ansible_user=vagrant
