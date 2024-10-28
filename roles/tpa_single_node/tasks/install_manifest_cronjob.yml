@@ -19,9 +19,10 @@
     mode: "0600"
   register: copy_systemd_file
 
-- name: Copy Systemd file timer to Server
+- name: Add systemd timer for {{ podman_spec.systemd_file }}
+  when: podman_spec.timer is defined
   ansible.builtin.template:
-    src: systemd/systemd-timer-{{ podman_spec.timer_type }}.j2
+    src: systemd/timer.j2
     dest: "{{ tpa_single_node_systemd_directory + '/' + podman_spec.systemd_file }}.timer"
     mode: "0600"
   register: copy_systemd_timer_file

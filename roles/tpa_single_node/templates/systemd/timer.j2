@@ -1,0 +1,16 @@
+[Unit]
+Description=Run {{ podman_spec.systemd_file}}.timer
+  
+[Timer]
+Unit={{ podman_spec.systemd_file}}.service
+{% if podman_spec.timer.type == "monotonic" -%}
+OnBootSec=1min
+OnUnitActiveSec={{ podman_spec.timer.pattern }}
+{% endif -%} 
+{% if podman_spec.timer.type == "realtime" -%}
+OnCalendar={{ podman_spec.timer.pattern }}
+Persistent=true
+{% endif %} 
+
+[Install]
+WantedBy=timers.target

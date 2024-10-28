@@ -1,10 +1,10 @@
 ---
 # Storage Service
-tpa_single_node_storage_type: minio # Either s3 or minio or other s3 compatible
+tpa_single_node_storage_type: s3 # Either s3 or minio or other s3 compatible
 tpa_single_node_storage_region: eu-west-1 # <AWS S3 Storage region> # For Minio just keep eu-west-1
 # SQS_SERVICE
-tpa_single_node_event_bus_type: kafka # Either kafka or sqs
+tpa_single_node_event_bus_type: sqs # Either kafka or sqs
 ### AWS SQS fields
 tpa_single_node_sqs_region: eu-west-1 # AWS SQS Region
 # SSO_SERVICE
-tpa_single_node_oidc_type: keycloak # Either Keycloak or AWS Cognito
+tpa_single_node_oidc_type: cognito # Either Keycloak or AWS Cognito
