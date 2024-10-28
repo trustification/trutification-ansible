@@ -15,6 +15,10 @@
     - ansible_facts['distribution_major_version'] == '9'
     - (ansible_facts['distribution_version'] | split('.'))[1] | int >= 3
 
+- name: Create Services list
+  ansible.builtin.set_fact:
+    services: []
+
 - name: Install Operating System Components
   ansible.builtin.include_tasks: os.yml
   when: rhel

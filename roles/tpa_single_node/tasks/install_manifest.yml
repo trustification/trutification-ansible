@@ -1,7 +1,4 @@
 ---
-# NOTE: determining when the service will restart with `when: ...` is not ideal, however
-# we would need a dynamic handler otherwise and these are a bit fragile.
-
 - name: Set location of Podman Play Manifest
   ansible.builtin.set_fact:
     kube_play_file: >-
@@ -22,11 +19,16 @@
     mode: "0600"
   register: copy_systemd_file
 
-- name: Restart Podman Service
-  ansible.builtin.systemd:
-    state: restarted
-    enabled: true
-    daemon_reload: true
-    name: "{{ podman_spec.systemd_file }}"
-    no_block: true
-  when: copy_manifest.changed or copy_systemd_file.changed
+- name: Add systemd timer for {{ podman_spec.systemd_file }}
+  when: podman_spec.timer is defined
+  ansible.builtin.template:
+    src: systemd/timer.j2
+    dest: "{{ tpa_single_node_systemd_directory + '/' + podman_spec.systemd_file }}.timer"
+    mode: "0600"
+  register: copy_systemd_timer_file
+
+- name: Add {{ podman_spec.systemd_file }} to services list
+  ansible.builtin.set_fact:
+    services: "{{ services + [  podman_spec.systemd_file ] }}"
+  changed_when: true
+  notify: Reload services

@@ -1,6 +1,6 @@
 ---
 - name: Deploy vexination walker Pod
-  ansible.builtin.include_tasks: install_manifest_cronjob.yml
+  ansible.builtin.include_tasks: install_manifest.yml
   when: not tpa_single_node_vexination_walker_suspended
   vars:
     podman_spec:
