@@ -1,0 +1,8 @@
+# This file contains ignores rule violations for ansible-lint
+roles/tpa_single_node/tasks/infra/component_auth.yml name[template]
+roles/tpa_single_node/templates/branding/CND-AppSpeed-Keyart-2_at_2x.png load-failure[unicodedecodeerror]
+roles/tpa_single_node/templates/branding/android-chrome-192x192.png load-failure[unicodedecodeerror]
+roles/tpa_single_node/templates/branding/apple-touch-icon.png load-failure[unicodedecodeerror]
+roles/tpa_single_node/templates/branding/favicon-16x16.png load-failure[unicodedecodeerror]
+roles/tpa_single_node/templates/branding/favicon-32x32.png load-failure[unicodedecodeerror]
+roles/tpa_single_node/templates/branding/favicon.ico load-failure[unicodedecodeerror]
