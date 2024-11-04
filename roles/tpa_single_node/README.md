@@ -26,8 +26,8 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 ### Optional
 |Option|Description|Type|Default|
 |---|---|---|---|
-| tpa_single_node_trustification_image | Trustification image. | str |  `registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:2943d20c8ac831f4ae4f209c8ca6807619404062`  |
-| tpa_single_node_guac_image | Guac image. | str |  `registry.redhat.io/rhtpa/rhtpa-guac-rhel9:f0688194637cc759052e02c350c38dbabc19484e`  |
+| tpa_single_node_trustification_image | Trustification image. | str |  `registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:16bc624b40f2863c9e69e8cdd4d557eb0d200eaf`  |
+| tpa_single_node_guac_image | Guac image. | str |  `registry.redhat.io/rhtpa/rhtpa-guac-rhel9:65220008e46d9def5314d56a351e45f918aa68d1`  |
 | tpa_single_node_base_hostname | The user name logging in to the registry to pull images. | str |  `trustification`  |
 | tpa_single_node_rhel_host | Ip of the instance. | str |  |
 | tpa_single_node_certificates_dir | Folder where to place the certificates to deploy on the instance. | str |  `certs`  |
