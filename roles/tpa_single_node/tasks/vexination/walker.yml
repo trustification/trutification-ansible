@@ -1,14 +1,16 @@
 ---
 - name: Deploy vexination walker Pod
-  ansible.builtin.include_tasks: install_manifest_cronjob.yml
+  ansible.builtin.include_tasks: install_service.yml
   when: not tpa_single_node_vexination_walker_suspended
   vars:
-    podman_spec:
+    specs:
+      service: vexination-walker
       state: stopped
-      systemd_file: vexination-walker
-      timer_type: monotonic # realtime
-      time_pattern: 1h # *:0/10 for realtime instead of monotonic
       network: "{{ tpa_single_node_podman_network }}"
-      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/vexination/walker/Deployment.yaml.j2') | from_yaml }}"
+      kube_file: "{{ role_path }}/templates/systemd/default.kube.j2"
+      manifest_file: "{{ role_path }}/templates/manifests/vexination/walker/Deployment.yaml.j2"
       configmaps:
         - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/custom-trust-anchor.yaml"
+      timer:
+        type: monotonic # realtime
+        pattern: 1h # *:0/10 for realtime instead of monotonic

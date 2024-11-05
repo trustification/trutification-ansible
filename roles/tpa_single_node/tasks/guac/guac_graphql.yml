@@ -1,11 +1,12 @@
 ---
 - name: Deploy guac-graphql Pod
-  ansible.builtin.include_tasks: install_manifest.yml
+  ansible.builtin.include_tasks: install_service.yml
   vars:
-    podman_spec:
-      state: started
-      systemd_file: guac-graphql
-      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/guac/graphql/Deployment.yaml.j2') | from_yaml }}"
+    specs:
+      service: guac-graphql
+      state: restarted
       network: "{{ tpa_single_node_podman_network }}"
+      kube_file: "{{ role_path }}/templates/systemd/default.kube.j2"
+      manifest_file: "{{ role_path }}/templates/manifests/guac/graphql/Deployment.yaml.j2"
       configmaps:
         - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/custom-trust-anchor.yaml"

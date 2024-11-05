@@ -1,14 +1,16 @@
 ---
 - name: Deploy bombastic walker Pod
-  ansible.builtin.include_tasks: install_manifest_cronjob.yml
+  ansible.builtin.include_tasks: install_service.yml
   when: not tpa_single_node_bombastic_walker_suspended
   vars:
-    podman_spec:
+    specs:
+      service: bombastic-walker
       state: stopped
-      systemd_file: bombastic-walker
       network: "{{ tpa_single_node_podman_network }}"
-      timer_type: monotonic # realtime
-      time_pattern: 1h # *:0/10 for realtime instead of monotonic
-      kube_file_content: "{{ lookup('ansible.builtin.template', 'manifests/bombastic/walker/Deployment.yaml.j2') | from_yaml }}"
+      kube_file: "{{ role_path }}/templates/systemd/default.kube.j2"
+      manifest_file: "{{ role_path }}/templates/manifests/bombastic/walker/Deployment.yaml.j2"
       configmaps:
         - "{{ tpa_single_node_kube_manifest_dir }}/ConfigMaps/custom-trust-anchor.yaml"
+      timer:
+        type: monotonic # realtime
+        pattern: 1h # *:0/10 for realtime instead of monotonic
