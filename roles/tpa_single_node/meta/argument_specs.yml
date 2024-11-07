@@ -10,7 +10,7 @@ argument_specs:
         description: "Trustification image."
         type: "str"
         version_added: "0.2.0"
-        default: "registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:16bc624b40f2863c9e69e8cdd4d557eb0d200eaf"
+        default: "registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:5f4dd4a048a212bdb17eedf6613af80df227efd1"
       tpa_single_node_guac_image:
         description: "Guac image."
         type: "str"
