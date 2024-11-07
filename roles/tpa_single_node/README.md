@@ -26,7 +26,7 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 ### Optional
 |Option|Description|Type|Default|
 |---|---|---|---|
-| tpa_single_node_trustification_image | Trustification image. | str |  `registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:16bc624b40f2863c9e69e8cdd4d557eb0d200eaf`  |
+| tpa_single_node_trustification_image | Trustification image. | str |  `registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:5f4dd4a048a212bdb17eedf6613af80df227efd1`  |
 | tpa_single_node_guac_image | Guac image. | str |  `registry.redhat.io/rhtpa/rhtpa-guac-rhel9:7adca20ee17df2d863354c1861b31f47948d8839`  |
 | tpa_single_node_base_hostname | The user name logging in to the registry to pull images. | str |  `trustification`  |
 | tpa_single_node_rhel_host | Ip of the instance. | str |  |
