@@ -12,8 +12,7 @@ See the support scope for [Red Hat Technology Preview](https://access.redhat.com
 ## Description
 
 The RHTPA service is the downstream redistribution of the [Trustification](https://github.com/trustification/trustification) project.
-The automation contained within this Git repository installs and configures the components of RHTPA to run on a single RHEL server, which uses a standalone containerized deployment.
-A Kubernetes-based manifest creates containers that uses [`podman kube play`](https://docs.podman.io/en/latest/markdown/podman-kube-play.1.html).
+The automation contained within this Git repository installs and configures the components of RHTPA to run on a single RHEL server by using a standalone containerized deployment. A Kubernetes-based manifest creates containers that uses [`podman kube play`](https://docs.podman.io/en/latest/markdown/podman-kube-play.1.html).
 
 The RHTPA Ansible collection deploys the following RHTPA components:
 
@@ -21,65 +20,37 @@ The RHTPA Ansible collection deploys the following RHTPA components:
 - [Guac](https://github.com/trustification/guac)
 
 An [NGINX](https://www.nginx.com) front end places an entrypoint to the RHTPA UI.
-A set of self-signed certificates get generated at runtime to establishing secure communications.
 
-The ingress host name is follow, where `<base_hostname>` is your deployment's base hostname:
-* https://`<base_hostname>`
+## Prerequisites
+
+A RHEL 9.3+ server should be used to run the Trustification components.
+
+Install and configure Ansible on a control node before performing the automated deployment.
+
+## Minimum hardware requirements
+* 24 vCPU,
+* 48 GB Ram,
+* 100 GB Disk space
 
 ## Requirements
 
 * Ansible 2.16.0 or greater
-* Python 3.9.0 or greater
+* Python 3.10.0 or greater
 * RHEL x86\_64 9.3 or greater.
 * Installation and configuration of Ansible on a control node to perform the automation.
-* Installation of the Ansible collections on the control node.
-  * If installing from the Ansible Automation Hub, then run `ansible-galaxy install redhat.trusted_profile_analyzer`.
-  * If installing from this Git repository, then clone it locally, and run `ansible-galaxy collection install -r requirements.yml`.
-* An OpenID Connect (OIDC) provider, such as [Keycloak](https://console.redhat.com/ansible/automation-hub/repo/published/redhat/sso/).
-* A PostgreSQL instance
-* SQS like [Kafka](https://console.redhat.com/ansible/automation-hub/repo/published/redhat/amq_streams/)
-* S3 service or S3 compatible service
-* Optional:
-  Installation of the `podman` binaries to verify that the RHTPA service is working as expected.
 
-## Overview
-The following components are provided by the customers:
+You must provide the following external services:
+
+* An OpenID Connect (OIDC) provider, such [RedHat Single Sign On](https://console.redhat.com/ansible/automation-hub/repo/published/redhat/sso/) or Amazon Web Services (AWS) Cognito.
+* Simple Queue Service (SQS), for example, [Red Hat AMQ Streams](https://console.redhat.com/ansible/automation-hub/repo/published/redhat/amq_streams/)
+* A new PostgreSQL database.
+* AWS Simple Storage Service (S3) or an S3-compatible service, for example, MinIO.
+
+## External Services Configurations
 
 ### RedHat Single Sign On
-  For this, you will need to:
 
-  * Install Keycloak
-  * Create a new realm
-  * Create the following roles for this realm
-   * `chicken-user`
-   * `chicken-manager`
-   * `chicken-admin`
-  * Make the `chicken-user` a default role
-  * Create the following scopes for this realm
-    * `read:document`
-    * `create:document`
-    * `delete:document`
-  * Add the `create:document` and `delete:document` scope to the `chicken-manager` role
-  * Create two clients
-    *  One public client
-        * Set `standardFlowEnabled` to `true`
-        * Set `fullScopedAllowed` to `true`
-        * Set the following `defaultClientScopes`
-          * `read:document`
-          * `create:document`
-          * `delete:document`
-    * One protected client  
-        * Set `publicClient` to `false`
-        * Set `serviecAccountsEnabled` to `true`
-        * Set `fullScopedAllowed` to `true`
-        * Set the following `defaultClientScopes`
-          * `read:document`
-          * `create:document`
-        * Add role `chicken-manager` to the service account of this client
-    * Increase the token timeout for both clients to at least 5 minutes
-    * Create a user, acting as administrator
-    * Add the `chicken-manager` and `chicken-admin` role to this user
-
+* [Trustification Keycloak](https://github.com/trustification/trustification/blob/release/1.2.z/docs/modules/admin/pages/cluster-preparing.adoc#keycloak)
 
 
 ### RedHat Kafka streams  
@@ -95,72 +66,43 @@ The following components are provided by the customers:
   v11y-indexed-default
   v11y-stored-default
 ```
-configured in the main.yml
+configured in the roles/tpa_single_node/vars/main.yml
+
+* [Trustification event queues](https://github.com/trustification/trustification/blob/release/1.2.z/docs/modules/admin/pages/cluster-preparing.adoc#event-queues)
 
 ### Postgresql
 
 Create a PostgreSQL database and configure your database credentials in the  environment variables, see 'Verifying the deployment section', 
 other database configurations are in the roles/tpa_single_node/vars/main.yml
 
-Postgres ssl mode is enabled by default. To disable it please change the following in vars/main.yml file:
+Postgres ssl mode is enabled by default. To disable it please change the following in roles/tpa_single_node/vars/main.yml file:
 `tpa_single_node_pg_ssl_mode: disable`.
 
+* [Trustification-PostgreSQL](https://github.com/trustification/trustification/blob/release/1.2.z/docs/modules/admin/pages/cluster-preparing.adoc#rds)
 
-### S3 or S3 compatible service like Minio
+### S3 or S3 compatible service
   Have the following unversioned S3 bucket names created:
   ```
   bombastic-default
   vexination-default
   v11y-default 
   ```
-  configured in the main.yml
+configured in the roles/tpa_single_node/vars/main.yml
 
-
-*  Details about how to configure the services can be found here [RHTPA external services deploy](https://docs.redhat.com/en/documentation/red_hat_trusted_profile_analyzer/1/html-single/deployment_guide/index#installing-trusted-profile-analyzer-by-using-helm-with-other-services_deploy)
-* [Trustification](https://github.com/trustification/trustification/blob/main/docs/modules/admin/pages/cluster-preparing.adoc)
-
-
+* [Trustification S3](https://github.com/trustification/trustification/blob/release/1.2.z/docs/modules/admin/pages/cluster-preparing.adoc#s3-storage)
 
 
 Utilize the steps below to understand how to setup and execute the provisioning.
 
 ## Installation
 
+## Configurations on the controller node
 
-Before using this collection, you need to install it with the Ansible Galaxy command-line tool:
+On the controller node export the following env vars
 
-```
-ansible-galaxy collection install redhat.trusted_profile_analyzer
-```
-
-You can also include it in a `requirements.yml` file and install it with `ansible-galaxy collection install -r requirements.yml`, using the format:
-
-
-```yaml
-collections:
-  - name: redhat.trusted_profile_analyzer
-```
-
-Note that if you install any collections from Ansible Galaxy, they will not be upgraded automatically when you upgrade the Ansible package.
-To upgrade the collection to the latest available version, run the following command:
-
-```
-ansible-galaxy collection install redhat.trusted_profile_analyzer --upgrade
-```
-
-You can also install a specific version of the collection, for example, if you need to downgrade when something is broken in the latest version (please report an issue in this repository). Use the following syntax to install version 0.2.0:
-
-```
-ansible-galaxy collection install redhat.trusted_profile_analyzer:==0.2.0
-```
-
-## Verifying the deployment
-
-1. Export the following environment variables, replacing `TODO` with your relevant information:
+1. Export the following environment variables, replacing the placeholders with your relevant information:
 
    ```shell
-      export TPA_SINGLE_NODE_REGISTRATION_USERNAME=<Your Red Hat subscription username>
-      export TPA_SINGLE_NODE_REGISTRATION_PASSWORD=<Your Red Hat subscription password>
       export TPA_SINGLE_NODE_REGISTRY_USERNAME=<Your Red Hat image registry username>
       export TPA_SINGLE_NODE_REGISTRY_PASSWORD=<Your Red Hat image registry password>
       export TPA_PG_HOST=<POSTGRES HOST IP>
@@ -177,92 +119,47 @@ ansible-galaxy collection install redhat.trusted_profile_analyzer:==0.2.0
       export TPA_EVENT_ACCESS_KEY_ID=<Kafka Username or AWS SQS Access Key>
       export TPA_EVENT_SECRET_ACCESS_KEY=<Kafka User Password or AWS SQS Secret Key>
    ```
-2. In case of Kafka Events, create environmental variable for bootstrap server
+
+2. To choose between S3 or compatible service, kafka or sqs, Keycloak or AWS Cognito configure the roles/tpa_single_node/defaults/main.yml   
+
+3. In case of Minio, create environmental variable for storage endpoint
+```shell
+export TPA_STORAGE_ENDPOINT = <Minio storage URL >
+```
+
+4. In case of Kafka Events, create environmental variable for bootstrap server
 ```shell
 export TPA_EVENT_BOOTSTRAP_SERVER=<Kafka Bootstrap Server>
 ```
 
-3. In case of AWS Cognito as OIDC, create environmental variable for Cognito Domain
+5. In case of AWS Cognito as OIDC, create environmental variable for Cognito Domain
 ```shell
 export TPA_OIDC_COGNITO_DOMAIN=<AWS Cognito Domain>
 ```
 
-4. Open the browser to call the UI
-   https://`<base_hostname>`
-
-
-
-
-
-
-
-
-
-
-## Prerequisites
-
-A RHEL 9.3+ server should be used to run the Trustification components.
-
-Ansible must be installed and configured on a control node that will be used to perform the automation.
-
-Perform the following steps to prepare the control node for execution.
-
-### Dependencies
-
-Install the required Ansible collections by executing the following
-
-```shell
-ansible-galaxy collection install -r requirements.yml
-```
-
-### OIDC provider
-
-An installation of Red Hat SSO/Keycloak/AWS Cognito must be provided to allow for integration with containerized Trustification.
-
 ## Provision
 
-#### https://developer.hashicorp.com/vagrant/docs/provisioning/ansible
-
-#### https://docs.ansible.com/ansible/2.9/scenario_guides/guide_vagrant.html
-
-In order to deploy Trustification on a RHEL 9.3+ VM:
-
-1. Create an `inventory.ini` file in the project with a single VM in the `trustification` group:
+1. Update the content of the `inventory.ini` file in the project:
 
 ```
 [trustification]
-192.168.121.60
+<IP_TARGET_MACHINE>
 
 [trustification:vars]
-ansible_user=vagrant
-ansible_ssh_pass=vargrant
-ansible_private_key_file=./vm-testing/images/rhel9-vm/.vagrant/machines/trustification/libvirt/private_key
+ansible_user=<username>
+ansible_ssh_pass=<ssh_password>
+ansible_private_key_file=<path to private key>
 ```
 
-2. Create `ansible.cfg` file in the project with a single VM in the `trustification` group:
+2. Configure if needed the `ansible.cfg` file in the project:
 
 ```
 [defaults]
 inventory = ./inventory.ini
-host_key_checking = False
+host_key_checking = 
 ```
 
-3. Add the subscription, registry and certificates information :
-
-- For Red Hat subscription define :
-  ```
-  export TPA_SINGLE_NODE_REGISTRATION_USERNAME=<Your Red Hat subscription username>
-  export TPA_SINGLE_NODE_REGISTRATION_PASSWORD=<Your Red Hat subscription password>
-  ```
-- For Red Hat image registry define :
-  ```
-  export TPA_SINGLE_NODE_REGISTRY_USERNAME=<Your Red Hat image registry username>
-  export TPA_SINGLE_NODE_REGISTRY_PASSWORD=<Your Red Hat image registry password>
-  ```
-
-Alternatively vagrant will prompt you to provide the registration username and password.
-
-4. Path for TLS certificates files:
+3. Path for TLS certificates files:
 
 Copy your certificate files in `certs/` directory using following names:
 
@@ -279,40 +176,11 @@ Optionally, the certs directory variable `tpa_single_node_certificates_dir` unde
 - tpa_single_node_nginx_tls_crt_path
 - tpa_single_node_nginx_tls_key_path
 
-5. Create Environment Variables for Storage, Events and OIDC
-
-```
-export TPA_PG_HOST=<POSTGRES_HOST_IP>
-export TPA_PG_USER=<DB_USER>
-export TPA_PG_PASSWORD=<DB_PASSWORD>
-export TPA_STORAGE_ACCESS_KEY=<Storage Access Key>
-export TPA_STORAGE_SECRET_KEY=<Storage Secret Key>
-export TPA_OIDC_ISSUER_URL=<AWS Cognito or Keycloak Issuer URL. Incase of Keycloak endpoint auth/realms/chicken is needed>
-export TPA_OIDC_FRONTEND_ID=<OIDC Frontend Id>
-export TPA_OIDC_PROVIDER_CLIENT_ID=<OIDC Walker Id>
-export TPA_OIDC_PROVIDER_CLIENT_SECRET=<OIDC Walker Secret>
-export TPA_EVENT_ACCESS_KEY_ID=<Kafka Username or AWS SQS Access Key>
-export TPA_EVENT_SECRET_ACCESS_KEY=<Kafka User Password or AWS SQS Secret Key>
-export TPA_STORAGE_ENDPOINT = <Minio storage URL >
-```
-
-6. In case of Kafka Events, create environmental variable for bootstrap server
-
-```
-export TPA_EVENT_BOOTSTRAP_SERVER=<Kafka Bootstrap Server>
-```
-
-7. In case of AWS Cognito as OIDC, create environmental variable for Cognito Domain
-
-```
-export TPA_OIDC_COGNITO_DOMAIN=<AWS Cognito Domain>
-```
-
-8. Update `roles/tpa_single_node/vars/main.yml` file with the below values,
+4. Update `roles/tpa_single_node/vars/main.yml` file with the below values,
 
 - Storage Service:
 
-  1. Update the Storage type, eithe `s3` or `minio`
+  1. Update the Storage type, either `s3` or `minio`
   2. Update the S3/Minio bucket names
   3. Update the AWS region for AWS S3 or keep `us-west-1` for minio
   4. In case of minio, update minio storage end point `tpa_single_node_storage_endpoint`
@@ -325,66 +193,67 @@ export TPA_OIDC_COGNITO_DOMAIN=<AWS Cognito Domain>
 
 Refer `roles/tpa_single_node/vars/main_example_aws.yml` and `roles/tpa_single_node/vars/main_example_nonaws.yml`
 
-9. Execute the following command (NOTE: you will have to provide credentials to authenticate to registry.redhat.io: https://access.redhat.com/RegistryAuthentication):
+## Installation
 
-```shell
-ANSIBLE_ROLES_PATH="roles/" ansible-playbook -i inventory.ini play.yml
+Before using this collection, you need to install it with the Ansible Galaxy command-line tool:
+
+```
+ansible-galaxy collection install redhat.trusted_profile_analyzer
 ```
 
-
-## Use Cases
-
-See [using Ansible collections](https://docs.ansible.com/ansible/devel/user_guide/collections_using.html) for more details.
+You can also include it in a `requirements.yml` file and install it with `ansible-galaxy collection install -r requirements.yml`, using the format:
 
 
+```yaml
+collections:
+  - name: redhat.trusted_profile_analyzer
+```
 
-1. Create an `inventory` file with a single node under the `trustification` group:
+or with the classic ansible command
 
-   ```
-   [trustification]
-   <IP of the target machine>
-   ```
+```shell
+ANSIBLE_ROLES_PATH="roles/" ansible-playbook -i inventory.ini play.yml -vv
+```
 
-2. Create an Ansible Playbook named `play.yml`, and configure with your relevant information:
+Note that if you install any collections from Ansible Galaxy, they will not be upgraded automatically when you upgrade the Ansible package.
+To upgrade the collection to the latest available version, run the following command:
 
-   ```yaml
-   - name: Trustification
-     hosts: trustification
-     vars:
-         vars:
-            tpa_single_node_trustification_image: registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9:<sha>
-            tpa_single_node_guac_image: registry.redhat.io/rhtpa/rhtpa-guac-rhel9:<sha>
-     vars_files:
-       - vars/main.yml
-     tasks:
-       - name: Include TPA single node
-         ansible.builtin.include_role:
-           name: tpa_single_node # Use if deploying from Ansible Automation Hub.
-   ```
-   > [!NOTE]
-   If running this Playbook from a locally-cloned Git repository, then replace the `redhat.trusted_profile_analyzer.tpa_single_node` value with `tpa_single_node`.
+```
+ansible-galaxy collection install redhat.trusted_profile_analyzer --upgrade
+```
 
-3. Install the RHTPA Ansible collection.
+You can also install a specific version of the collection, for example, if you need to downgrade when something is broken in the latest version (please report an issue in this repository). Use the following syntax to install version 0.2.0:
 
-    - If installing from Ansible Automation Hub, then run the following command:
+```
+ansible-galaxy collection install redhat.trusted_profile_analyzer:==0.2.0
+```
 
-      ```shell
-      ansible-playbook -i inventory play.yml
-      ```
+### Dependencies
 
-    - If running from a locally-cloned Git repository, then run the following command:
+Install the required Ansible collections by executing the following
 
-      ```shell
-      export ANSIBLE_ROLES_PATH="roles/" ; ansible-playbook -i inventory play.yml
-      ```
-
+```shell
+ansible-galaxy collection install -r requirements.yml
+```
 
 ## Contributing
 
-### Testing Deployment on a VM
+## Support
 
-The [vm-testing/README.md](vm-testing/README.md) file contains instructions on testing the deployment on a VM. Right now, only Vagrant and libvirt are supported as testing VM provisioner.
+Support tickets for RedHat Trusted Profile Analyzer can be opened at https://access.redhat.com/support/cases/#/case/new?product=Red%20Hat%20Trusted%20Profile%20Analyzer.
+
+## Release notes and Roadmap
+
+Release notes can be found [here](https://docs.redhat.com/en/documentation/red_hat_trusted_profile_analyzer/1.2/html/release_notes/index).
+
+## Related Information
+
+More information around Red Hat Trusted Profile Analyzer can be found [here](https://docs.redhat.com/en/documentation/red_hat_trusted_profile_analyzer/).
 
 ## Feedback
 
 Any and all feedback is welcome. Submit an [Issue](https://github.com/trustification/trustification-ansible/issues) or [Pull Request](https://github.com/trustification/trustification-ansible/pulls) as desired.
+
+## License Information
+
+License Information cna be found within the [LICENSE](LICENSE) file.
