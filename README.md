@@ -66,7 +66,8 @@ You must provide the following external services:
   v11y-indexed-default
   v11y-stored-default
 ```
-configured in the roles/tpa_single_node/vars/main.yml
+
+Configure these topic names in the `roles/tpa_single_node/vars/main.yml` file.
 
 * [Trustification event queues](https://github.com/trustification/trustification/blob/release/1.2.z/docs/modules/admin/pages/cluster-preparing.adoc#event-queues)
 
@@ -75,7 +76,7 @@ configured in the roles/tpa_single_node/vars/main.yml
 Create a PostgreSQL database and configure your database credentials in the  environment variables, see 'Verifying the deployment section', 
 other database configurations are in the roles/tpa_single_node/vars/main.yml
 
-Postgres ssl mode is enabled by default. To disable it please change the following in roles/tpa_single_node/vars/main.yml file:
+Postgres ssl mode is enabled by default. To disable SSL, change the following line in the `roles/tpa_single_node/vars/main.yml` file.
 `tpa_single_node_pg_ssl_mode: disable`.
 
 * [Trustification-PostgreSQL](https://github.com/trustification/trustification/blob/release/1.2.z/docs/modules/admin/pages/cluster-preparing.adoc#rds)
@@ -87,7 +88,7 @@ Postgres ssl mode is enabled by default. To disable it please change the followi
   vexination-default
   v11y-default 
   ```
-configured in the roles/tpa_single_node/vars/main.yml
+Configure these S3 bucket names in the `roles/tpa_single_node/vars/main.yml` file.
 
 * [Trustification S3](https://github.com/trustification/trustification/blob/release/1.2.z/docs/modules/admin/pages/cluster-preparing.adoc#s3-storage)
 
@@ -98,7 +99,7 @@ Utilize the steps below to understand how to setup and execute the provisioning.
 
 ## Configurations on the controller node
 
-On the controller node export the following env vars
+On the controller node export the following environment variables:
 
 1. Export the following environment variables, replacing the placeholders with your relevant information:
 
@@ -120,19 +121,21 @@ On the controller node export the following env vars
       export TPA_EVENT_SECRET_ACCESS_KEY=<Kafka User Password or AWS SQS Secret Key>
    ```
 
-2. To choose between S3 or compatible service, kafka or sqs, Keycloak or AWS Cognito configure the roles/tpa_single_node/defaults/main.yml   
+2. Choose between AWS S3 or an S3-compatible service, and update the `roles/tpa_single_node/defaults/main.yml` file accordingly.
 
-3. In case of Minio, create environmental variable for storage endpoint
+3. Choose between Keycloak or AWS Cognito, and update the `roles/tpa_single_node/defaults/main.yml` file accordingly.  
+
+4. In case of Minio, create environmental variable for storage endpoint
 ```shell
 export TPA_STORAGE_ENDPOINT = <Minio storage URL >
 ```
 
-4. In case of Kafka Events, create environmental variable for bootstrap server
+5. For Kafka events, create an environment variable pointing to the bootstrap server:
 ```shell
 export TPA_EVENT_BOOTSTRAP_SERVER=<Kafka Bootstrap Server>
 ```
 
-5. In case of AWS Cognito as OIDC, create environmental variable for Cognito Domain
+6. If you are using AWS Cognito as your OIDC provider, then create an environment variable pointing to the Cognito domain:
 ```shell
 export TPA_OIDC_COGNITO_DOMAIN=<AWS Cognito Domain>
 ```
@@ -176,7 +179,7 @@ Optionally, the certs directory variable `tpa_single_node_certificates_dir` unde
 - tpa_single_node_nginx_tls_crt_path
 - tpa_single_node_nginx_tls_key_path
 
-4. Update `roles/tpa_single_node/vars/main.yml` file with the below values,
+4. Update the `roles/tpa_single_node/vars/main.yml` file with these values:
 
 - Storage Service:
 
@@ -209,20 +212,22 @@ collections:
   - name: redhat.trusted_profile_analyzer
 ```
 
-or with the classic ansible command
+Or by using the following Ansible commands:
 
 ```shell
-ANSIBLE_ROLES_PATH="roles/" ansible-playbook -i inventory.ini play.yml -vv
+export ANSIBLE_ROLES_PATH="roles/" ansible-playbook -i inventory.ini play.yml -vv
 ```
 
-Note that if you install any collections from Ansible Galaxy, they will not be upgraded automatically when you upgrade the Ansible package.
+> [!NOTE]
+If you install any collection from Ansible Galaxy, upgrading the Ansible package is not automatically done.
 To upgrade the collection to the latest available version, run the following command:
 
 ```
 ansible-galaxy collection install redhat.trusted_profile_analyzer --upgrade
 ```
 
-You can also install a specific version of the collection, for example, if you need to downgrade when something is broken in the latest version (please report an issue in this repository). Use the following syntax to install version 0.2.0:
+You can also install a specific version of the collection.
+For example, if you need to downgrade when something is broken in the latest version.
 
 ```
 ansible-galaxy collection install redhat.trusted_profile_analyzer:==0.2.0
@@ -248,7 +253,7 @@ Release notes can be found [here](https://docs.redhat.com/en/documentation/red_h
 
 ## Related Information
 
-More information around Red Hat Trusted Profile Analyzer can be found [here](https://docs.redhat.com/en/documentation/red_hat_trusted_profile_analyzer/).
+More information around Red Hat Trusted Profile Analyzer can be found [here](https://access.redhat.com/products/red-hat-trusted-profile-analyzer).
 
 ## Feedback
 
