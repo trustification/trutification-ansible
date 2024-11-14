@@ -215,7 +215,8 @@ collections:
 Or by using the following Ansible commands:
 
 ```shell
-export ANSIBLE_ROLES_PATH="roles/" ansible-playbook -i inventory.ini play.yml -vv
+export ANSIBLE_ROLES_PATH="roles/" ; 
+ansible-playbook -i inventory.ini play.yml -vv
 ```
 
 > [!NOTE]
