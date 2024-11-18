@@ -235,7 +235,7 @@ You can also install a specific version of the collection.
 For example, if you need to downgrade when something is broken in the latest version.
 
 ```
-ansible-galaxy collection install redhat.trusted_profile_analyzer:==0.2.0
+ansible-galaxy collection install redhat.trusted_profile_analyzer:==1.2.0
 ```
 
 ### Dependencies
