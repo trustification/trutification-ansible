@@ -82,6 +82,7 @@ Deploy the [RHTPA](https://docs.redhat.com/en/documentation/red_hat_trusted_prof
 | tpa_single_node_dataset_job_suspended | Dataset job suspended flag | bool |  `True`  |
 | tpa_single_node_vexination_walker_suspended | Vexination walker job suspended flag | bool |  `True`  |
 | tpa_single_node_v11y_walker_suspended | V11y walker job suspended flag | bool |  `False`  |
+| tpa_single_node_probe_initial_delay_seconds | Initial prob delay in seconds | int |  `30`  |
 
 ## Example Playbook
 

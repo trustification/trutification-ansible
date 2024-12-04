@@ -349,3 +349,8 @@ argument_specs:
         type: "bool"
         version_added: "1.2.0"
         default: false
+      tpa_single_node_probe_initial_delay_seconds:
+        description: "Initial prob delay in seconds"
+        type: "int"
+        version_added: "1.2.1"
+        default: 30

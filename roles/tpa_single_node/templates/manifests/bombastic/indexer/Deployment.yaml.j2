@@ -43,12 +43,12 @@ spec:
           image: "{{ tpa_single_node_trustification_image }}"
           imagePullPolicy: IfNotPresent
           livenessProbe:
-            initialDelaySeconds: 2
+            initialDelaySeconds: {{ tpa_single_node_probe_initial_delay_seconds }}
             httpGet:
               path: /health/live
               port: 9010
           readinessProbe:
-            initialDelaySeconds: 2
+            initialDelaySeconds: {{ tpa_single_node_probe_initial_delay_seconds }}
             httpGet:
               path: /health/ready
               port: 9010
