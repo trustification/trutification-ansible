@@ -93,9 +93,9 @@ spec:
             httpGet:
               path: /
               port: {{ tpa_single_node_spog_ui_port }}
-            initialDelaySeconds: 2
+            initialDelaySeconds: {{ tpa_single_node_probe_initial_delay_seconds }}
           readinessProbe:
             httpGet:
               path: /
               port: {{ tpa_single_node_spog_ui_port }}
-            initialDelaySeconds: 2
+            initialDelaySeconds: {{ tpa_single_node_probe_initial_delay_seconds }}

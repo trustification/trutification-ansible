@@ -68,7 +68,7 @@ spec:
               port: 9010
               scheme: HTTPS
           livenessProbe:
-            initialDelaySeconds: 2
+            initialDelaySeconds: {{ tpa_single_node_probe_initial_delay_seconds }}
             httpGet:
               path: /healthz
               port: 9010
