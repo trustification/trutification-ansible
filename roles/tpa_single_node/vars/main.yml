@@ -89,6 +89,9 @@ tpa_single_node_dataset_job_suspended: true
 tpa_single_node_vexination_walker_suspended: true
 tpa_single_node_v11y_walker_suspended: false
 
+# Probes
+tpa_single_node_probe_initial_delay_seconds: 30
+
 # defaults file for tpa_single_node
 tpa_single_node_system_packages:
   - podman

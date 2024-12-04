@@ -79,12 +79,12 @@ spec:
             httpGet:
               path: /health/live
               port: 9010
-            initialDelaySeconds: 2
+            initialDelaySeconds: {{ tpa_single_node_probe_initial_delay_seconds }}
           readinessProbe:
             httpGet:
               path: /health/ready
               port: 9010
-            initialDelaySeconds: 2
+            initialDelaySeconds: {{ tpa_single_node_probe_initial_delay_seconds }}
           startupProbe:
             httpGet:
               path: /health/startup
