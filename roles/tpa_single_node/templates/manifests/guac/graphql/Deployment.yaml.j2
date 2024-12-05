@@ -69,10 +69,11 @@ spec:
               scheme: HTTPS
           livenessProbe:
             initialDelaySeconds: {{ tpa_single_node_probe_initial_delay_seconds }}
-            httpGet:
-              path: /healthz
-              port: 9010
-              scheme: HTTPS
+            exec:
+              command:
+                - /bin/curl
+                - -kf
+                - 'https://localhost:8089/healthz'
           ports:
             - containerPort: 9010
               protocol: TCP
