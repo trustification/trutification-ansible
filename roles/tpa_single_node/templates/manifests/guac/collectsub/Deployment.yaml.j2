@@ -46,8 +46,11 @@ spec:
               name: tls-cert
               readOnly: true
           livenessProbe:
-            tcpSocket:
-              port: 2782
+            exec:
+              command:
+                - sh
+                - -c
+                - "echo > /dev/tcp/localhost/2782"
           ports:
             - containerPort: 2782
               protocol: TCP
