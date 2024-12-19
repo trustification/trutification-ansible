@@ -1,0 +1,103 @@
+---
+# vars file for tpa_scaffolding
+tpa_single_node_base_hostname: trustification
+tpa_single_node_certificates_dir: ./certs/
+tpa_single_node_config_dir: /etc/rhtpa
+tpa_single_node_kube_manifest_dir: "{{ tpa_single_node_config_dir }}/manifests"
+tpa_single_node_namespace: trustification
+tpa_single_node_podman_network: tcnet
+tpa_single_node_systemd_directory: /etc/systemd/system
+tpa_single_node_default_empty: ""
+
+# DB_SERVICE
+tpa_single_node_pg_install_enabled: false
+tpa_single_node_pg_host: <postgresql ip on the docker bridge>
+tpa_single_node_pg_port: 5432
+tpa_single_node_pg_db: guac
+tpa_single_node_pg_admin: "{{ lookup('env', 'TPA_PG_ADMIN') }}"
+tpa_single_node_pg_admin_passwd: "{{ lookup('env', 'TPA_PG_ADMIN_PASSWORD') }}"
+tpa_single_node_pg_user: "{{ lookup('env', 'TPA_PG_USER') }}"
+tpa_single_node_pg_user_passwd: "{{ lookup('env', 'TPA_PG_USER_PASSWORD') }}"
+tpa_single_node_pg_ssl_mode: require
+
+# Storage Service
+tpa_single_node_storage_access_key: "{{ lookup('env', 'TPA_STORAGE_ACCESS_KEY') }}" # S3/minio root username
+tpa_single_node_storage_secret_key: "{{ lookup('env', 'TPA_STORAGE_SECRET_KEY') }}" # S3/minio root password
+tpa_single_node_storage_bombastic_bucket: bombastic-default # <bombastic storage bucket name>
+tpa_single_node_storage_v11y_bucket: v11y-default # <v11y storage bucket name>
+tpa_single_node_storage_vexination_bucket: vexination-default # <vexination storage bucket name>
+
+## Storage Service - Minio fields
+tpa_single_node_storage_endpoint: <minio ip in the compose log>  # Minio storage URL pointing to API 9000
+
+# SQS_SERVICE
+tpa_single_node_event_access_key_id: "{{ lookup('env', 'TPA_EVENT_ACCESS_KEY_ID') }}" # Kafka Username or AWS SQS Access Key ID
+tpa_single_node_event_secret_access_key: "{{ lookup('env', 'TPA_EVENT_SECRET_ACCESS_KEY') }}" # Kafka password or AWS SQS Secret Access Key
+tpa_single_node_bombastic_topic_failed: bombastic-failed-default # Bombastic Events topic failed
+tpa_single_node_bombastic_topic_indexed: bombastic-indexed-default # Bombastic Events topic indexed
+tpa_single_node_bombastic_topic_stored: bombastic-stored-default # Bombastic Events topic stored
+tpa_single_node_vexination_topic_failed: vexination-failed-default # Vexination Events topic failed
+tpa_single_node_vexination_topic_indexed: vexination-indexed-default # Vexination Events topic indexed
+tpa_single_node_vexination_topic_stored: vexination-stored-default # Vexination Events topic stored
+tpa_single_node_v11y_topic_failed: v11y-failed-default # v11y Events topic failed
+tpa_single_node_v11y_topic_indexed: v11y-indexed-default # v11y Events topic indexed
+tpa_single_node_v11y_topic_stored: v11y-stored-default # v11y Events topic stored
+
+## SQS_SERVICE - Kafka fields
+tpa_single_node_kafka_bootstrap_servers: <kafka ip in the compose log>
+# Security protocol used for Kafka user authentication.
+tpa_single_node_kafka_security_protocol: SASL_PLAINTEXT # Example - SASL_PLAINTEXT
+# Kafka Authentication Mechanism which is spec.kafka.listeners.authentication.type in Block letters.
+tpa_single_node_kafka_auth_mechanism: SCRAM-SHA-512 # Example - SCRAM-SHA-512
+
+# SSO_SERVICE
+tpa_single_node_oidc_issuer_url: <keykloak ip in the compose log>
+tpa_single_node_oidc_frontend_id: "{{ lookup('env', 'TPA_OIDC_FRONTEND_ID') | default('tpa_single_node_default_empty', true) }}"
+tpa_single_node_oidc_provider_client_id: "{{ lookup('env', 'TPA_OIDC_PROVIDER_CLIENT_ID') | default('tpa_single_node_default_empty', true) }}"
+tpa_single_node_oidc_provider_client_secret: "{{ lookup('env', 'TPA_OIDC_PROVIDER_CLIENT_SECRET') | default('tpa_single_node_default_empty', true) }}"
+
+## AWS OIDC fields
+tpa_single_node_aws_cognito_domain: "{{ lookup('env', 'TPA_OIDC_COGNITO_DOMAIN') | default('tpa_single_node_default_empty', true) }}"
+
+# TSL CA Certificates
+tpa_single_node_root_ca: "{{ tpa_single_node_certificates_dir }}/rootCA.crt"
+
+# TSL Certificates
+tpa_single_node_trust_cert_tls_crt_path: "{{ tpa_single_node_certificates_dir }}/trust-cert.crt"
+tpa_single_node_trust_cert_tls_key_path: "{{ tpa_single_node_certificates_dir }}/trust-cert.key"
+tpa_single_node_nginx_tls_crt_path: "{{ tpa_single_node_certificates_dir }}/trust-cert.crt"
+tpa_single_node_nginx_tls_key_path: "{{ tpa_single_node_certificates_dir }}/trust-cert.key"
+
+# Target node(s) - Secret and Configmap locations
+tpa_single_node_storage_secret: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/storage.yaml"
+tpa_single_node_event_secret: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/event.yaml"
+tpa_single_node_oidc_secret: "{{ tpa_single_node_kube_manifest_dir }}/Secrets/oidc.yaml"
+
+# ports
+tpa_single_node_spog_ui_port: 8080
+tpa_single_node_vexination_api_port: 8081
+tpa_single_node_bombastic_api_port: 8082
+tpa_single_node_spog_api_port: 8084
+tpa_single_node_collector_osv_port: 8085
+tpa_single_node_v11y_api_port: 8087
+tpa_single_node_collectorist_api_port: 8088
+tpa_single_node_guac_graphql_port: 8089
+
+# Services suspended
+tpa_single_node_bombastic_walker_suspended: true
+tpa_single_node_dataset_job_suspended: true
+tpa_single_node_vexination_walker_suspended: true
+tpa_single_node_v11y_walker_suspended: false
+
+# Probes
+tpa_single_node_probe_initial_delay_seconds: 30
+
+# defaults file for tpa_single_node
+tpa_single_node_system_packages:
+  - podman
+  - podman-plugins
+  # @postgres-remove
+  - postgresql
+  - postgresql-server
+  - python3-pip
+  - python3-cryptography
