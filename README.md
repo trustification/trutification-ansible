@@ -262,4 +262,4 @@ Any and all feedback is welcome. Submit an [Issue](https://github.com/trustifica
 
 ## License Information
 
-License Information cna be found within the [LICENSE](LICENSE) file.
+License Information cna be found within the [LICENSE](https://github.com/trustification/trustification-ansible/blob/main/LICENSE) file.
