@@ -4,6 +4,7 @@ exclude_paths:
   - vm-testing
   - input-template
   - roles/tpa_single_node/tasks/infra/postgresql.yml
+  - .ansible/collections/ansible_collections/redhat/trusted_profile_analyzer/roles/tpa_single_node/tasks/infra/postgresql.yml
   - roles/tpa_single_node/templates/branding
   - .ansible/collections/ansible_collections/redhat/trusted_profile_analyzer/roles/tpa_single_node/templates/branding/favicon.ico
   - .ansible/collections/ansible_collections/redhat/trusted_profile_analyzer/roles/tpa_single_node/templates/branding/favicon-32x32.png
