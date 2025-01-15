@@ -5,5 +5,11 @@ exclude_paths:
   - input-template
   - roles/tpa_single_node/tasks/infra/postgresql.yml
   - roles/tpa_single_node/templates/branding
+  - .ansible/collections/ansible_collections/redhat/trusted_profile_analyzer/roles/tpa_single_node/templates/branding/favicon.ico
+  - .ansible/collections/ansible_collections/redhat/trusted_profile_analyzer/roles/tpa_single_node/templates/branding/favicon-32x32.png
+  - .ansible/collections/ansible_collections/redhat/trusted_profile_analyzer/roles/tpa_single_node/templates/branding/favicon-16x16.png
+  - .ansible/collections/ansible_collections/redhat/trusted_profile_analyzer/roles/tpa_single_node/templates/branding/apple-touch-icon.png
+  - .ansible/collections/ansible_collections/redhat/trusted_profile_analyzer/roles/tpa_single_node/templates/branding/android-chrome-192x192.png
+  - .ansible/collections/ansible_collections/redhat/trusted_profile_analyzer/roles/tpa_single_node/templates/branding/CND-AppSpeed-Keyart-2_at_2x.png
 skip_list:
   - name[template]
